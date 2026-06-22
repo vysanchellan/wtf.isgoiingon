@@ -1,26 +1,101 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fdfbf7;
+  --foreground: #1c1410;
+  --surface: #ffffff;
+  --surface-muted: #f5efe6;
+  --border: #e7ddc9;
+  --brand: #d97706;
+  --brand-strong: #b45309;
+  --accent: #f59e0b;
+}
+
+.dark {
+  --background: #14110d;
+  --foreground: #f5efe6;
+  --surface: #1f1a14;
+  --surface-muted: #28221a;
+  --border: #3a3127;
+  --brand: #f59e0b;
+  --brand-strong: #fbbf24;
+  --accent: #fcd34d;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-border-soft: var(--border);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Glass card utility */
+.glass {
+  background-color: color-mix(in oklab, var(--surface) 70%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+}
+
+/* Animated gradient background for hero */
+.gradient-hero {
+  background: radial-gradient(
+      1200px 600px at 80% -10%,
+      color-mix(in oklab, var(--accent) 30%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 500px at -10% 110%,
+      color-mix(in oklab, var(--brand) 25%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(180deg, var(--background), var(--surface-muted));
+}
+
+/* Subtle paper grain for marketing pages */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    currentColor 1px,
+    transparent 0
+  );
+  background-size: 3px 3px;
+}
+
+/* Custom scrollbar (uses tailwind-scrollbar utilities where applied) */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--border) 80%, transparent);
+  border-radius: 999px;
 }
