@@ -1,5 +1,4 @@
 import { AlertTriangle } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 type Variant = "banner" | "inline" | "card";
 
@@ -20,14 +19,23 @@ export function Disclaimer({ variant = "inline", children, className }: Props) {
       <div
         role="note"
         aria-label="Demo disclaimer"
-        className={cn(
-          "w-full bg-amber-500 text-white text-xs sm:text-sm",
-          "flex items-center justify-center gap-2 px-4 py-1.5 font-medium tracking-wide",
-          className
-        )}
+        style={{
+          width: "100%",
+          background: "rgba(217, 119, 6, 0.15)",
+          color: "var(--amber)",
+          fontSize: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "6px",
+          padding: "4px 16px",
+          fontWeight: 500,
+          letterSpacing: "0.02em",
+          borderBottom: "1px solid rgba(217, 119, 6, 0.15)",
+        }}
       >
-        <AlertTriangle className="h-3.5 w-3.5 shrink-0" aria-hidden />
-        <span className="text-center">{content}</span>
+        <AlertTriangle style={{ width: 12, height: 12, flexShrink: 0 }} />
+        <span style={{ textAlign: "center" }}>{content}</span>
       </div>
     );
   }
@@ -37,15 +45,20 @@ export function Disclaimer({ variant = "inline", children, className }: Props) {
       <div
         role="note"
         aria-label="Demo disclaimer"
-        className={cn(
-          "rounded-xl border border-amber-400/60 bg-amber-50 px-4 py-3 text-sm text-amber-900",
-          "dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200",
-          "flex gap-3",
-          className
-        )}
+        style={{
+          borderRadius: "var(--radius)",
+          border: "1px solid rgba(217, 119, 6, 0.2)",
+          background: "rgba(146, 64, 14, 0.08)",
+          padding: "12px 16px",
+          fontSize: "12px",
+          color: "var(--amber)",
+          display: "flex",
+          gap: "10px",
+          lineHeight: 1.6,
+        }}
       >
-        <AlertTriangle className="h-5 w-5 shrink-0 mt-0.5" aria-hidden />
-        <p className="leading-relaxed">{content}</p>
+        <AlertTriangle style={{ width: 16, height: 16, flexShrink: 0, marginTop: 2 }} />
+        <p>{content}</p>
       </div>
     );
   }
@@ -54,12 +67,16 @@ export function Disclaimer({ variant = "inline", children, className }: Props) {
     <p
       role="note"
       aria-label="Demo disclaimer"
-      className={cn(
-        "inline-flex items-center gap-1.5 text-xs font-medium text-amber-700 dark:text-amber-300",
-        className
-      )}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "6px",
+        fontSize: "11px",
+        fontWeight: 500,
+        color: "var(--amber)",
+      }}
     >
-      <AlertTriangle className="h-3.5 w-3.5" aria-hidden />
+      <AlertTriangle style={{ width: 12, height: 12 }} />
       <span>{content}</span>
     </p>
   );

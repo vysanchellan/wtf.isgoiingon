@@ -1,30 +1,47 @@
 import Link from "next/link";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, Shield } from "lucide-react";
 
 export function CTASection() {
   return (
-    <section className="bg-white dark:bg-[var(--surface)] py-16">
+    <section className="gradient-section relative overflow-hidden py-20 sm:py-24">
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 600px 300px at 50% 0%, rgba(255, 215, 0, 0.06), transparent)",
+        }}
+      />
       <div className="mx-auto max-w-lg px-4 text-center sm:px-6">
-        <h2 className="text-xl font-medium">Ready to try the demo?</h2>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">
-          Click through the full flow — register, pick a package, and see the dashboard.
+        <h2 className="gradient-text text-2xl font-bold sm:text-3xl">
+          Ready to try the demo?
+        </h2>
+        <p
+          className="mx-auto mt-3 max-w-md text-sm leading-relaxed"
+          style={{ color: "var(--text-secondary)" }}
+        >
+          Click through the full flow &mdash; register, pick a package, and see
+          the dashboard in action.
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
           <Link
             href="/register"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#1D9E75] px-5 py-2.5 text-sm font-medium text-white no-underline hover:bg-[#0F6E56] transition"
+            className="btn-gold inline-flex items-center gap-2 px-6 py-2.5 text-sm no-underline"
           >
             <TrendingUp className="h-4 w-4" />
             Start investing
           </Link>
           <Link
             href="/admin"
-            className="inline-flex items-center rounded-lg border border-[var(--border-secondary)] px-5 py-2.5 text-sm font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--surface-muted)] transition"
+            className="btn-outline inline-flex items-center gap-2 px-6 py-2.5 text-sm no-underline"
           >
+            <Shield className="h-4 w-4" />
             Admin panel
           </Link>
         </div>
-        <p className="mt-4 text-[10px] text-amber-700 dark:text-amber-300">
+        <p
+          className="mt-5 text-[11px] font-medium tracking-wide"
+          style={{ color: "var(--amber)" }}
+        >
           This is a DEMO. No real investment is made.
         </p>
       </div>

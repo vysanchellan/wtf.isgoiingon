@@ -25,17 +25,21 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-    <section id="how" className="bg-white dark:bg-[var(--surface)] border-b border-[var(--border-tertiary)]">
-      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
-        <div className="mb-2 text-xs font-medium tracking-wider text-[#0F6E56] uppercase">
-          How it works
+    <section id="how" style={{ background: "var(--bg-primary)", borderBottom: "1px solid var(--border)" }}>
+      <div style={{ margin: "0 auto", maxWidth: "768px", padding: "64px 16px" }}>
+        <div style={{ fontSize: "11px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "8px" }}>
+          How It Works
         </div>
-        <h2 className="text-xl font-medium mb-1">Simple, transparent process</h2>
-        <p className="text-sm text-[var(--text-secondary)] mb-8">
+
+        <h2 className="gradient-text" style={{ fontSize: "28px", fontWeight: 700, lineHeight: 1.2, marginBottom: "8px" }}>
+          Simple, transparent process
+        </h2>
+
+        <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "40px", maxWidth: "480px" }}>
           Your money is deployed into a live Amazon reselling operation. Here&apos;s exactly what happens.
         </p>
 
-        <ul className="divide-y divide-[var(--border-tertiary)]">
+        <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
           {STEPS.map((step, i) => (
             <motion.li
               key={step.num}
@@ -43,21 +47,69 @@ export function HowItWorks() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="grid grid-cols-[40px_1fr] gap-4 py-5"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "40px 1fr",
+                gap: "16px",
+                padding: "20px 0",
+                position: "relative",
+              }}
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E1F5EE] text-sm font-medium text-[#0F6E56] shrink-0">
+              {i < STEPS.length - 1 && (
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: "1px",
+                    background: "linear-gradient(90deg, transparent, var(--border-glow), transparent)",
+                  }}
+                />
+              )}
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  background: "linear-gradient(135deg, var(--gold), var(--amber))",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  color: "#0a0a0f",
+                  flexShrink: 0,
+                }}
+              >
                 {step.num}
               </div>
               <div>
-                <div className="text-sm font-medium">{step.title}</div>
-                <div className="mt-1 text-xs text-[var(--text-secondary)] leading-relaxed">{step.desc}</div>
+                <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-primary)" }}>
+                  {step.title}
+                </div>
+                <div style={{ marginTop: "4px", fontSize: "12px", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+                  {step.desc}
+                </div>
               </div>
             </motion.li>
           ))}
         </ul>
 
-        <div className="mt-8 rounded-lg border border-amber-400/60 bg-amber-50 px-4 py-3 text-xs text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
-          <strong>Risk disclosure:</strong> All of the above is fictional. This is a demo project. Investment returns shown are fabricated and do not represent real outcomes.
+        <div
+          style={{
+            marginTop: "32px",
+            borderRadius: "var(--radius)",
+            borderLeft: "3px solid var(--gold-dark)",
+            background: "rgba(146, 64, 14, 0.1)",
+            padding: "12px 16px",
+            fontSize: "12px",
+          }}
+        >
+          <strong style={{ color: "var(--text-primary)", fontWeight: 500 }}>Risk disclosure:</strong>{" "}
+          <span style={{ color: "var(--text-muted)" }}>
+            All of the above is fictional. This is a demo project. Investment returns shown are fabricated and do not represent real outcomes.
+          </span>
         </div>
       </div>
     </section>

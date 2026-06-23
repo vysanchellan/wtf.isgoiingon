@@ -23,56 +23,98 @@ export function Testimonials() {
 
   return (
     <section
-      className="border-b border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)] py-16 sm:py-20"
+      className="py-16 sm:py-20"
+      style={{
+        background: "var(--bg-secondary)",
+        borderBottom: "1px solid var(--border)",
+      }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
-        <div className="mb-6 text-center">
-          <div className="text-xs font-medium tracking-wider text-[#0F6E56] uppercase">
+        <div className="mb-10 text-center">
+          <span
+            className="text-xs font-semibold tracking-[0.2em] uppercase"
+            style={{ color: "var(--gold)" }}
+          >
             Testimonials
-          </div>
-          <h2 className="text-xl font-medium mt-1">What our investors say</h2>
-          <p className="mt-1 text-xs text-amber-700 dark:text-amber-300">
-            Every quote below is fictional, written for the purposes of this UI demo.
-          </p>
+          </span>
+          <h2 className="gradient-text mt-2 text-2xl font-bold sm:text-3xl">
+            What our investors say
+          </h2>
         </div>
 
         <div className="relative">
           <AnimatePresence mode="wait">
-            <motion.figure
+            <motion.div
               key={t.name}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.35 }}
-              className="rounded-xl border border-[#1D9E75]/30 bg-white dark:bg-[var(--surface)] p-6"
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="card-premium glow relative overflow-hidden p-8"
+              style={{ borderLeft: "3px solid var(--gold)" }}
             >
-              <Quote className="h-5 w-5 text-[#1D9E75]/60" aria-hidden />
-              <blockquote className="mt-3 text-sm leading-relaxed text-[var(--text-primary)]">
+              <div
+                className="absolute bottom-4 right-4 select-none"
+                style={{ color: "var(--gold)", opacity: 0.06 }}
+              >
+                <Quote className="h-20 w-20" />
+              </div>
+              <div style={{ color: "var(--gold)", opacity: 0.2 }}>
+                <Quote className="h-8 w-8" />
+              </div>
+              <blockquote
+                className="mt-4 text-lg leading-relaxed italic"
+                style={{ color: "var(--text-primary)" }}
+              >
                 &ldquo;{t.quote}&rdquo;
               </blockquote>
-              <figcaption className="mt-4 flex items-center justify-between border-t border-[var(--border-tertiary)] pt-3 text-xs">
-                <span className="font-medium">{t.name}</span>
-                <span className="text-[#1D9E75] font-medium">{t.amount}</span>
-              </figcaption>
-              <p className="mt-2 text-[10px] font-medium text-amber-700 dark:text-amber-300">
+              <div
+                className="mt-6 flex items-center justify-between pt-4"
+                style={{ borderTop: "1px solid var(--border)" }}
+              >
+                <span
+                  className="text-sm font-semibold"
+                  style={{ color: "var(--gold)" }}
+                >
+                  {t.name}
+                </span>
+                <span
+                  className="text-sm font-bold"
+                  style={{ color: "var(--gold)" }}
+                >
+                  {t.amount}
+                </span>
+              </div>
+              <p
+                className="mt-3 text-[11px] font-medium"
+                style={{ color: "var(--amber)" }}
+              >
                 Name and quote are fictional. Not a real testimonial.
               </p>
-            </motion.figure>
+            </motion.div>
           </AnimatePresence>
 
-          <div className="mt-4 flex items-center justify-between">
+          <div className="mt-6 flex items-center justify-between">
             <button
               type="button"
-              onClick={() => setIndex((i) => (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
+              onClick={() =>
+                setIndex(
+                  (i) => (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length
+                )
+              }
               aria-label="Previous testimonial"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-secondary)] hover:border-[#1D9E75]/40 transition"
+              className="btn-outline inline-flex h-9 w-9 items-center justify-center"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
 
-            <div className="flex items-center gap-1.5" role="tablist" aria-label="Choose testimonial">
+            <div
+              className="flex items-center gap-2"
+              role="tablist"
+              aria-label="Choose testimonial"
+            >
               {TESTIMONIALS.map((tt, i) => (
                 <button
                   key={tt.name}
@@ -82,18 +124,24 @@ export function Testimonials() {
                   aria-label={`Show testimonial from ${tt.name}`}
                   onClick={() => setIndex(i)}
                   className={cn(
-                    "h-2 rounded-full transition-all",
-                    i === index ? "w-5 bg-[#1D9E75]" : "w-2 bg-[var(--border)] hover:bg-[var(--text-secondary)]"
+                    "h-2 rounded-full transition-all duration-300",
+                    i === index ? "w-6" : "w-2"
                   )}
+                  style={{
+                    background:
+                      i === index ? "var(--gold)" : "var(--border)",
+                  }}
                 />
               ))}
             </div>
 
             <button
               type="button"
-              onClick={() => setIndex((i) => (i + 1) % TESTIMONIALS.length)}
+              onClick={() =>
+                setIndex((i) => (i + 1) % TESTIMONIALS.length)
+              }
               aria-label="Next testimonial"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-secondary)] hover:border-[#1D9E75]/40 transition"
+              className="btn-outline inline-flex h-9 w-9 items-center justify-center"
             >
               <ChevronRight className="h-4 w-4" />
             </button>

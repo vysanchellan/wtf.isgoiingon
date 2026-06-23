@@ -8,15 +8,43 @@ export default function FaqPage() {
       <Head>
         <title>FAQ — AmzVest ZA (DEMO)</title>
       </Head>
-      <section className="border-b border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)]">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-          <div className="text-xs font-medium tracking-wider text-[#0F6E56] uppercase">
+      <section
+        style={{
+          borderBottom: "1px solid var(--border)",
+          background: "var(--bg-secondary)",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 1152,
+            margin: "0 auto",
+            padding: "48px 16px 40px",
+          }}
+        >
+          <div
+            style={{
+              fontSize: 11,
+              fontWeight: 600,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--gold)",
+            }}
+          >
             FAQ
           </div>
-          <h1 className="mt-2 text-2xl font-medium sm:text-3xl">
+          <h1
+            style={{
+              fontSize: 28,
+              fontWeight: 600,
+              color: "var(--text-primary)",
+              margin: "8px 0 0",
+            }}
+          >
             Questions about this demo.
           </h1>
-          <Disclaimer variant="card" className="mt-4 max-w-xl" />
+          <div style={{ marginTop: 20, maxWidth: 600 }}>
+            <Disclaimer variant="card" />
+          </div>
         </div>
       </section>
       <FAQ />

@@ -17,48 +17,107 @@ export default function ContactPage() {
       <Head>
         <title>Contact — AmzVest ZA (DEMO)</title>
       </Head>
-      <section className="border-b border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)]">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-          <div className="text-xs font-medium tracking-wider text-[#0F6E56] uppercase">
+      <section
+        style={{
+          borderBottom: "1px solid var(--border)",
+          background: "var(--bg-secondary)",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 1152,
+            margin: "0 auto",
+            padding: "48px 16px 40px",
+          }}
+        >
+          <div
+            style={{
+              fontSize: 11,
+              fontWeight: 600,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--gold)",
+            }}
+          >
             Contact
           </div>
-          <h1 className="mt-2 text-2xl font-medium sm:text-3xl">
-            Get in touch with the (fictional) team.
+          <h1
+            style={{
+              fontSize: 28,
+              fontWeight: 600,
+              color: "var(--text-primary)",
+              margin: "8px 0 0",
+            }}
+          >
+            Get in touch
           </h1>
-          <Disclaimer variant="card" className="mt-4 max-w-xl">
-            This form does not submit anywhere — it&apos;s a UI flow for a demo project. No data is sent or stored.
-          </Disclaimer>
+          <div style={{ marginTop: 20, maxWidth: 600 }}>
+            <Disclaimer variant="card">
+              This form does not submit anywhere — it&apos;s a UI flow for a demo project. No data is sent or stored.
+            </Disclaimer>
+          </div>
         </div>
       </section>
 
-      <section className="py-16 bg-white dark:bg-[var(--surface)]">
-        <div className="mx-auto max-w-xl px-4 sm:px-6">
-          <form onSubmit={handleSubmit} className="rounded-xl border border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)] p-6">
-            <h2 className="text-base font-medium">Send a message (demo)</h2>
-            <p className="mt-1 text-xs text-[var(--text-secondary)]">
+      <section style={{ padding: "64px 0", background: "var(--bg-primary)" }}>
+        <div style={{ maxWidth: 560, margin: "0 auto", padding: "0 16px" }}>
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              background: "var(--bg-card)",
+              border: "1px solid var(--border)",
+              borderRadius: "var(--radius-xl)",
+              padding: 24,
+            }}
+          >
+            <h2 style={{ fontSize: 16, fontWeight: 600, margin: 0, color: "var(--text-primary)" }}>
+              Send a message (demo)
+            </h2>
+            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "4px 0 20px" }}>
               Fields validate locally. Submission shows a confirmation only.
             </p>
 
-            <div className="mt-5 space-y-4">
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <Field label="Name" id="name" type="text" />
+              <Field label="Email" id="email" type="email" />
+              <Field label="Subject" id="subject" type="text" />
               <div>
-                <label htmlFor="name" className="text-xs font-medium">Name</label>
-                <input id="name" type="text" required className="mt-1 w-full rounded-lg border border-[var(--border-secondary)] bg-[var(--background)] px-3 py-2 text-sm outline-none focus:border-[#1D9E75]/60 focus:ring-2 focus:ring-[#1D9E75]/20" />
-              </div>
-              <div>
-                <label htmlFor="email" className="text-xs font-medium">Email</label>
-                <input id="email" type="email" required className="mt-1 w-full rounded-lg border border-[var(--border-secondary)] bg-[var(--background)] px-3 py-2 text-sm outline-none focus:border-[#1D9E75]/60 focus:ring-2 focus:ring-[#1D9E75]/20" />
-              </div>
-              <div>
-                <label htmlFor="subject" className="text-xs font-medium">Subject</label>
-                <input id="subject" type="text" required className="mt-1 w-full rounded-lg border border-[var(--border-secondary)] bg-[var(--background)] px-3 py-2 text-sm outline-none focus:border-[#1D9E75]/60 focus:ring-2 focus:ring-[#1D9E75]/20" />
-              </div>
-              <div>
-                <label htmlFor="message" className="text-xs font-medium">Message</label>
-                <textarea id="message" required rows={4} className="mt-1 w-full rounded-lg border border-[var(--border-secondary)] bg-[var(--background)] px-3 py-2 text-sm outline-none focus:border-[#1D9E75]/60 focus:ring-2 focus:ring-[#1D9E75]/20" />
+                <label htmlFor="message" style={labelStyle}>Message</label>
+                <textarea
+                  id="message"
+                  required
+                  rows={4}
+                  style={inputStyle}
+                  onFocus={focusGold}
+                  onBlur={blurBorder}
+                />
               </div>
             </div>
 
-            <button type="submit" className="mt-5 inline-flex w-full items-center justify-center rounded-lg bg-[#1D9E75] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#0F6E56] transition">
+            <button
+              type="submit"
+              style={{
+                width: "100%",
+                marginTop: 20,
+                padding: "11px 16px",
+                fontSize: 13,
+                fontWeight: 600,
+                color: "#0a0a0f",
+                background: "linear-gradient(135deg, var(--gold), var(--amber))",
+                border: "none",
+                borderRadius: "var(--radius)",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = "0 8px 30px rgba(255, 215, 0, 0.25)";
+                e.currentTarget.style.transform = "translateY(-1px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.transform = "none";
+              }}
+            >
               Send demo message
             </button>
 
@@ -68,12 +127,25 @@ export default function ContactPage() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
-                  className="mt-5 flex items-start gap-3 rounded-xl border border-emerald-400/50 bg-emerald-50 px-4 py-3 text-xs text-emerald-900 dark:border-emerald-500/40 dark:bg-emerald-500/10 dark:text-emerald-200"
+                  style={{
+                    marginTop: 20,
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 10,
+                    padding: "12px 16px",
+                    borderRadius: "var(--radius)",
+                    background: "rgba(255, 215, 0, 0.08)",
+                    border: "1px solid rgba(255, 215, 0, 0.2)",
+                    fontSize: 12,
+                    color: "var(--gold)",
+                  }}
                 >
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+                  <CheckCircle2 style={{ width: 16, height: 16, flexShrink: 0, marginTop: 1 }} />
                   <div>
-                    <p className="font-semibold">Demo: message accepted.</p>
-                    <p className="text-emerald-800/80 dark:text-emerald-200/80">No email is actually sent. This is a demo.</p>
+                    <p style={{ fontWeight: 600, margin: 0 }}>Demo: message accepted.</p>
+                    <p style={{ color: "var(--text-secondary)", margin: "2px 0 0" }}>
+                      No email is actually sent. This is a demo.
+                    </p>
                   </div>
                 </motion.div>
               )}
@@ -83,4 +155,51 @@ export default function ContactPage() {
       </section>
     </>
   );
+}
+
+const labelStyle: React.CSSProperties = {
+  fontSize: 12,
+  fontWeight: 600,
+  color: "var(--text-secondary)",
+  display: "block",
+  marginBottom: 6,
+};
+
+const inputStyle: React.CSSProperties = {
+  width: "100%",
+  padding: "10px 12px",
+  fontSize: 13,
+  background: "var(--bg-tertiary)",
+  border: "1px solid var(--border)",
+  borderRadius: "var(--radius)",
+  color: "var(--text-primary)",
+  outline: "none",
+  boxSizing: "border-box",
+  fontFamily: "inherit",
+};
+
+function Field({ label, id, type }: { label: string; id: string; type: string }) {
+  return (
+    <div>
+      <label htmlFor={id} style={labelStyle}>{label}</label>
+      <input
+        id={id}
+        type={type}
+        required
+        style={inputStyle}
+        onFocus={focusGold}
+        onBlur={blurBorder}
+      />
+    </div>
+  );
+}
+
+function focusGold(e: React.FocusEvent<HTMLElement>) {
+  e.currentTarget.style.borderColor = "var(--gold)";
+  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(255, 215, 0, 0.15)";
+}
+
+function blurBorder(e: React.FocusEvent<HTMLElement>) {
+  e.currentTarget.style.borderColor = "var(--border)";
+  e.currentTarget.style.boxShadow = "none";
 }

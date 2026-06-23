@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { TrendingUp } from "lucide-react";
-import { PACKAGES, type PackageId, getPackage } from "@/lib/data";
+import { PACKAGES, getPackage, type PackageId } from "@/lib/data";
 import { useDemoStore } from "@/lib/store";
 import { formatCurrency } from "@/lib/utils";
 
@@ -23,45 +23,124 @@ export default function RegisterPage() {
       <Head>
         <title>Register — AmzVest ZA (DEMO)</title>
       </Head>
-      <div className="flex min-h-[calc(100vh-120px)] items-center justify-center px-4 py-12">
-        <div className="w-full max-w-sm rounded-xl border border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)] p-8">
-          <div className="flex items-center gap-2 mb-6">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[#1D9E75]">
-              <TrendingUp className="h-4 w-4 text-white" />
+      <div
+        style={{
+          display: "flex",
+          minHeight: "calc(100vh - 120px)",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "48px 16px",
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            maxWidth: 400,
+            background: "var(--bg-card)",
+            border: "1px solid var(--border-glow)",
+            borderRadius: "var(--radius-xl)",
+            padding: 32,
+            boxShadow: "var(--shadow-glow), var(--shadow-card)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
+            <div
+              style={{
+                display: "flex",
+                height: 36,
+                width: 36,
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "var(--radius)",
+                background: "linear-gradient(135deg, var(--gold), var(--amber))",
+              }}
+            >
+              <TrendingUp style={{ height: 18, width: 18, color: "#0a0a0f" }} />
             </div>
-            <span className="text-sm font-medium">AmzVest ZA</span>
+            <span style={{ fontSize: 15, fontWeight: 600, color: "var(--gold)" }}>
+              AmzVest ZA
+            </span>
           </div>
-          <h2 className="text-lg font-medium">Create your account</h2>
-          <p className="text-xs text-[var(--text-secondary)] mt-1 mb-6">
+
+          <h2 style={{ fontSize: 20, fontWeight: 600, color: "var(--text-primary)", margin: 0 }}>
+            Create your account
+          </h2>
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", margin: "4px 0 20px" }}>
             Join 143 investors already earning returns
           </p>
 
-          <div className="rounded-lg bg-[#E1F5EE] px-4 py-3 mb-5">
-            <div className="text-xs font-medium text-[#0F6E56]">{pkg.name} Package selected</div>
-            <div className="text-[11px] text-[#0F6E56] mt-0.5">
+          <div
+            style={{
+              padding: "12px 16px",
+              borderRadius: "var(--radius)",
+              background: "rgba(255, 215, 0, 0.06)",
+              border: "1px solid rgba(255, 215, 0, 0.15)",
+              marginBottom: 20,
+            }}
+          >
+            <div style={{ fontSize: 12, fontWeight: 600, color: "var(--gold)" }}>
+              {pkg.name} Package selected
+            </div>
+            <div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 4 }}>
               Invest {formatCurrency(pkg.invest)} · Receive {formatCurrency(pkg.returnAmount)} over {pkg.weeks} weeks ({formatCurrency(pkg.weeklyPayout)}/week)
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Full name</label>
-              <input type="text" placeholder="Sipho Nkosi" className="mt-1 w-full rounded-lg border border-[var(--border-secondary)] bg-[var(--background)] px-3 py-2 text-sm outline-none focus:border-[#1D9E75]/60 focus:ring-2 focus:ring-[#1D9E75]/20" />
+              <label style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>
+                Full name
+              </label>
+              <input
+                type="text"
+                placeholder="Sipho Nkosi"
+                style={inputStyle}
+                onFocus={focusGold}
+                onBlur={blurBorder}
+              />
             </div>
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Email address</label>
-              <input type="email" placeholder="sipho@email.com" className="mt-1 w-full rounded-lg border border-[var(--border-secondary)] bg-[var(--background)] px-3 py-2 text-sm outline-none focus:border-[#1D9E75]/60 focus:ring-2 focus:ring-[#1D9E75]/20" />
+              <label style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>
+                Email address
+              </label>
+              <input
+                type="email"
+                placeholder="sipho@email.com"
+                style={inputStyle}
+                onFocus={focusGold}
+                onBlur={blurBorder}
+              />
             </div>
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Phone number</label>
-              <input type="tel" placeholder="+27 82 000 0000" className="mt-1 w-full rounded-lg border border-[var(--border-secondary)] bg-[var(--background)] px-3 py-2 text-sm outline-none focus:border-[#1D9E75]/60 focus:ring-2 focus:ring-[#1D9E75]/20" />
+              <label style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>
+                Phone number
+              </label>
+              <input
+                type="tel"
+                placeholder="+27 82 000 0000"
+                style={inputStyle}
+                onFocus={focusGold}
+                onBlur={blurBorder}
+              />
             </div>
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Investment package</label>
+              <label style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>
+                Investment package
+              </label>
               <select
                 value={pkgId}
                 onChange={(e) => setPkgId(e.target.value as PackageId)}
-                className="mt-1 w-full rounded-lg border border-[var(--border-secondary)] bg-[var(--background)] px-3 py-2 text-sm outline-none focus:border-[#1D9E75]/60 focus:ring-2 focus:ring-[#1D9E75]/20"
+                style={{
+                  ...inputStyle,
+                  cursor: "pointer",
+                  appearance: "none",
+                  backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A89F94' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E\")",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 12px center",
+                  paddingRight: 32,
+                }}
+                onFocus={focusGold}
+                onBlur={blurBorder}
               >
                 {PKG_IDS.map((id) => {
                   const p = getPackage(id);
@@ -74,26 +153,101 @@ export default function RegisterPage() {
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Create password</label>
-              <input type="password" placeholder="Minimum 8 characters" className="mt-1 w-full rounded-lg border border-[var(--border-secondary)] bg-[var(--background)] px-3 py-2 text-sm outline-none focus:border-[#1D9E75]/60 focus:ring-2 focus:ring-[#1D9E75]/20" />
+              <label style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>
+                Create password
+              </label>
+              <input
+                type="password"
+                placeholder="Minimum 8 characters"
+                style={inputStyle}
+                onFocus={focusGold}
+                onBlur={blurBorder}
+              />
             </div>
             <Link
               href="/dashboard"
-              className="block w-full rounded-lg bg-[#1D9E75] px-4 py-2.5 text-center text-sm font-medium text-white no-underline hover:bg-[#0F6E56] transition"
+              style={{
+                display: "block",
+                width: "100%",
+                padding: "11px 16px",
+                textAlign: "center",
+                fontSize: 13,
+                fontWeight: 600,
+                color: "#0a0a0f",
+                background: "linear-gradient(135deg, var(--gold), var(--amber))",
+                border: "none",
+                borderRadius: "var(--radius)",
+                textDecoration: "none",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+                marginTop: 2,
+                boxSizing: "border-box",
+              }}
+              onMouseEnter={hoverGold}
+              onMouseLeave={leaveGold}
             >
-              Create account &amp; proceed to payment
+              Create account & proceed to payment
             </Link>
           </div>
 
-          <div className="mt-4 text-center text-xs text-[var(--text-secondary)]">
-            Already have an account? <Link href="/login" className="text-[#1D9E75] no-underline">Sign in</Link>
+          <div style={{ marginTop: 20, textAlign: "center", fontSize: 12, color: "var(--text-secondary)" }}>
+            Already have an account?{" "}
+            <Link href="/login" style={{ color: "var(--gold)", textDecoration: "none" }}>
+              Sign in
+            </Link>
           </div>
 
-          <div className="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-[10px] text-amber-800 dark:bg-amber-500/10 dark:text-amber-200">
-            This is a DEMO. No real account is created. No payment is processed.
+          <div
+            style={{
+              marginTop: 16,
+              padding: "10px 12px",
+              borderRadius: "var(--radius)",
+              background: "rgba(245, 158, 11, 0.1)",
+              border: "1px solid rgba(245, 158, 11, 0.2)",
+              fontSize: 11,
+              color: "var(--amber)",
+              textAlign: "center",
+              fontWeight: 500,
+            }}
+          >
+            This is a DEMO. No real account is created.
           </div>
         </div>
       </div>
     </>
   );
+}
+
+const inputStyle: React.CSSProperties = {
+  width: "100%",
+  padding: "10px 12px",
+  fontSize: 13,
+  background: "var(--bg-tertiary)",
+  border: "1px solid var(--border)",
+  borderRadius: "var(--radius)",
+  color: "var(--text-primary)",
+  outline: "none",
+  boxSizing: "border-box",
+};
+
+function focusGold(e: React.FocusEvent<HTMLElement>) {
+  const el = e.currentTarget;
+  el.style.borderColor = "var(--gold)";
+  el.style.boxShadow = "0 0 0 3px rgba(255, 215, 0, 0.15)";
+}
+
+function blurBorder(e: React.FocusEvent<HTMLElement>) {
+  const el = e.currentTarget;
+  el.style.borderColor = "var(--border)";
+  el.style.boxShadow = "none";
+}
+
+function hoverGold(e: React.MouseEvent<HTMLElement>) {
+  e.currentTarget.style.boxShadow = "0 8px 30px rgba(255, 215, 0, 0.25)";
+  e.currentTarget.style.transform = "translateY(-1px)";
+}
+
+function leaveGold(e: React.MouseEvent<HTMLElement>) {
+  e.currentTarget.style.boxShadow = "none";
+  e.currentTarget.style.transform = "none";
 }

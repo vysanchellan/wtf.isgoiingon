@@ -8,9 +8,16 @@ type Props = {
 
 export function Layout({ children }: Props) {
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--background-tertiary)]">
+    <div
+      style={{
+        display: "flex",
+        minHeight: "100vh",
+        flexDirection: "column",
+        background: "var(--bg-primary)",
+      }}
+    >
       <Navbar />
-      <main className="flex-1">{children}</main>
+      <main style={{ flex: 1 }}>{children}</main>
       <Footer />
     </div>
   );

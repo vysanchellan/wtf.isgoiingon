@@ -8,60 +8,105 @@ export function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="border-b border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)] py-16 sm:py-20">
+    <section
+      className="py-16 sm:py-20"
+      style={{
+        background: "var(--bg-secondary)",
+        borderBottom: "1px solid var(--border)",
+      }}
+    >
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
-        <div className="mb-6 text-center">
-          <div className="text-xs font-medium tracking-wider text-[#0F6E56] uppercase">
+        <div className="mb-10 text-center">
+          <span
+            className="text-xs font-semibold tracking-[0.2em] uppercase"
+            style={{ color: "var(--gold)" }}
+          >
             FAQ
-          </div>
-          <h2 className="text-xl font-medium mt-1">Frequently asked questions</h2>
-          <p className="mt-1 text-sm text-[var(--text-secondary)]">
-            The most important answers about this demo are right here.
-          </p>
+          </span>
+          <h2 className="gradient-text mt-2 text-2xl font-bold sm:text-3xl">
+            Frequently asked questions
+          </h2>
         </div>
 
-        <ul className="divide-y divide-[var(--border-tertiary)] overflow-hidden rounded-xl border border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)]">
-          {FAQS.map((item, i) => {
-            const isOpen = open === i;
-            return (
-              <li key={item.q}>
-                <button
-                  type="button"
-                  onClick={() => setOpen(isOpen ? null : i)}
-                  aria-expanded={isOpen}
-                  aria-controls={`faq-${i}`}
-                  className="flex w-full items-start justify-between gap-4 px-5 py-4 text-left hover:bg-[var(--surface-muted)] transition"
+        <div className="gradient-border overflow-hidden rounded-xl">
+          <div
+            style={{
+              background: "var(--bg-card)",
+              border: "1px solid var(--border)",
+              borderRadius: "var(--radius-lg)",
+            }}
+          >
+            {FAQS.map((item, i) => {
+              const isOpen = open === i;
+              return (
+                <div
+                  key={item.q}
+                  className="transition-all duration-300"
+                  style={{
+                    background: isOpen
+                      ? "rgba(255, 215, 0, 0.02)"
+                      : "transparent",
+                  }}
                 >
-                  <span className="text-sm font-medium">{item.q}</span>
-                  <ChevronDown
-                    className={cn(
-                      "mt-0.5 h-4 w-4 shrink-0 text-[var(--text-secondary)] transition",
-                      isOpen && "rotate-180 text-[#1D9E75]"
-                    )}
-                    aria-hidden
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      id={`faq-${i}`}
-                      key="content"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.22 }}
-                      className="overflow-hidden"
+                  <button
+                    type="button"
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-${i}`}
+                    className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition-all duration-200 hover:opacity-90"
+                    style={{
+                      background: isOpen
+                        ? "rgba(255, 215, 0, 0.03)"
+                        : "transparent",
+                    }}
+                  >
+                    <span
+                      className={cn(
+                        "text-sm font-medium transition-colors duration-200",
+                        isOpen ? "font-semibold" : ""
+                      )}
+                      style={{
+                        color: isOpen ? "var(--gold)" : "var(--text-primary)",
+                      }}
                     >
-                      <p className="px-5 pb-5 text-xs text-[var(--text-secondary)] leading-relaxed">
-                        {item.a}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </li>
-            );
-          })}
-        </ul>
+                      {item.q}
+                    </span>
+                    <ChevronDown
+                      className={cn(
+                        "h-4 w-4 shrink-0 transition-all duration-300"
+                      )}
+                      style={{
+                        color: isOpen ? "var(--gold)" : "var(--text-muted)",
+                        transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                      }}
+                      aria-hidden
+                    />
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        id={`faq-${i}`}
+                        key="content"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" as const }}
+                        className="overflow-hidden"
+                      >
+                        <div
+                          className="px-6 pb-6 text-sm leading-relaxed"
+                          style={{ color: "var(--text-secondary)" }}
+                        >
+                          {item.a}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );

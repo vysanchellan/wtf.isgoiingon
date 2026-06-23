@@ -12,21 +12,25 @@ export function PackagesGrid({ withHeader = true }: Props) {
   const { setSelectedPackage } = useDemoStore();
 
   return (
-    <section id="packages" className="border-b border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)]">
-      <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
+    <section id="packages" style={{ background: "var(--bg-primary)", borderBottom: "1px solid var(--border)" }}>
+      <div style={{ margin: "0 auto", maxWidth: "1024px", padding: "64px 16px" }}>
         {withHeader && (
-          <div className="mb-8">
-            <div className="text-xs font-medium tracking-wider text-[#0F6E56] uppercase">
+          <div style={{ marginBottom: "40px" }}>
+            <div style={{ fontSize: "11px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "8px" }}>
               Investment packages
             </div>
-            <h2 className="text-xl font-medium mt-1">Choose your investment tier</h2>
-            <p className="text-sm text-[var(--text-secondary)] mt-1">
+            <h2 className="gradient-text" style={{ fontSize: "24px", fontWeight: 700, marginBottom: "4px" }}>
+              Choose your investment tier
+            </h2>
+            <p style={{ fontSize: "14px", color: "var(--text-secondary)", maxWidth: "480px" }}>
               All packages deliver a 3× return over 3 equal weekly payouts. The more you invest, the more you earn.
             </p>
           </div>
         )}
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="pkg-grid" style={{ display: "grid", gap: "16px", gridTemplateColumns: "1fr" }}>
+          <style>{`@media (min-width: 768px) { .pkg-grid { grid-template-columns: repeat(3, 1fr) !important; } }`}</style>
+
           {PACKAGES.map((pkg, i) => (
             <motion.div
               key={pkg.id}
@@ -34,50 +38,76 @@ export function PackagesGrid({ withHeader = true }: Props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className={`rounded-xl overflow-hidden border transition ${
-                pkg.highlight
-                  ? "border-[#1D9E75] border-2"
-                  : "border-[var(--border-tertiary)] hover:border-[#1D9E75]"
-              }`}
+              className={pkg.highlight ? "card-premium" : "card-premium"}
+              style={{
+                position: "relative",
+                overflow: "hidden",
+                border: pkg.highlight ? "2px solid var(--gold)" : undefined,
+                borderRadius: "var(--radius-lg)",
+              }}
             >
-              <div className={`px-5 py-4 border-b border-[var(--border-tertiary)] ${
-                pkg.highlight ? "bg-[#E1F5EE]" : "bg-[var(--surface-muted)]"
-              }`}>
-                <div className="text-[10px] font-medium tracking-wider text-[var(--text-secondary)] uppercase mb-1">
-                  {pkg.name}
-                  {pkg.badge && (
-                    <span className="ml-2 inline-block rounded-full bg-[#1D9E75] px-2 py-0.5 text-[9px] font-medium text-white uppercase tracking-wide">
-                      {pkg.badge}
-                    </span>
-                  )}
+              {pkg.highlight && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "12px",
+                    right: "12px",
+                    borderRadius: "9999px",
+                    background: "linear-gradient(135deg, var(--gold), var(--amber))",
+                    padding: "2px 10px",
+                    fontSize: "9px",
+                    fontWeight: 700,
+                    color: "#0a0a0f",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                    zIndex: 1,
+                  }}
+                >
+                  Popular
                 </div>
-                <div className="text-xl font-medium">
+              )}
+
+              <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)" }}>
+                <div style={{ fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--text-muted)" }}>
+                  {pkg.name}
+                </div>
+                <div className="gradient-text" style={{ fontSize: "24px", fontWeight: 700, marginTop: "4px" }}>
                   {formatCurrency(pkg.invest)}
                 </div>
               </div>
-              <div className="px-5 py-4">
-                <div className="flex items-baseline justify-between mb-3">
-                  <span className="text-xs text-[var(--text-secondary)]">You receive</span>
-                  <span className="text-lg font-medium text-[#1D9E75]">{formatCurrency(pkg.returnAmount)}</span>
+
+              <div style={{ padding: "16px 20px" }}>
+                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "12px" }}>
+                  <span style={{ fontSize: "12px", color: "var(--text-secondary)" }}>You receive</span>
+                  <span style={{ fontSize: "18px", fontWeight: 700, color: "var(--gold)" }}>
+                    {formatCurrency(pkg.returnAmount)}
+                  </span>
                 </div>
-                <hr className="border-[var(--border-tertiary)] mb-3" />
-                <div className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                  <strong className="text-[var(--text-primary)] font-medium">{formatCurrency(pkg.weeklyPayout)}/week</strong> × {pkg.weeks} payouts<br />
+                <hr style={{ border: "none", borderTop: "1px solid var(--border)", margin: "0 0 12px" }} />
+                <div style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+                  <strong style={{ fontWeight: 600, color: "var(--text-primary)" }}>{formatCurrency(pkg.weeklyPayout)}/week</strong> × {pkg.weeks} payouts<br />
                   Over {pkg.weeks} weeks<br />
                   200% net gain
                 </div>
+
                 <Link
                   href="/register"
                   onClick={() => setSelectedPackage(pkg.id)}
-                  className={`mt-4 block w-full rounded-lg py-2 text-center text-xs font-medium no-underline transition ${
-                    pkg.highlight
-                      ? "bg-[#1D9E75] text-white hover:bg-[#0F6E56]"
-                      : "bg-[#E1F5EE] text-[#0F6E56] hover:opacity-85"
-                  }`}
+                  className={pkg.highlight ? "btn-gold" : "btn-outline"}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    padding: "10px 16px",
+                    marginTop: "16px",
+                    textAlign: "center",
+                    fontSize: "12px",
+                    textDecoration: "none",
+                  }}
                 >
                   Choose {pkg.name}
                 </Link>
-                <p className="mt-2 text-center text-[10px] text-amber-700 dark:text-amber-300">
+
+                <p style={{ marginTop: "8px", textAlign: "center", fontSize: "10px", color: "var(--amber)" }}>
                   Fictional rate. Not real.
                 </p>
               </div>

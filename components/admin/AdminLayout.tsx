@@ -1,5 +1,4 @@
 import { type ReactNode } from "react";
-import { Disclaimer } from "@/components/ui/Disclaimer";
 
 type Props = {
   children: ReactNode;
@@ -10,13 +9,18 @@ type Props = {
 export function AdminLayout({ children, title, description }: Props) {
   return (
     <div>
-      <Disclaimer variant="banner">
+      <div style={{
+        width: "100%", background: "rgba(217, 119, 6, 0.15)", color: "var(--amber)",
+        fontSize: "10px", display: "flex", alignItems: "center", justifyContent: "center",
+        gap: "6px", padding: "4px 16px", fontWeight: 500,
+        borderBottom: "1px solid rgba(217, 119, 6, 0.15)",
+      }}>
         DEMO — Admin simulation. No real data.
-      </Disclaimer>
-      <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
-        <div className="mb-6">
-          <h1 className="text-lg font-medium">{title}</h1>
-          {description && <p className="text-sm text-[var(--text-secondary)] mt-1">{description}</p>}
+      </div>
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "32px 16px" }}>
+        <div style={{ marginBottom: 24 }}>
+          <h1 style={{ fontSize: 20, fontWeight: 600, color: "var(--text-primary)", margin: 0 }}>{title}</h1>
+          {description && <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4, margin: 0 }}>{description}</p>}
         </div>
         {children}
       </div>

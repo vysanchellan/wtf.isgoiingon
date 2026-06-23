@@ -1,9 +1,8 @@
 import Head from "next/head";
 import { useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
-import { INVESTORS, PAYOUTS, PACKAGES, getPackage } from "@/lib/data";
+import { INVESTORS, PAYOUTS, PACKAGES } from "@/lib/data";
 import { formatCurrency } from "@/lib/utils";
-import { cn } from "@/lib/utils";
 
 type TabId = "investors" | "payouts" | "packages";
 
@@ -32,39 +31,50 @@ export default function AdminDashboardPage() {
         <title>Admin · Dashboard — AmzVest ZA (DEMO)</title>
       </Head>
       <AdminLayout title="Admin panel" description="AmzVest ZA · Operations dashboard">
-        <div className="grid grid-cols-4 gap-2.5 mb-6">
-          <div className="rounded-lg bg-[var(--surface-muted)] p-3">
-            <div className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-1">Capital deployed</div>
-            <div className="text-lg font-medium text-[#1D9E75]">{formatCurrency(totalDeployed)}</div>
-          </div>
-          <div className="rounded-lg bg-[var(--surface-muted)] p-3">
-            <div className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-1">Active investors</div>
-            <div className="text-lg font-medium">{activeCount}</div>
-          </div>
-          <div className="rounded-lg bg-[var(--surface-muted)] p-3">
-            <div className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-1">Payouts this week</div>
-            <div className="text-lg font-medium text-[#BA7517]">{formatCurrency(totalPayoutsThisWeek)}</div>
-          </div>
-          <div className="rounded-lg bg-[var(--surface-muted)] p-3">
-            <div className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-1">Total paid out</div>
-            <div className="text-lg font-medium text-[#1D9E75]">{formatCurrency(totalPaidOut)}</div>
-          </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10, marginBottom: 24 }}>
+          <KpiCard label="Capital deployed" value={formatCurrency(totalDeployed)} gold />
+          <KpiCard label="Active investors" value={String(activeCount)} />
+          <KpiCard label="Payouts this week" value={formatCurrency(totalPayoutsThisWeek)} amber />
+          <KpiCard label="Total paid out" value={formatCurrency(totalPaidOut)} gold />
         </div>
 
-        <div className="rounded-xl border border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)] overflow-hidden">
-          <div className="px-5 pt-4 border-b border-[var(--border-tertiary)]">
-            <div className="flex gap-0">
+        <div
+          style={{
+            background: "var(--bg-card)",
+            border: "1px solid var(--border)",
+            borderRadius: "var(--radius-xl)",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              padding: "16px 20px 0",
+              borderBottom: "1px solid var(--border)",
+            }}
+          >
+            <div style={{ display: "flex", gap: 0 }}>
               {TABS.map((t) => (
                 <button
                   key={t.id}
                   type="button"
                   onClick={() => setTab(t.id)}
-                  className={cn(
-                    "px-4 py-2 text-xs font-medium border-b-2 transition",
-                    tab === t.id
-                      ? "text-[#1D9E75] border-[#1D9E75]"
-                      : "text-[var(--text-secondary)] border-transparent hover:text-[var(--text-primary)]"
-                  )}
+                  style={{
+                    padding: "8px 18px",
+                    fontSize: 12,
+                    fontWeight: 600,
+                    background: "none",
+                    border: "none",
+                    borderBottom: tab === t.id ? "2px solid var(--gold)" : "2px solid transparent",
+                    color: tab === t.id ? "var(--gold)" : "var(--text-muted)",
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (tab !== t.id) e.currentTarget.style.color = "var(--text-primary)";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (tab !== t.id) e.currentTarget.style.color = "var(--text-muted)";
+                  }}
                 >
                   {t.label}
                 </button>
@@ -72,130 +82,308 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          {tab === "investors" && (
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs">
-                <thead>
-                  <tr className="bg-[var(--surface-muted)]">
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Name</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Package</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Invested</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Return</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Status</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider"></th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[var(--border-tertiary)]">
-                  {INVESTORS.map((inv) => (
-                    <tr key={inv.id} className="hover:bg-[var(--surface-muted)]">
-                      <td className="px-5 py-3 font-medium">{inv.name}</td>
-                      <td className="px-5 py-3 text-[var(--text-secondary)]">{inv.package}</td>
-                      <td className="px-5 py-3">{formatCurrency(inv.invested)}</td>
-                      <td className="px-5 py-3">{formatCurrency(inv.returnAmount)}</td>
-                      <td className="px-5 py-3">
-                        <span className={cn(
-                          "rounded-full px-2.5 py-0.5 text-[10px] font-medium",
-                          inv.status === "active" && "bg-[#E1F5EE] text-[#0F6E56]",
-                          inv.status === "complete" && "bg-[#EAF3DE] text-[#3B6D11]",
-                          inv.status === "pending" && "bg-[#FAEEDA] text-[#633806]"
-                        )}>
-                          {inv.status === "complete" ? "Complete" : inv.status === "pending" ? "Pending payment" : "Active"}
-                        </span>
-                      </td>
-                      <td className="px-5 py-3">
-                        <button className="rounded-lg border border-[var(--border-secondary)] px-3 py-1 text-[10px] hover:bg-[var(--surface-muted)] transition">
-                          View
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-
+          {tab === "investors" && <InvestorsTable />}
           {tab === "payouts" && (
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs">
-                <thead>
-                  <tr className="bg-[var(--surface-muted)]">
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Investor</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Package</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Amount</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Week</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Due date</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[var(--border-tertiary)]">
-                  {PAYOUTS.map((p, i) => {
-                    const key = `${p.investor}-${p.week}`;
-                    const isPaid = paidPayouts.has(key);
-                    return (
-                      <tr key={i} className="hover:bg-[var(--surface-muted)]">
-                        <td className="px-5 py-3 font-medium">{p.investor}</td>
-                        <td className="px-5 py-3 text-[var(--text-secondary)]">{p.package}</td>
-                        <td className="px-5 py-3 font-medium text-[#1D9E75]">{formatCurrency(p.amount)}</td>
-                        <td className="px-5 py-3 text-[var(--text-secondary)]">Week {p.week}</td>
-                        <td className="px-5 py-3 text-[var(--text-secondary)]">{p.dueDate}</td>
-                        <td className="px-5 py-3">
-                          <button
-                            onClick={() => markPaid(key)}
-                            disabled={isPaid}
-                            className={cn(
-                              "rounded-lg px-3 py-1 text-[10px] font-medium transition",
-                              isPaid
-                                ? "bg-[#EAF3DE] text-[#3B6D11] cursor-default"
-                                : "border border-[#1D9E75] text-[#0F6E56] hover:bg-[#E1F5EE]"
-                            )}
-                          >
-                            {isPaid ? "✓ Paid" : "Mark paid"}
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+            <PayoutsTable paidPayouts={paidPayouts} markPaid={markPaid} />
           )}
-
-          {tab === "packages" && (
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs">
-                <thead>
-                  <tr className="bg-[var(--surface-muted)]">
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Package</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Investor pays</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Investor receives</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Weekly payout</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Your profit</th>
-                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Active</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[var(--border-tertiary)]">
-                  {PACKAGES.map((pkg) => {
-                    const activeCount = INVESTORS.filter(
-                      (i) => i.package === pkg.id && i.status === "active"
-                    ).length;
-                    const profit = pkg.invest * 7; // fictional profit calc
-                    return (
-                      <tr key={pkg.id} className="hover:bg-[var(--surface-muted)]">
-                        <td className="px-5 py-3 font-medium">{pkg.name}</td>
-                        <td className="px-5 py-3">{formatCurrency(pkg.invest)}</td>
-                        <td className="px-5 py-3">{formatCurrency(pkg.returnAmount)}</td>
-                        <td className="px-5 py-3 text-[var(--text-secondary)]">{formatCurrency(pkg.weeklyPayout)} × {pkg.weeks}</td>
-                        <td className="px-5 py-3 font-medium text-[#1D9E75]">{formatCurrency(profit)}</td>
-                        <td className="px-5 py-3">{activeCount}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
+          {tab === "packages" && <PackagesTable />}
         </div>
       </AdminLayout>
     </>
+  );
+}
+
+function KpiCard({ label, value, gold, amber }: { label: string; value: string; gold?: boolean; amber?: boolean }) {
+  return (
+    <div
+      style={{
+        background: "var(--bg-card)",
+        border: "1px solid var(--border)",
+        borderRadius: "var(--radius)",
+        padding: 14,
+      }}
+    >
+      <div
+        style={{
+          fontSize: 10,
+          color: "var(--text-muted)",
+          textTransform: "uppercase",
+          letterSpacing: "0.08em",
+          marginBottom: 6,
+        }}
+      >
+        {label}
+      </div>
+      <div
+        style={{
+          fontSize: 20,
+          fontWeight: 600,
+          color: gold ? "var(--gold)" : amber ? "var(--amber)" : "var(--text-primary)",
+        }}
+      >
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function InvestorsTable() {
+  return (
+    <div style={{ overflowX: "auto" }}>
+      <table style={{ width: "100%", fontSize: 12, borderCollapse: "collapse" }}>
+        <thead>
+          <tr style={{ background: "var(--bg-tertiary)" }}>
+            {["Name", "Package", "Invested", "Return", "Status", ""].map((h) => (
+              <th
+                key={h}
+                style={{
+                  textAlign: "left",
+                  padding: "10px 20px",
+                  fontWeight: 600,
+                  color: "var(--text-muted)",
+                  textTransform: "uppercase",
+                  fontSize: 10,
+                  letterSpacing: "0.08em",
+                }}
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody style={{ borderTop: "1px solid var(--border)" }}>
+          {INVESTORS.map((inv, i) => (
+            <tr
+              key={inv.id}
+              style={{
+                borderBottom: i < INVESTORS.length - 1 ? "1px solid var(--border)" : "none",
+                transition: "background 0.15s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "var(--bg-tertiary)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+            >
+              <td style={{ padding: "10px 20px", fontWeight: 500 }}>{inv.name}</td>
+              <td style={{ padding: "10px 20px", color: "var(--text-secondary)" }}>
+                {inv.package.charAt(0).toUpperCase() + inv.package.slice(1)}
+              </td>
+              <td style={{ padding: "10px 20px" }}>{formatCurrency(inv.invested)}</td>
+              <td style={{ padding: "10px 20px" }}>{formatCurrency(inv.returnAmount)}</td>
+              <td style={{ padding: "10px 20px" }}>
+                <StatusBadge status={inv.status} />
+              </td>
+              <td style={{ padding: "10px 20px" }}>
+                <button
+                  style={{
+                    padding: "4px 12px",
+                    fontSize: 10,
+                    fontWeight: 500,
+                    background: "transparent",
+                    border: "1px solid var(--border)",
+                    borderRadius: "var(--radius)",
+                    color: "var(--text-secondary)",
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "var(--gold-dark)";
+                    e.currentTarget.style.background = "rgba(255, 215, 0, 0.05)";
+                    e.currentTarget.style.color = "var(--gold)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "var(--border)";
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.color = "var(--text-secondary)";
+                  }}
+                >
+                  View
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function StatusBadge({ status }: { status: string }) {
+  const styles: Record<string, React.CSSProperties> = {
+    active: { background: "rgba(255, 215, 0, 0.08)", color: "var(--gold)" },
+    complete: { background: "rgba(255, 215, 0, 0.12)", color: "var(--gold)" },
+    pending: { background: "rgba(245, 158, 11, 0.1)", color: "var(--amber)" },
+  };
+  const labels: Record<string, string> = {
+    active: "Active",
+    complete: "Complete",
+    pending: "Pending payment",
+  };
+  return (
+    <span
+      style={{
+        ...styles[status],
+        padding: "2px 10px",
+        borderRadius: 999,
+        fontSize: 10,
+        fontWeight: 600,
+      }}
+    >
+      {labels[status]}
+    </span>
+  );
+}
+
+function PayoutsTable({
+  paidPayouts,
+  markPaid,
+}: {
+  paidPayouts: Set<string>;
+  markPaid: (key: string) => void;
+}) {
+  return (
+    <div style={{ overflowX: "auto" }}>
+      <table style={{ width: "100%", fontSize: 12, borderCollapse: "collapse" }}>
+        <thead>
+          <tr style={{ background: "var(--bg-tertiary)" }}>
+            {["Investor", "Package", "Amount", "Week", "Due date", "Action"].map((h) => (
+              <th
+                key={h}
+                style={{
+                  textAlign: "left",
+                  padding: "10px 20px",
+                  fontWeight: 600,
+                  color: "var(--text-muted)",
+                  textTransform: "uppercase",
+                  fontSize: 10,
+                  letterSpacing: "0.08em",
+                }}
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody style={{ borderTop: "1px solid var(--border)" }}>
+          {PAYOUTS.map((p, i) => {
+            const key = `${p.investor}-${p.week}`;
+            const isPaid = paidPayouts.has(key);
+            return (
+              <tr
+                key={key}
+                style={{
+                  borderBottom: i < PAYOUTS.length - 1 ? "1px solid var(--border)" : "none",
+                  transition: "background 0.15s",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "var(--bg-tertiary)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+              >
+                <td style={{ padding: "10px 20px", fontWeight: 500 }}>{p.investor}</td>
+                <td style={{ padding: "10px 20px", color: "var(--text-secondary)" }}>
+                  {p.package.charAt(0).toUpperCase() + p.package.slice(1)}
+                </td>
+                <td style={{ padding: "10px 20px", fontWeight: 600, color: "var(--gold)" }}>
+                  {formatCurrency(p.amount)}
+                </td>
+                <td style={{ padding: "10px 20px", color: "var(--text-secondary)" }}>
+                  Week {p.week}
+                </td>
+                <td style={{ padding: "10px 20px", color: "var(--text-secondary)" }}>
+                  {p.dueDate}
+                </td>
+                <td style={{ padding: "10px 20px" }}>
+                  <button
+                    onClick={() => markPaid(key)}
+                    disabled={isPaid}
+                    style={{
+                      padding: "4px 12px",
+                      fontSize: 10,
+                      fontWeight: 600,
+                      border: isPaid ? "none" : "1px solid rgba(255, 215, 0, 0.4)",
+                      borderRadius: "var(--radius)",
+                      cursor: isPaid ? "default" : "pointer",
+                      transition: "all 0.2s",
+                      background: isPaid ? "rgba(255, 215, 0, 0.12)" : "transparent",
+                      color: isPaid ? "var(--gold)" : "var(--gold-dark)",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isPaid) {
+                        e.currentTarget.style.background = "rgba(255, 215, 0, 0.08)";
+                        e.currentTarget.style.boxShadow = "0 0 12px rgba(255, 215, 0, 0.15)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isPaid) {
+                        e.currentTarget.style.background = "transparent";
+                        e.currentTarget.style.boxShadow = "none";
+                      }
+                    }}
+                  >
+                    {isPaid ? "✓ Paid" : "Mark paid"}
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function PackagesTable() {
+  return (
+    <div style={{ overflowX: "auto" }}>
+      <table style={{ width: "100%", fontSize: 12, borderCollapse: "collapse" }}>
+        <thead>
+          <tr style={{ background: "var(--bg-tertiary)" }}>
+            {["Package", "Investor pays", "Investor receives", "Weekly payout", "Your profit", "Active"].map((h) => (
+              <th
+                key={h}
+                style={{
+                  textAlign: "left",
+                  padding: "10px 20px",
+                  fontWeight: 600,
+                  color: "var(--text-muted)",
+                  textTransform: "uppercase",
+                  fontSize: 10,
+                  letterSpacing: "0.08em",
+                }}
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody style={{ borderTop: "1px solid var(--border)" }}>
+          {PACKAGES.map((pkg, i) => {
+            const activeCount = INVESTORS.filter(
+              (inv) => inv.package === pkg.id && inv.status === "active"
+            ).length;
+            const profit = pkg.invest * 7;
+            return (
+              <tr
+                key={pkg.id}
+                style={{
+                  borderBottom: i < PACKAGES.length - 1 ? "1px solid var(--border)" : "none",
+                  transition: "background 0.15s",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "var(--bg-tertiary)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+              >
+                <td style={{ padding: "10px 20px", fontWeight: 500 }}>{pkg.name}</td>
+                <td style={{ padding: "10px 20px" }}>{formatCurrency(pkg.invest)}</td>
+                <td style={{ padding: "10px 20px" }}>{formatCurrency(pkg.returnAmount)}</td>
+                <td style={{ padding: "10px 20px", color: "var(--text-secondary)" }}>
+                  {formatCurrency(pkg.weeklyPayout)} × {pkg.weeks}
+                </td>
+                <td style={{ padding: "10px 20px", fontWeight: 600, color: "var(--gold)" }}>
+                  {formatCurrency(profit)}
+                </td>
+                <td style={{ padding: "10px 20px" }}>{activeCount}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 }
