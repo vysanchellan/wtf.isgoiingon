@@ -9,9 +9,7 @@ export function ThemeToggle({ className }: Props) {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Mounting flag prevents SSR/CSR mismatch — intentional setState in effect.
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -23,22 +21,14 @@ export function ThemeToggle({ className }: Props) {
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className={cn(
-        "inline-flex h-9 w-9 items-center justify-center rounded-full",
-        "border border-[color:var(--border)] bg-[color:var(--surface)]/60 backdrop-blur",
-        "text-[color:var(--foreground)]/80 hover:text-[color:var(--brand)] transition",
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--brand)]",
+        "inline-flex h-9 w-9 items-center justify-center rounded-lg",
+        "border border-[var(--border-secondary)] bg-[var(--background)]",
+        "text-[var(--text-secondary)] hover:text-[var(--brand)] transition",
         className
       )}
     >
-      {/* Render both icons to avoid layout shift; toggle visibility once mounted */}
-      <Sun
-        className={cn("h-4 w-4 transition", mounted ? (isDark ? "hidden" : "block") : "block")}
-        aria-hidden
-      />
-      <Moon
-        className={cn("h-4 w-4 transition", mounted ? (isDark ? "block" : "hidden") : "hidden")}
-        aria-hidden
-      />
+      <Sun className={cn("h-4 w-4", mounted && isDark ? "hidden" : "block")} aria-hidden />
+      <Moon className={cn("h-4 w-4", mounted && isDark ? "block" : "hidden")} aria-hidden />
     </button>
   );
 }

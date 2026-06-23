@@ -2,34 +2,22 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
-import { Coffee, Menu, Wallet as WalletIcon, X } from "lucide-react";
-import { useDemoStore } from "@/lib/store";
-import { cn, formatCurrency } from "@/lib/utils";
-import { ThemeToggle } from "./ThemeToggle";
+import { TrendingUp, Menu, X } from "lucide-react";
 import { Disclaimer } from "./Disclaimer";
+import { ThemeToggle } from "./ThemeToggle";
+import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/packages", label: "Packages" },
   { href: "/how-it-works", label: "How It Works" },
   { href: "/faq", label: "FAQ" },
-  { href: "/contact", label: "Contact" },
 ];
 
 export function Navbar() {
   const router = useRouter();
-  const { state, hydrated } = useDemoStore();
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Close drawer on route change
   useEffect(() => {
     const close = () => setOpen(false);
     router.events.on("routeChangeStart", close);
@@ -39,42 +27,33 @@ export function Navbar() {
   const isActive = (href: string) =>
     href === "/" ? router.pathname === "/" : router.pathname.startsWith(href);
 
+  const isDashboard = router.pathname === "/dashboard";
+  const isAdmin = router.pathname.startsWith("/admin");
+
   return (
     <header className="sticky top-0 z-40">
       <Disclaimer variant="banner" />
-      <div
-        className={cn(
-          "transition-all duration-300",
-          "border-b border-[color:var(--border)]/60",
-          scrolled
-            ? "bg-[color:var(--background)]/85 backdrop-blur-md shadow-sm"
-            : "bg-[color:var(--background)]/60 backdrop-blur"
-        )}
-      >
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-base font-semibold tracking-tight"
-            aria-label="BrewClub home"
-          >
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[color:var(--brand)]/15 text-[color:var(--brand)]">
-              <Coffee className="h-4 w-4" aria-hidden />
-            </span>
-            <span>
-              Brew<span className="text-[color:var(--brand)]">Club</span>
-            </span>
+      <div className="border-b border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)]">
+        <div className="mx-auto flex h-[58px] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+          <Link href="/" className="flex items-center gap-2.5 no-underline" aria-label="AmzVest ZA home">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1D9E75]">
+              <TrendingUp className="h-4 w-4 text-white" aria-hidden />
+            </div>
+            <div className="text-base font-medium text-[var(--text-primary)]">
+              AmzVest <span className="text-[var(--text-secondary)] font-normal text-sm">ZA</span>
+            </div>
           </Link>
 
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-2 md:flex" aria-label="Primary">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "rounded-full px-3 py-1.5 text-sm transition",
+                  "rounded-lg px-3 py-1.5 text-sm transition no-underline",
                   isActive(link.href)
-                    ? "bg-[color:var(--brand)]/12 text-[color:var(--brand-strong)]"
-                    : "text-[color:var(--foreground)]/75 hover:text-[color:var(--foreground)] hover:bg-[color:var(--surface-muted)]"
+                    ? "bg-[#E1F5EE] text-[#0F6E56] font-medium"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-muted)]"
                 )}
               >
                 {link.label}
@@ -83,31 +62,34 @@ export function Navbar() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Link
-              href="/wallet"
-              className={cn(
-                "hidden items-center gap-1.5 rounded-full border border-[color:var(--border)] bg-[color:var(--surface)]/60 px-3 py-1.5 text-sm font-medium backdrop-blur sm:inline-flex",
-                "hover:border-[color:var(--brand)]/50 transition"
-              )}
-              aria-label="Wallet"
-            >
-              <WalletIcon className="h-3.5 w-3.5 text-[color:var(--brand)]" aria-hidden />
-              <span className="tabular-nums">
-                {hydrated ? formatCurrency(state.walletBalance) : "$0.00"}
-              </span>
-            </Link>
             <ThemeToggle />
+            {isDashboard ? (
+              <span className="hidden text-sm text-[var(--text-secondary)] sm:block">Sipho Nkosi</span>
+            ) : isAdmin ? (
+              <span className="hidden rounded-full bg-[#E1F5EE] px-3 py-1 text-xs font-medium text-[#0F6E56] sm:inline-block">Admin</span>
+            ) : null}
             <Link
-              href="/admin"
-              className="hidden rounded-full bg-[color:var(--brand)] px-3 py-1.5 text-sm font-medium text-white shadow-sm transition hover:bg-[color:var(--brand-strong)] md:inline-block"
+              href={isDashboard ? "/" : isAdmin ? "/" : "/login"}
+              className={cn(
+                "rounded-lg border px-4 py-1.5 text-sm font-medium no-underline transition",
+                "border-[var(--border-secondary)] text-[var(--text-primary)] hover:bg-[var(--surface-muted)]"
+              )}
             >
-              Admin
+              {isDashboard || isAdmin ? "Exit" : "Sign in"}
             </Link>
+            {!isDashboard && !isAdmin && (
+              <Link
+                href="/register"
+                className="hidden rounded-lg bg-[#1D9E75] px-4 py-1.5 text-sm font-medium text-white no-underline transition hover:bg-[#0F6E56] sm:inline-block"
+              >
+                Invest now
+              </Link>
+            )}
             <button
               type="button"
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--border)] md:hidden"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--border-secondary)] md:hidden"
               onClick={() => setOpen((v) => !v)}
             >
               {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
@@ -123,7 +105,7 @@ export function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.18 }}
-              className="md:hidden border-t border-[color:var(--border)]/60 bg-[color:var(--background)]/95 backdrop-blur"
+              className="border-t border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)] md:hidden"
             >
               <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-3" aria-label="Mobile">
                 {NAV_LINKS.map((link) => (
@@ -131,39 +113,24 @@ export function Navbar() {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                      "rounded-lg px-3 py-2 text-sm",
+                      "rounded-lg px-3 py-2 text-sm no-underline",
                       isActive(link.href)
-                        ? "bg-[color:var(--brand)]/12 text-[color:var(--brand-strong)]"
-                        : "text-[color:var(--foreground)]/80 hover:bg-[color:var(--surface-muted)]"
+                        ? "bg-[#E1F5EE] text-[#0F6E56] font-medium"
+                        : "text-[var(--text-secondary)] hover:bg-[var(--surface-muted)]"
                     )}
                   >
                     {link.label}
                   </Link>
                 ))}
-                <div className="my-1 h-px bg-[color:var(--border)]/60" />
-                <Link
-                  href="/wallet"
-                  className="flex items-center justify-between rounded-lg px-3 py-2 text-sm hover:bg-[color:var(--surface-muted)]"
-                >
-                  <span className="inline-flex items-center gap-2">
-                    <WalletIcon className="h-4 w-4 text-[color:var(--brand)]" />
-                    Wallet
-                  </span>
-                  <span className="tabular-nums text-[color:var(--foreground)]/70">
-                    {hydrated ? formatCurrency(state.walletBalance) : "$0.00"}
-                  </span>
+                <div className="my-1 h-px bg-[var(--border-tertiary)]" />
+                <Link href="/login" className="rounded-lg px-3 py-2 text-sm no-underline text-[var(--text-secondary)] hover:bg-[var(--surface-muted)]">
+                  Sign in
                 </Link>
                 <Link
-                  href="/account"
-                  className="rounded-lg px-3 py-2 text-sm hover:bg-[color:var(--surface-muted)]"
+                  href="/register"
+                  className="rounded-lg bg-[#1D9E75] px-3 py-2 text-center text-sm font-medium text-white no-underline"
                 >
-                  My account
-                </Link>
-                <Link
-                  href="/admin"
-                  className="rounded-lg bg-[color:var(--brand)] px-3 py-2 text-center text-sm font-medium text-white"
-                >
-                  Admin dashboard
+                  Invest now
                 </Link>
               </nav>
             </motion.div>

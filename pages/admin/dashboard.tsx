@@ -1,128 +1,201 @@
 import Head from "next/head";
-import { useMemo } from "react";
-import { Box, DollarSign, Package, Users } from "lucide-react";
-import type { ReactElement } from "react";
-import type { NextPage } from "next";
+import { useState } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
-import { StatCard } from "@/components/admin/StatCard";
-import { RevenueChart } from "@/components/admin/RevenueChart";
-import { ADMIN_ORDERS, ADMIN_USERS, INVENTORY, REVENUE_SERIES } from "@/lib/data";
-import { Disclaimer } from "@/components/ui/Disclaimer";
-import { cn, formatCurrency, formatDate } from "@/lib/utils";
+import { INVESTORS, PAYOUTS, PACKAGES, getPackage } from "@/lib/data";
+import { formatCurrency } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
-const STATUS_STYLES: Record<string, string> = {
-  delivered: "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300",
-  shipped: "bg-sky-100 text-sky-800 dark:bg-sky-500/20 dark:text-sky-300",
-  processing: "bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300",
-  refunded: "bg-rose-100 text-rose-800 dark:bg-rose-500/20 dark:text-rose-300",
-};
+type TabId = "investors" | "payouts" | "packages";
 
-const DashboardPage: NextPage & {
-  getLayout?: (page: ReactElement) => ReactElement;
-} = () => {
-  const stats = useMemo(() => {
-    const activeUsers = ADMIN_USERS.filter((u) => u.status === "active").length;
-    const recentOrders = ADMIN_ORDERS.slice(0, 5);
-    const mrr = ADMIN_USERS.filter((u) => u.status === "active").reduce(
-      (acc, u) => {
-        const price = u.package === "master" ? 75 : u.package === "connoisseur" ? 35 : 15;
-        return acc + (u.package ? price : 0);
-      },
-      0
-    );
-    const currentMonth = REVENUE_SERIES[REVENUE_SERIES.length - 1];
-    const prevMonth = REVENUE_SERIES[REVENUE_SERIES.length - 2];
-    const growthPct = ((currentMonth.revenue - prevMonth.revenue) / prevMonth.revenue) * 100;
-    const totalBags = INVENTORY.reduce((acc, i) => acc + i.stockBags, 0);
-    return { activeUsers, recentOrders, mrr, currentMonth, growthPct, totalBags };
-  }, []);
+const TABS: { id: TabId; label: string }[] = [
+  { id: "investors", label: "Investors" },
+  { id: "payouts", label: "Payouts due" },
+  { id: "packages", label: "Package overview" },
+];
+
+export default function AdminDashboardPage() {
+  const [tab, setTab] = useState<TabId>("investors");
+  const [paidPayouts, setPaidPayouts] = useState<Set<string>>(new Set());
+
+  const totalDeployed = INVESTORS.reduce((sum, i) => sum + i.invested, 0);
+  const activeCount = INVESTORS.filter((i) => i.status === "active").length;
+  const totalPayoutsThisWeek = PAYOUTS.reduce((sum, p) => sum + p.amount, 0);
+  const totalPaidOut = INVESTORS.reduce((sum, i) => sum + i.returnAmount, 0);
+
+  const markPaid = (key: string) => {
+    setPaidPayouts((prev) => new Set(prev).add(key));
+  };
 
   return (
     <>
       <Head>
-        <title>Admin · Overview — BrewClub (DEMO)</title>
+        <title>Admin · Dashboard — AmzVest ZA (DEMO)</title>
       </Head>
-
-      <Disclaimer variant="card" className="mb-6">
-        Every number on this dashboard — users, revenue, orders, stock — is fabricated
-        for a UI/UX demonstration. No real data is being queried.
-      </Disclaimer>
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          label="MRR"
-          value={formatCurrency(stats.mrr)}
-          delta={{ value: `${stats.growthPct.toFixed(1)}%`, positive: stats.growthPct >= 0 }}
-          icon={DollarSign}
-          index={0}
-        />
-        <StatCard
-          label="Active subscribers"
-          value={stats.activeUsers.toString()}
-          delta={{ value: "+12", positive: true }}
-          icon={Users}
-          index={1}
-        />
-        <StatCard
-          label="Orders this month"
-          value={stats.currentMonth.orders.toString()}
-          delta={{ value: "+17", positive: true }}
-          icon={Package}
-          index={2}
-        />
-        <StatCard
-          label="Bags in stock"
-          value={stats.totalBags.toLocaleString()}
-          delta={{ value: "−84", positive: false }}
-          icon={Box}
-          index={3}
-        />
-      </div>
-
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
-        <RevenueChart />
-
-        <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-5 shadow-sm">
-          <div className="mb-3 flex items-center justify-between">
-            <h3 className="text-base font-semibold">Recent orders</h3>
-            <span className="text-xs text-[color:var(--foreground)]/55">last 5</span>
+      <AdminLayout title="Admin panel" description="AmzVest ZA · Operations dashboard">
+        <div className="grid grid-cols-4 gap-2.5 mb-6">
+          <div className="rounded-lg bg-[var(--surface-muted)] p-3">
+            <div className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-1">Capital deployed</div>
+            <div className="text-lg font-medium text-[#1D9E75]">{formatCurrency(totalDeployed)}</div>
           </div>
-          <ul className="divide-y divide-[color:var(--border)]">
-            {stats.recentOrders.map((o) => (
-              <li key={o.id} className="flex items-center justify-between gap-3 py-2.5 text-sm">
-                <div>
-                  <p className="font-medium">{o.user}</p>
-                  <p className="text-xs text-[color:var(--foreground)]/55">
-                    {o.id} · {formatDate(o.placedAt)}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="tabular-nums font-semibold">{formatCurrency(o.amount)}</p>
-                  <span
-                    className={cn(
-                      "mt-0.5 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize",
-                      STATUS_STYLES[o.status]
-                    )}
-                  >
-                    {o.status}
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <div className="rounded-lg bg-[var(--surface-muted)] p-3">
+            <div className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-1">Active investors</div>
+            <div className="text-lg font-medium">{activeCount}</div>
+          </div>
+          <div className="rounded-lg bg-[var(--surface-muted)] p-3">
+            <div className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-1">Payouts this week</div>
+            <div className="text-lg font-medium text-[#BA7517]">{formatCurrency(totalPayoutsThisWeek)}</div>
+          </div>
+          <div className="rounded-lg bg-[var(--surface-muted)] p-3">
+            <div className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider mb-1">Total paid out</div>
+            <div className="text-lg font-medium text-[#1D9E75]">{formatCurrency(totalPaidOut)}</div>
+          </div>
         </div>
-      </div>
+
+        <div className="rounded-xl border border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)] overflow-hidden">
+          <div className="px-5 pt-4 border-b border-[var(--border-tertiary)]">
+            <div className="flex gap-0">
+              {TABS.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setTab(t.id)}
+                  className={cn(
+                    "px-4 py-2 text-xs font-medium border-b-2 transition",
+                    tab === t.id
+                      ? "text-[#1D9E75] border-[#1D9E75]"
+                      : "text-[var(--text-secondary)] border-transparent hover:text-[var(--text-primary)]"
+                  )}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {tab === "investors" && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-[var(--surface-muted)]">
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Name</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Package</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Invested</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Return</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Status</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider"></th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[var(--border-tertiary)]">
+                  {INVESTORS.map((inv) => (
+                    <tr key={inv.id} className="hover:bg-[var(--surface-muted)]">
+                      <td className="px-5 py-3 font-medium">{inv.name}</td>
+                      <td className="px-5 py-3 text-[var(--text-secondary)]">{inv.package}</td>
+                      <td className="px-5 py-3">{formatCurrency(inv.invested)}</td>
+                      <td className="px-5 py-3">{formatCurrency(inv.returnAmount)}</td>
+                      <td className="px-5 py-3">
+                        <span className={cn(
+                          "rounded-full px-2.5 py-0.5 text-[10px] font-medium",
+                          inv.status === "active" && "bg-[#E1F5EE] text-[#0F6E56]",
+                          inv.status === "complete" && "bg-[#EAF3DE] text-[#3B6D11]",
+                          inv.status === "pending" && "bg-[#FAEEDA] text-[#633806]"
+                        )}>
+                          {inv.status === "complete" ? "Complete" : inv.status === "pending" ? "Pending payment" : "Active"}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3">
+                        <button className="rounded-lg border border-[var(--border-secondary)] px-3 py-1 text-[10px] hover:bg-[var(--surface-muted)] transition">
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {tab === "payouts" && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-[var(--surface-muted)]">
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Investor</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Package</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Amount</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Week</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Due date</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[var(--border-tertiary)]">
+                  {PAYOUTS.map((p, i) => {
+                    const key = `${p.investor}-${p.week}`;
+                    const isPaid = paidPayouts.has(key);
+                    return (
+                      <tr key={i} className="hover:bg-[var(--surface-muted)]">
+                        <td className="px-5 py-3 font-medium">{p.investor}</td>
+                        <td className="px-5 py-3 text-[var(--text-secondary)]">{p.package}</td>
+                        <td className="px-5 py-3 font-medium text-[#1D9E75]">{formatCurrency(p.amount)}</td>
+                        <td className="px-5 py-3 text-[var(--text-secondary)]">Week {p.week}</td>
+                        <td className="px-5 py-3 text-[var(--text-secondary)]">{p.dueDate}</td>
+                        <td className="px-5 py-3">
+                          <button
+                            onClick={() => markPaid(key)}
+                            disabled={isPaid}
+                            className={cn(
+                              "rounded-lg px-3 py-1 text-[10px] font-medium transition",
+                              isPaid
+                                ? "bg-[#EAF3DE] text-[#3B6D11] cursor-default"
+                                : "border border-[#1D9E75] text-[#0F6E56] hover:bg-[#E1F5EE]"
+                            )}
+                          >
+                            {isPaid ? "✓ Paid" : "Mark paid"}
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {tab === "packages" && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-[var(--surface-muted)]">
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Package</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Investor pays</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Investor receives</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Weekly payout</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Your profit</th>
+                    <th className="text-left px-5 py-3 font-medium text-[var(--text-secondary)] uppercase tracking-wider">Active</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[var(--border-tertiary)]">
+                  {PACKAGES.map((pkg) => {
+                    const activeCount = INVESTORS.filter(
+                      (i) => i.package === pkg.id && i.status === "active"
+                    ).length;
+                    const profit = pkg.invest * 7; // fictional profit calc
+                    return (
+                      <tr key={pkg.id} className="hover:bg-[var(--surface-muted)]">
+                        <td className="px-5 py-3 font-medium">{pkg.name}</td>
+                        <td className="px-5 py-3">{formatCurrency(pkg.invest)}</td>
+                        <td className="px-5 py-3">{formatCurrency(pkg.returnAmount)}</td>
+                        <td className="px-5 py-3 text-[var(--text-secondary)]">{formatCurrency(pkg.weeklyPayout)} × {pkg.weeks}</td>
+                        <td className="px-5 py-3 font-medium text-[#1D9E75]">{formatCurrency(profit)}</td>
+                        <td className="px-5 py-3">{activeCount}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </AdminLayout>
     </>
   );
-};
-
-DashboardPage.getLayout = (page) => (
-  <AdminLayout
-    title="Overview"
-    description="A snapshot of the BrewClub demo business."
-  >
-    {page}
-  </AdminLayout>
-);
-
-export default DashboardPage;
+}

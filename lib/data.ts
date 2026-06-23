@@ -1,117 +1,85 @@
-// ---------------------------------------------------------------------------
-// All data in this file is FICTIONAL — for UI/UX demo only.
-// No real users, payments, or orders. See README + page banners.
-// ---------------------------------------------------------------------------
+export type PackageId = "starter" | "growth" | "premium";
 
-export type PackageId = "starter" | "connoisseur" | "master";
-
-export type Package = {
+export type InvestmentPackage = {
   id: PackageId;
   name: string;
-  priceMonthly: number;
-  bagsPerMonth: number;
+  invest: number;
+  returnAmount: number;
+  weeklyPayout: number;
+  weeks: number;
   tagline: string;
   description: string;
-  perks: string[];
-  badge?: string;
   highlight?: boolean;
+  badge?: string;
 };
 
-export const PACKAGES: Package[] = [
+export const PACKAGES: InvestmentPackage[] = [
   {
     id: "starter",
     name: "Starter",
-    priceMonthly: 15,
-    bagsPerMonth: 1,
-    tagline: "One bag a month, perfectly timed",
-    description:
-      "A single 250g bag of single-origin beans delivered fresh each month. Perfect for solo drinkers.",
-    perks: [
-      "1 × 250g single-origin bag / month",
-      "Roast date guarantee (within 7 days)",
-      "Pause or skip any month",
-    ],
+    invest: 500,
+    returnAmount: 1500,
+    weeklyPayout: 500,
+    weeks: 3,
+    tagline: "Invest R500, receive R1,500",
+    description: "A R500 investment that returns R1,500 over 3 equal weekly payouts.",
   },
   {
-    id: "connoisseur",
-    name: "Connoisseur",
-    priceMonthly: 35,
-    bagsPerMonth: 3,
-    tagline: "Three bags, curated by our roasters",
-    description:
-      "Three 250g bags chosen by our head roaster — a curated mix of origins, processes, and roast levels.",
-    perks: [
-      "3 × 250g curated bags / month",
-      "Tasting notes & brewing guide for each",
-      "Early access to micro-lot releases",
-      "Free shipping",
-    ],
-    badge: "Most popular",
+    id: "growth",
+    name: "Growth",
+    invest: 1000,
+    returnAmount: 3000,
+    weeklyPayout: 1000,
+    weeks: 3,
+    tagline: "Invest R1,000, receive R3,000",
+    description: "A R1,000 investment that returns R3,000 over 3 equal weekly payouts.",
     highlight: true,
+    badge: "Popular",
   },
   {
-    id: "master",
-    name: "Master",
-    priceMonthly: 75,
-    bagsPerMonth: 5,
-    tagline: "The full experience, plus gear",
-    description:
-      "Five bags a month, including rare micro-lots, plus a complimentary burr grinder when you sign up.",
-    perks: [
-      "5 × 250g bags / month (incl. micro-lots)",
-      "Complimentary burr grinder on signup",
-      "Quarterly tasting kit",
-      "Priority shipping & support",
-      "Invites to in-person cuppings",
-    ],
+    id: "premium",
+    name: "Premium",
+    invest: 2500,
+    returnAmount: 7500,
+    weeklyPayout: 2500,
+    weeks: 3,
+    tagline: "Invest R2,500, receive R7,500",
+    description: "A R2,500 investment that returns R7,500 over 3 equal weekly payouts.",
   },
 ];
 
-export function getPackage(id: PackageId): Package {
+export function getPackage(id: PackageId): InvestmentPackage {
   const pkg = PACKAGES.find((p) => p.id === id);
   if (!pkg) throw new Error(`Unknown package: ${id}`);
   return pkg;
 }
 
-// ---------------------------------------------------------------------------
-// Marketing content
-// ---------------------------------------------------------------------------
-
 export type Testimonial = {
   name: string;
-  role: string;
   quote: string;
-  bag: string;
+  amount: string;
 };
 
 export const TESTIMONIALS: Testimonial[] = [
   {
-    name: "Amara O.",
-    role: "Pour-over hobbyist",
-    bag: "Ethiopia Yirgacheffe",
-    quote:
-      "The Yirgacheffe in my last box was the cleanest cup I've ever brewed at home. Roast dates are always within a week — I can taste it.",
+    name: "Thabo M.",
+    quote: "I was skeptical at first, but the weekly payouts are exactly what they promised. Received my full R3,000 on time.",
+    amount: "R3,000 earned",
   },
   {
-    name: "Marcus L.",
-    role: "Espresso enthusiast",
-    bag: "Brazil Cerrado",
-    quote:
-      "I switched from a supermarket bag and never looked back. The Connoisseur tier gives me enough variety to keep mornings interesting.",
+    name: "Nomsa D.",
+    quote: "Started with the Starter package to test the waters. After seeing the first payout hit my account, I upgraded to Premium.",
+    amount: "R7,500 earned",
   },
   {
-    name: "Priya R.",
-    role: "Café owner",
-    bag: "Colombia Huila",
-    quote:
-      "I use BrewClub bags as guest pours at the shop. Customers ask about them every week. Curation is genuinely thoughtful.",
+    name: "Ayanda K.",
+    quote: "The reinvest feature is brilliant. I rolled my returns into a bigger package and doubled my earnings in the next cycle.",
+    amount: "R9,000 earned",
   },
   {
-    name: "Tomás G.",
-    role: "Weekend brewer",
-    bag: "Guatemala Antigua",
-    quote:
-      "Pausing a month while traveling took two clicks. That alone is worth it. The grinder that came with Master is a real piece of kit, not a freebie.",
+    name: "Lerato S.",
+    quote: "Three weeks, three payouts, no issues. The Amazon reselling model makes total sense once you see the numbers.",
+    amount: "R1,500 earned",
   },
 ];
 
@@ -119,211 +87,65 @@ export type FaqItem = { q: string; a: string };
 
 export const FAQS: FaqItem[] = [
   {
-    q: "Is BrewClub a real service?",
-    a: "No. BrewClub is a fictional brand built as a UI/UX demonstration for an academic project. No coffee will ship, no payments are processed, no accounts persist beyond your browser.",
+    q: "Is AmzVest ZA a real platform?",
+    a: "No. This is a fictional demo project created for educational purposes only. No real investments are accepted, no real returns are paid, and no real Amazon reselling operation exists behind this site.",
   },
   {
-    q: "Will my card be charged if I 'top up' BrewCredits?",
-    a: "No. The deposit form does not collect or transmit any real card data. Entering numbers updates a value in your browser's local storage only.",
+    q: "Can I deposit real money?",
+    a: "Absolutely not. No deposit functionality exists. This is a demonstration only. Any 'investment' or 'payment' flows shown are UI simulations that do not process real transactions.",
   },
   {
-    q: "Where does the coffee come from?",
-    a: "Nowhere — the origins, roast dates, and tasting notes shown on the site are illustrative. No real supply chain exists behind this demo.",
+    q: "Are the returns real?",
+    a: "No. All return figures are completely fabricated. The 3× return, weekly payout amounts, and any financial projections shown on this site are fictional and for illustrative purposes only.",
   },
   {
-    q: "Can I pause or cancel a subscription?",
-    a: "On a real subscription service you'd manage this from your Account page. In this demo, you can also reset the entire mock state from your Account page to start over.",
+    q: "Is my data safe?",
+    a: "No data is collected, stored, or transmitted. This is a static demo site. Any information entered into forms remains in your browser and is never sent to any server.",
   },
   {
-    q: "How is my data handled?",
-    a: "All state lives in your browser via localStorage. Nothing is sent to a server. Clearing your browser data wipes the demo state.",
+    q: "Who created this?",
+    a: "This is an educational project built for demonstration purposes. The creators do not offer investment services and this site should not be construed as financial advice.",
   },
   {
-    q: "Who built this?",
-    a: "A student building a third-year UI/UX project. The fictional brand, characters, testimonials, and figures are all invented for the purpose of the exercise.",
+    q: "Can I reinvest my returns?",
+    a: "In this demo simulation, the 'Reinvest' button navigates to the registration page. No actual reinvestment occurs — it is a UI flow designed to demonstrate the concept.",
   },
 ];
 
-// ---------------------------------------------------------------------------
-// Seed catalog (admin inventory)
-// ---------------------------------------------------------------------------
-
-export type InventoryItem = {
-  sku: string;
-  origin: string;
-  process: string;
-  roast: "Light" | "Medium" | "Medium-Dark" | "Dark";
-  stockBags: number;
-  roastedOn: string; // ISO
-};
-
-export const INVENTORY: InventoryItem[] = [
-  {
-    sku: "ETH-YIR-001",
-    origin: "Ethiopia, Yirgacheffe",
-    process: "Washed",
-    roast: "Light",
-    stockBags: 184,
-    roastedOn: "2026-06-15",
-  },
-  {
-    sku: "COL-HUI-014",
-    origin: "Colombia, Huila",
-    process: "Honey",
-    roast: "Medium",
-    stockBags: 312,
-    roastedOn: "2026-06-17",
-  },
-  {
-    sku: "BRA-CER-022",
-    origin: "Brazil, Cerrado",
-    process: "Natural",
-    roast: "Medium-Dark",
-    stockBags: 421,
-    roastedOn: "2026-06-12",
-  },
-  {
-    sku: "GUA-ANT-007",
-    origin: "Guatemala, Antigua",
-    process: "Washed",
-    roast: "Medium",
-    stockBags: 96,
-    roastedOn: "2026-06-18",
-  },
-  {
-    sku: "KEN-NYE-031",
-    origin: "Kenya, Nyeri",
-    process: "Washed",
-    roast: "Light",
-    stockBags: 58,
-    roastedOn: "2026-06-19",
-  },
-  {
-    sku: "IND-MON-009",
-    origin: "Indonesia, Mandheling",
-    process: "Wet-hulled",
-    roast: "Dark",
-    stockBags: 142,
-    roastedOn: "2026-06-10",
-  },
-];
-
-// ---------------------------------------------------------------------------
-// Seed admin tables
-// ---------------------------------------------------------------------------
-
-export type AdminUser = {
+export type Investor = {
   id: string;
   name: string;
-  email: string;
-  joinedAt: string;
-  status: "active" | "paused" | "cancelled";
-  package: PackageId | null;
-  lifetimeSpend: number;
+  package: PackageId;
+  invested: number;
+  returnAmount: number;
+  status: "active" | "complete" | "pending";
 };
 
-export const ADMIN_USERS: AdminUser[] = [
-  {
-    id: "U-1042",
-    name: "Amara Okafor",
-    email: "amara.o@example.com",
-    joinedAt: "2025-09-12",
-    status: "active",
-    package: "connoisseur",
-    lifetimeSpend: 315,
-  },
-  {
-    id: "U-1043",
-    name: "Marcus Lin",
-    email: "marcus.l@example.com",
-    joinedAt: "2025-10-04",
-    status: "active",
-    package: "master",
-    lifetimeSpend: 675,
-  },
-  {
-    id: "U-1044",
-    name: "Priya Rao",
-    email: "priya.r@example.com",
-    joinedAt: "2025-11-21",
-    status: "active",
-    package: "connoisseur",
-    lifetimeSpend: 245,
-  },
-  {
-    id: "U-1045",
-    name: "Tomás Garcia",
-    email: "tomas.g@example.com",
-    joinedAt: "2026-01-08",
-    status: "paused",
-    package: "starter",
-    lifetimeSpend: 75,
-  },
-  {
-    id: "U-1046",
-    name: "Eleanor Brooks",
-    email: "eleanor.b@example.com",
-    joinedAt: "2026-02-19",
-    status: "active",
-    package: "starter",
-    lifetimeSpend: 60,
-  },
-  {
-    id: "U-1047",
-    name: "Jin Park",
-    email: "jin.p@example.com",
-    joinedAt: "2026-03-02",
-    status: "cancelled",
-    package: null,
-    lifetimeSpend: 45,
-  },
-  {
-    id: "U-1048",
-    name: "Sofia Almeida",
-    email: "sofia.a@example.com",
-    joinedAt: "2026-04-11",
-    status: "active",
-    package: "master",
-    lifetimeSpend: 225,
-  },
-  {
-    id: "U-1049",
-    name: "David Chen",
-    email: "david.c@example.com",
-    joinedAt: "2026-05-23",
-    status: "active",
-    package: "connoisseur",
-    lifetimeSpend: 105,
-  },
+export const INVESTORS: Investor[] = [
+  { id: "I-1001", name: "Sipho Nkosi", package: "growth", invested: 1000, returnAmount: 3000, status: "active" },
+  { id: "I-1002", name: "Nomsa Dlamini", package: "premium", invested: 2500, returnAmount: 7500, status: "active" },
+  { id: "I-1003", name: "Thabo Mokoena", package: "starter", invested: 500, returnAmount: 1500, status: "complete" },
+  { id: "I-1004", name: "Ayanda Khumalo", package: "growth", invested: 1000, returnAmount: 3000, status: "active" },
+  { id: "I-1005", name: "Priya Naidoo", package: "premium", invested: 2500, returnAmount: 7500, status: "pending" },
+  { id: "I-1006", name: "Lerato Sithole", package: "starter", invested: 500, returnAmount: 1500, status: "active" },
+  { id: "I-1007", name: "David Chen", package: "growth", invested: 1000, returnAmount: 3000, status: "complete" },
+  { id: "I-1008", name: "Sofia Almeida", package: "premium", invested: 2500, returnAmount: 7500, status: "active" },
 ];
 
-export type AdminOrder = {
-  id: string;
-  user: string;
+export type Payout = {
+  investor: string;
   package: PackageId;
   amount: number;
-  status: "shipped" | "processing" | "delivered" | "refunded";
-  placedAt: string;
+  week: number;
+  dueDate: string;
+  paid: boolean;
 };
 
-export const ADMIN_ORDERS: AdminOrder[] = [
-  { id: "O-9821", user: "Amara Okafor", package: "connoisseur", amount: 35, status: "delivered", placedAt: "2026-06-01" },
-  { id: "O-9822", user: "Marcus Lin", package: "master", amount: 75, status: "delivered", placedAt: "2026-06-02" },
-  { id: "O-9823", user: "Sofia Almeida", package: "master", amount: 75, status: "shipped", placedAt: "2026-06-12" },
-  { id: "O-9824", user: "Eleanor Brooks", package: "starter", amount: 15, status: "delivered", placedAt: "2026-06-14" },
-  { id: "O-9825", user: "Priya Rao", package: "connoisseur", amount: 35, status: "delivered", placedAt: "2026-06-15" },
-  { id: "O-9826", user: "David Chen", package: "connoisseur", amount: 35, status: "shipped", placedAt: "2026-06-18" },
-  { id: "O-9827", user: "Amara Okafor", package: "connoisseur", amount: 35, status: "processing", placedAt: "2026-06-20" },
-  { id: "O-9828", user: "Marcus Lin", package: "master", amount: 75, status: "processing", placedAt: "2026-06-21" },
-  { id: "O-9819", user: "Tomás Garcia", package: "starter", amount: 15, status: "refunded", placedAt: "2026-05-30" },
+export const PAYOUTS: Payout[] = [
+  { investor: "Sipho Nkosi", package: "growth", amount: 1000, week: 2, dueDate: "16 Jun", paid: false },
+  { investor: "Nomsa Dlamini", package: "premium", amount: 2500, week: 2, dueDate: "16 Jun", paid: false },
+  { investor: "Ayanda Khumalo", package: "growth", amount: 1000, week: 1, dueDate: "18 Jun", paid: false },
+  { investor: "Lerato Sithole", package: "starter", amount: 500, week: 3, dueDate: "20 Jun", paid: false },
 ];
 
-// 6-month revenue series for the admin chart
-export const REVENUE_SERIES: { month: string; revenue: number; orders: number }[] = [
-  { month: "Jan", revenue: 3120, orders: 88 },
-  { month: "Feb", revenue: 3580, orders: 102 },
-  { month: "Mar", revenue: 4210, orders: 119 },
-  { month: "Apr", revenue: 4870, orders: 134 },
-  { month: "May", revenue: 5440, orders: 151 },
-  { month: "Jun", revenue: 6120, orders: 168 },
-];
+export const ALL_PACKAGE_IDS: PackageId[] = PACKAGES.map((p) => p.id);

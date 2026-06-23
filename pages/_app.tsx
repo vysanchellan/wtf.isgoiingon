@@ -1,7 +1,5 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import type { NextPage } from "next";
-import type { ReactElement, ReactNode } from "react";
 import Head from "next/head";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
@@ -16,16 +14,8 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-type NextPageWithLayout<P = object> = NextPage<P> & {
-  getLayout?: (page: ReactElement) => ReactNode;
-};
-
-type AppPropsWithLayout = AppProps & { Component: NextPageWithLayout };
-
-export default function App({ Component, pageProps }: AppPropsWithLayout) {
+export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const getLayout =
-    Component.getLayout ?? ((page: ReactElement) => <Layout>{page}</Layout>);
 
   const page = (
     <AnimatePresence mode="wait" initial={false}>
@@ -44,17 +34,18 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <>
       <Head>
-        <title>BrewClub — Specialty coffee, on subscription (DEMO)</title>
+        <title>AmzVest ZA — Investment Demo (DEMO)</title>
         <meta
           name="description"
-          content="A fictional specialty-coffee subscription. UI/UX demo built for a third-year academic project."
+          content="A fictional Amazon reselling investment platform. Educational demo project."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#d97706" />
       </Head>
       <div className={`${inter.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-          <DemoStoreProvider>{getLayout(page)}</DemoStoreProvider>
+          <DemoStoreProvider>
+            <Layout>{page}</Layout>
+          </DemoStoreProvider>
         </ThemeProvider>
       </div>
     </>

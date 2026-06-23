@@ -1,110 +1,88 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Check, Star } from "lucide-react";
 import { PACKAGES } from "@/lib/data";
-import { cn, formatCurrency } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
+import { useDemoStore } from "@/lib/store";
 
 type Props = {
-  /** When true, the section renders with id/header for marketing pages. */
   withHeader?: boolean;
-  /** Where the "Choose" CTA on each card links to. Defaults to checkout. */
-  ctaHref?: (id: string) => string;
 };
 
-export function PackagesGrid({ withHeader = true, ctaHref }: Props) {
+export function PackagesGrid({ withHeader = true }: Props) {
+  const { setSelectedPackage } = useDemoStore();
+
   return (
-    <section id="packages" className="relative py-20 sm:py-24">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+    <section id="packages" className="border-b border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)]">
+      <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
         {withHeader && (
-          <div className="mb-12 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
-            <div className="max-w-2xl">
-              <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-                Three tiers. No surprises.
-              </h2>
-              <p className="mt-3 text-[color:var(--foreground)]/70">
-                Skip, pause, or change tiers any time. Prices include shipping in the
-                continental US (in this fictional world).
-              </p>
+          <div className="mb-8">
+            <div className="text-xs font-medium tracking-wider text-[#0F6E56] uppercase">
+              Investment packages
             </div>
-            <p className="text-xs font-medium text-amber-700 dark:text-amber-300">
-              All prices are illustrative — demo only.
+            <h2 className="text-xl font-medium mt-1">Choose your investment tier</h2>
+            <p className="text-sm text-[var(--text-secondary)] mt-1">
+              All packages deliver a 3× return over 3 equal weekly payouts. The more you invest, the more you earn.
             </p>
           </div>
         )}
 
-        <div className="grid gap-5 md:grid-cols-3">
-          {PACKAGES.map((pkg, i) => {
-            const href = (ctaHref ?? ((id) => `/checkout?package=${id}`))(pkg.id);
-            return (
-              <motion.div
-                key={pkg.id}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                className={cn(
-                  "group relative flex flex-col rounded-2xl border bg-[color:var(--surface)] p-6 shadow-sm transition",
-                  "hover:-translate-y-0.5 hover:shadow-md",
-                  pkg.highlight
-                    ? "border-[color:var(--brand)]/60 ring-1 ring-[color:var(--brand)]/30"
-                    : "border-[color:var(--border)]"
-                )}
-              >
-                {pkg.badge && (
-                  <span className="absolute -top-3 right-6 inline-flex items-center gap-1 rounded-full bg-[color:var(--brand)] px-2.5 py-1 text-[11px] font-semibold text-white shadow">
-                    <Star className="h-3 w-3" />
-                    {pkg.badge}
-                  </span>
-                )}
-
-                <div>
-                  <h3 className="text-xl font-semibold">{pkg.name}</h3>
-                  <p className="mt-1 text-sm text-[color:var(--foreground)]/70">
-                    {pkg.tagline}
-                  </p>
-                </div>
-
-                <div className="mt-5 flex items-baseline gap-1">
-                  <span className="text-4xl font-bold tracking-tight">
-                    {formatCurrency(pkg.priceMonthly)}
-                  </span>
-                  <span className="text-sm text-[color:var(--foreground)]/60">
-                    / month
-                  </span>
-                </div>
-                <p className="mt-1 text-xs text-[color:var(--foreground)]/55">
-                  {pkg.bagsPerMonth} × 250g bag{pkg.bagsPerMonth > 1 ? "s" : ""} per delivery
-                </p>
-
-                <ul className="mt-5 space-y-2 text-sm">
-                  {pkg.perks.map((perk) => (
-                    <li key={perk} className="flex items-start gap-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--brand)]" />
-                      <span className="text-[color:var(--foreground)]/85">{perk}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="mt-6 flex-1" />
-
-                <Link
-                  href={href}
-                  className={cn(
-                    "mt-2 inline-flex items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold transition",
-                    pkg.highlight
-                      ? "bg-[color:var(--brand)] text-white hover:bg-[color:var(--brand-strong)]"
-                      : "border border-[color:var(--border)] text-[color:var(--foreground)] hover:border-[color:var(--brand)]/40"
+        <div className="grid gap-4 md:grid-cols-3">
+          {PACKAGES.map((pkg, i) => (
+            <motion.div
+              key={pkg.id}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className={`rounded-xl overflow-hidden border transition ${
+                pkg.highlight
+                  ? "border-[#1D9E75] border-2"
+                  : "border-[var(--border-tertiary)] hover:border-[#1D9E75]"
+              }`}
+            >
+              <div className={`px-5 py-4 border-b border-[var(--border-tertiary)] ${
+                pkg.highlight ? "bg-[#E1F5EE]" : "bg-[var(--surface-muted)]"
+              }`}>
+                <div className="text-[10px] font-medium tracking-wider text-[var(--text-secondary)] uppercase mb-1">
+                  {pkg.name}
+                  {pkg.badge && (
+                    <span className="ml-2 inline-block rounded-full bg-[#1D9E75] px-2 py-0.5 text-[9px] font-medium text-white uppercase tracking-wide">
+                      {pkg.badge}
+                    </span>
                   )}
+                </div>
+                <div className="text-xl font-medium">
+                  {formatCurrency(pkg.invest)}
+                </div>
+              </div>
+              <div className="px-5 py-4">
+                <div className="flex items-baseline justify-between mb-3">
+                  <span className="text-xs text-[var(--text-secondary)]">You receive</span>
+                  <span className="text-lg font-medium text-[#1D9E75]">{formatCurrency(pkg.returnAmount)}</span>
+                </div>
+                <hr className="border-[var(--border-tertiary)] mb-3" />
+                <div className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                  <strong className="text-[var(--text-primary)] font-medium">{formatCurrency(pkg.weeklyPayout)}/week</strong> × {pkg.weeks} payouts<br />
+                  Over {pkg.weeks} weeks<br />
+                  200% net gain
+                </div>
+                <Link
+                  href="/register"
+                  onClick={() => setSelectedPackage(pkg.id)}
+                  className={`mt-4 block w-full rounded-lg py-2 text-center text-xs font-medium no-underline transition ${
+                    pkg.highlight
+                      ? "bg-[#1D9E75] text-white hover:bg-[#0F6E56]"
+                      : "bg-[#E1F5EE] text-[#0F6E56] hover:opacity-85"
+                  }`}
                 >
                   Choose {pkg.name}
                 </Link>
-
-                <p className="mt-3 text-center text-[11px] text-amber-700 dark:text-amber-300">
-                  Demo price — no real payment will be taken.
+                <p className="mt-2 text-center text-[10px] text-amber-700 dark:text-amber-300">
+                  Fictional rate. Not real.
                 </p>
-              </motion.div>
-            );
-          })}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

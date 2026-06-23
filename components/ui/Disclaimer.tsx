@@ -10,7 +10,7 @@ type Props = {
 };
 
 const DEFAULT_TEXT =
-  "DEMO — Educational UI/UX project. BrewClub is a fictional brand. No coffee ships, no payments are processed, no data leaves your browser.";
+  "DEMO — Educational project. AmzVest ZA is fictional. No investments are accepted, no returns are paid, no data leaves your browser.";
 
 export function Disclaimer({ variant = "inline", children, className }: Props) {
   const content = children ?? DEFAULT_TEXT;
@@ -21,7 +21,7 @@ export function Disclaimer({ variant = "inline", children, className }: Props) {
         role="note"
         aria-label="Demo disclaimer"
         className={cn(
-          "w-full bg-red-600 text-white text-xs sm:text-sm",
+          "w-full bg-amber-500 text-white text-xs sm:text-sm",
           "flex items-center justify-center gap-2 px-4 py-1.5 font-medium tracking-wide",
           className
         )}

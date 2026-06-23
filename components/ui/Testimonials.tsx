@@ -23,16 +23,17 @@ export function Testimonials() {
 
   return (
     <section
-      className="relative py-20 sm:py-24"
+      className="border-b border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)] py-16 sm:py-20"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className="mx-auto max-w-4xl px-4 sm:px-6">
-        <div className="mb-8 text-center">
-          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            What demo subscribers are saying.
-          </h2>
-          <p className="mt-3 text-sm text-amber-700 dark:text-amber-300">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6">
+        <div className="mb-6 text-center">
+          <div className="text-xs font-medium tracking-wider text-[#0F6E56] uppercase">
+            Testimonials
+          </div>
+          <h2 className="text-xl font-medium mt-1">What our investors say</h2>
+          <p className="mt-1 text-xs text-amber-700 dark:text-amber-300">
             Every quote below is fictional, written for the purposes of this UI demo.
           </p>
         </div>
@@ -45,32 +46,28 @@ export function Testimonials() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.35 }}
-              className="rounded-2xl border border-[color:var(--brand)]/30 bg-[color:var(--surface)] p-8 shadow-sm sm:p-10"
+              className="rounded-xl border border-[#1D9E75]/30 bg-white dark:bg-[var(--surface)] p-6"
             >
-              <Quote className="h-7 w-7 text-[color:var(--brand)]/70" aria-hidden />
-              <blockquote className="mt-4 text-lg leading-relaxed text-[color:var(--foreground)]/90 sm:text-xl">
-                “{t.quote}”
+              <Quote className="h-5 w-5 text-[#1D9E75]/60" aria-hidden />
+              <blockquote className="mt-3 text-sm leading-relaxed text-[var(--text-primary)]">
+                &ldquo;{t.quote}&rdquo;
               </blockquote>
-              <figcaption className="mt-6 flex flex-col gap-1 border-t border-[color:var(--border)] pt-4 text-sm">
-                <span className="font-semibold">{t.name}</span>
-                <span className="text-[color:var(--foreground)]/65">
-                  {t.role} · Loved the {t.bag}
-                </span>
-                <span className="mt-2 text-[11px] font-medium text-amber-700 dark:text-amber-300">
-                  Name and quote are fictional. Not a real testimonial.
-                </span>
+              <figcaption className="mt-4 flex items-center justify-between border-t border-[var(--border-tertiary)] pt-3 text-xs">
+                <span className="font-medium">{t.name}</span>
+                <span className="text-[#1D9E75] font-medium">{t.amount}</span>
               </figcaption>
+              <p className="mt-2 text-[10px] font-medium text-amber-700 dark:text-amber-300">
+                Name and quote are fictional. Not a real testimonial.
+              </p>
             </motion.figure>
           </AnimatePresence>
 
-          <div className="mt-6 flex items-center justify-between">
+          <div className="mt-4 flex items-center justify-between">
             <button
               type="button"
-              onClick={() =>
-                setIndex((i) => (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)
-              }
+              onClick={() => setIndex((i) => (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
               aria-label="Previous testimonial"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--border)] hover:border-[color:var(--brand)]/40 transition"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-secondary)] hover:border-[#1D9E75]/40 transition"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
@@ -86,9 +83,7 @@ export function Testimonials() {
                   onClick={() => setIndex(i)}
                   className={cn(
                     "h-2 rounded-full transition-all",
-                    i === index
-                      ? "w-6 bg-[color:var(--brand)]"
-                      : "w-2 bg-[color:var(--border)] hover:bg-[color:var(--foreground)]/30"
+                    i === index ? "w-5 bg-[#1D9E75]" : "w-2 bg-[var(--border)] hover:bg-[var(--text-secondary)]"
                   )}
                 />
               ))}
@@ -98,7 +93,7 @@ export function Testimonials() {
               type="button"
               onClick={() => setIndex((i) => (i + 1) % TESTIMONIALS.length)}
               aria-label="Next testimonial"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--border)] hover:border-[color:var(--brand)]/40 transition"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-secondary)] hover:border-[#1D9E75]/40 transition"
             >
               <ChevronRight className="h-4 w-4" />
             </button>

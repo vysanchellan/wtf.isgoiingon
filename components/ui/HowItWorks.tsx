@@ -1,70 +1,64 @@
 import { motion } from "framer-motion";
-import { ClipboardList, CreditCard, Package } from "lucide-react";
 
 const STEPS = [
   {
-    icon: ClipboardList,
-    title: "Pick a package",
-    body:
-      "Browse Starter, Connoisseur, or Master. Each is built around how much coffee you actually drink in a month.",
-    note: "Demo: cards link to a mock checkout.",
+    num: 1,
+    title: "Register & fund your package",
+    desc: "Create your account, choose a package, and pay securely via PayFast — EFT, card, or SnapScan accepted. Your investment is confirmed immediately.",
   },
   {
-    icon: CreditCard,
-    title: "Top up your BrewCredits",
-    body:
-      "Add credits to your account from your wallet. The form mimics a real card input — useful for testing the flow.",
-    note: "Demo: no real card data is collected or sent.",
+    num: 2,
+    title: "We purchase and sell products on Amazon",
+    desc: "Your capital is used to source high-margin products and list them on Amazon. The operation has a proven buy-sell cycle with consistent profit margins.",
   },
   {
-    icon: Package,
-    title: "Get fresh bags monthly",
-    body:
-      "Pause, skip, or upgrade any time from your account page. Your active subscription shows up on every page.",
-    note: "Demo: shipping is simulated — no orders are produced.",
+    num: 3,
+    title: "Receive your weekly payouts",
+    desc: "Starting one week after your investment activates, you receive equal weekly payments for 3 consecutive weeks — directly to your South African bank account.",
+  },
+  {
+    num: 4,
+    title: "Reinvest or withdraw",
+    desc: "Once your cycle completes, you can reinvest your returns into a new package and compound your earnings, or simply withdraw.",
   },
 ];
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="relative py-20 sm:py-24">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="mb-12 max-w-2xl">
-          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Three steps from sign-up to first sip.
-          </h2>
-          <p className="mt-3 text-[color:var(--foreground)]/70">
-            Every step in this flow is a real interaction in the demo — try them out.
-          </p>
+    <section id="how" className="bg-white dark:bg-[var(--surface)] border-b border-[var(--border-tertiary)]">
+      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
+        <div className="mb-2 text-xs font-medium tracking-wider text-[#0F6E56] uppercase">
+          How it works
         </div>
+        <h2 className="text-xl font-medium mb-1">Simple, transparent process</h2>
+        <p className="text-sm text-[var(--text-secondary)] mb-8">
+          Your money is deployed into a live Amazon reselling operation. Here&apos;s exactly what happens.
+        </p>
 
-        <ol className="grid gap-5 md:grid-cols-3">
-          {STEPS.map((step, i) => {
-            const Icon = step.icon;
-            return (
-              <motion.li
-                key={step.title}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="relative rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-6 shadow-sm"
-              >
-                <div className="absolute -top-3 left-6 inline-flex h-6 items-center rounded-full bg-[color:var(--brand)] px-2.5 text-xs font-semibold text-white">
-                  Step {i + 1}
-                </div>
-                <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[color:var(--brand)]/12 text-[color:var(--brand-strong)]">
-                  <Icon className="h-5 w-5" aria-hidden />
-                </div>
-                <h3 className="text-lg font-semibold">{step.title}</h3>
-                <p className="mt-2 text-sm text-[color:var(--foreground)]/75">{step.body}</p>
-                <p className="mt-3 text-xs font-medium text-amber-700 dark:text-amber-300">
-                  {step.note}
-                </p>
-              </motion.li>
-            );
-          })}
-        </ol>
+        <ul className="divide-y divide-[var(--border-tertiary)]">
+          {STEPS.map((step, i) => (
+            <motion.li
+              key={step.num}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="grid grid-cols-[40px_1fr] gap-4 py-5"
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E1F5EE] text-sm font-medium text-[#0F6E56] shrink-0">
+                {step.num}
+              </div>
+              <div>
+                <div className="text-sm font-medium">{step.title}</div>
+                <div className="mt-1 text-xs text-[var(--text-secondary)] leading-relaxed">{step.desc}</div>
+              </div>
+            </motion.li>
+          ))}
+        </ul>
+
+        <div className="mt-8 rounded-lg border border-amber-400/60 bg-amber-50 px-4 py-3 text-xs text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200">
+          <strong>Risk disclosure:</strong> All of the above is fictional. This is a demo project. Investment returns shown are fabricated and do not represent real outcomes.
+        </div>
       </div>
     </section>
   );

@@ -8,18 +8,19 @@ export function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="relative py-20 sm:py-24">
+    <section id="faq" className="border-b border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)] py-16 sm:py-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
-        <div className="mb-10 text-center">
-          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Frequently asked questions
-          </h2>
-          <p className="mt-3 text-[color:var(--foreground)]/70">
+        <div className="mb-6 text-center">
+          <div className="text-xs font-medium tracking-wider text-[#0F6E56] uppercase">
+            FAQ
+          </div>
+          <h2 className="text-xl font-medium mt-1">Frequently asked questions</h2>
+          <p className="mt-1 text-sm text-[var(--text-secondary)]">
             The most important answers about this demo are right here.
           </p>
         </div>
 
-        <ul className="divide-y divide-[color:var(--border)] overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)]">
+        <ul className="divide-y divide-[var(--border-tertiary)] overflow-hidden rounded-xl border border-[var(--border-tertiary)] bg-white dark:bg-[var(--surface)]">
           {FAQS.map((item, i) => {
             const isOpen = open === i;
             return (
@@ -29,13 +30,13 @@ export function FAQ() {
                   onClick={() => setOpen(isOpen ? null : i)}
                   aria-expanded={isOpen}
                   aria-controls={`faq-${i}`}
-                  className="flex w-full items-start justify-between gap-4 px-5 py-4 text-left hover:bg-[color:var(--surface-muted)]/60 transition"
+                  className="flex w-full items-start justify-between gap-4 px-5 py-4 text-left hover:bg-[var(--surface-muted)] transition"
                 >
-                  <span className="text-base font-semibold">{item.q}</span>
+                  <span className="text-sm font-medium">{item.q}</span>
                   <ChevronDown
                     className={cn(
-                      "mt-1 h-4 w-4 shrink-0 text-[color:var(--foreground)]/60 transition",
-                      isOpen && "rotate-180 text-[color:var(--brand)]"
+                      "mt-0.5 h-4 w-4 shrink-0 text-[var(--text-secondary)] transition",
+                      isOpen && "rotate-180 text-[#1D9E75]"
                     )}
                     aria-hidden
                   />
@@ -51,7 +52,7 @@ export function FAQ() {
                       transition={{ duration: 0.22 }}
                       className="overflow-hidden"
                     >
-                      <p className="px-5 pb-5 text-sm text-[color:var(--foreground)]/80 leading-relaxed">
+                      <p className="px-5 pb-5 text-xs text-[var(--text-secondary)] leading-relaxed">
                         {item.a}
                       </p>
                     </motion.div>
