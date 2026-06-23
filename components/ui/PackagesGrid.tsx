@@ -184,7 +184,7 @@ export function PackagesGrid({ withHeader = true }: Props) {
             >
               {pkg.highlight && (
                 <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
-                  <div className="flex items-center gap-1.5 rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--amber)] px-4 py-1.5">
+                  <div className="flex items-center gap-1.5 rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-light)] px-4 py-1.5">
                     <LucideStar className="h-4 w-4 fill-current text-[var(--bg-primary)]" />
                     <span className="text-sm font-semibold text-[var(--bg-primary)]">
                       Most Popular

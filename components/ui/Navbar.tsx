@@ -55,7 +55,7 @@ export function Navbar() {
       >
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="group flex items-center gap-2.5 no-underline">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--amber)] flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(255,215,0,0.25)] transition-transform duration-300 group-hover:scale-105">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-light)] flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(20,199,123,0.3)] transition-transform duration-300 group-hover:scale-105">
               <TrendingUp size={20} className="text-[var(--bg-primary)]" />
             </div>
             <span className="text-xl font-bold text-[var(--text-primary)] tracking-tight">

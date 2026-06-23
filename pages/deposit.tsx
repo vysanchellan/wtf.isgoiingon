@@ -74,7 +74,7 @@ export default function DepositPage() {
 
             <label className="field-label">Amount (ZAR)</label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-[var(--text-muted)]">
+              <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-base font-semibold text-[var(--gold)]">
                 R
               </span>
               <input
@@ -82,7 +82,8 @@ export default function DepositPage() {
                 min={0}
                 value={Number.isNaN(amount) ? "" : amount}
                 onChange={(e) => setAmount(parseInt(e.target.value, 10))}
-                className="input-premium pl-7 text-lg font-semibold"
+                style={{ paddingLeft: "2.1rem" }}
+                className="input-premium text-lg font-semibold"
               />
             </div>
 

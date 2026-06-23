@@ -56,7 +56,7 @@ export function Testimonials() {
               </blockquote>
               <div className="mt-6 flex items-center justify-between border-t border-[var(--border)] pt-4">
                 <span className="flex items-center gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--amber)] text-xs font-bold text-[var(--bg-primary)]">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-light)] text-xs font-bold text-[var(--bg-primary)]">
                     {t.name.split(" ").map((p) => p[0]).join("")}
                   </span>
                   <span className="text-sm font-semibold text-[var(--text-primary)]">

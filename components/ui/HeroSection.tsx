@@ -37,17 +37,17 @@ const itemVariants: Variants = {
   },
 };
 
-// Gold/amber palette tuned to the site's CSS variables (globals.css).
+// Emerald/teal palette tuned to the site's CSS variables (globals.css).
 const WAVE_PALETTE: WaveConfig[] = [
-  { offset: 0, amplitude: 70, frequency: 0.003, color: "rgba(255, 215, 0, 0.8)", opacity: 0.4 },
-  { offset: Math.PI / 2, amplitude: 90, frequency: 0.0026, color: "rgba(245, 158, 11, 0.7)", opacity: 0.32 },
-  { offset: Math.PI, amplitude: 60, frequency: 0.0034, color: "rgba(255, 237, 74, 0.65)", opacity: 0.28 },
-  { offset: Math.PI * 1.5, amplitude: 80, frequency: 0.0022, color: "rgba(217, 119, 6, 0.5)", opacity: 0.24 },
-  { offset: Math.PI * 2, amplitude: 55, frequency: 0.004, color: "rgba(245, 240, 232, 0.25)", opacity: 0.18 },
+  { offset: 0, amplitude: 70, frequency: 0.003, color: "rgba(20, 199, 123, 0.85)", opacity: 0.42 },
+  { offset: Math.PI / 2, amplitude: 90, frequency: 0.0026, color: "rgba(79, 227, 168, 0.7)", opacity: 0.34 },
+  { offset: Math.PI, amplitude: 60, frequency: 0.0034, color: "rgba(45, 212, 191, 0.65)", opacity: 0.3 },
+  { offset: Math.PI * 1.5, amplitude: 80, frequency: 0.0022, color: "rgba(12, 158, 99, 0.55)", opacity: 0.26 },
+  { offset: Math.PI * 2, amplitude: 55, frequency: 0.004, color: "rgba(210, 240, 230, 0.22)", opacity: 0.18 },
 ];
 
-const BG_TOP = "#0a0a0f";
-const BG_BOTTOM = "#10101a";
+const BG_TOP = "#060B14";
+const BG_BOTTOM = "#0A1120";
 
 export function HeroSection() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);

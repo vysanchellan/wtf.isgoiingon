@@ -29,7 +29,7 @@ export default function RegisterPage() {
           className="card-glass relative w-full max-w-sm p-8 shadow-[var(--shadow-glow)]"
         >
           <div className="mb-6 flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius)] bg-gradient-to-br from-[var(--gold)] to-[var(--amber)]">
+            <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius)] bg-gradient-to-br from-[var(--gold)] to-[var(--gold-light)]">
               <TrendingUp className="h-5 w-5 text-[#0a0a0f]" />
             </div>
             <span className="text-base font-bold tracking-tight text-[var(--text-primary)]">

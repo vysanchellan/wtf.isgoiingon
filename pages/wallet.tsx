@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Disclaimer } from "@/components/ui/Disclaimer";
+import { AnimatedCurrency } from "@/components/ui/AnimatedCurrency";
 import { useDemoStore } from "@/lib/store";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
@@ -48,14 +49,14 @@ export default function WalletPage() {
             transition={{ duration: 0.5 }}
             className="gradient-border relative overflow-hidden rounded-[var(--radius-xl)] bg-[var(--bg-card)] p-7"
           >
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_85%_0%,rgba(255,215,0,0.1),transparent_70%)]" />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_85%_0%,rgba(20,199,123,0.12),transparent_70%)]" />
             <div className="relative flex flex-wrap items-end justify-between gap-4">
               <div>
                 <div className="text-[10px] uppercase tracking-widest text-[var(--text-muted)]">
                   Available balance
                 </div>
                 <div className="mt-1 text-4xl font-bold tabular-nums text-[var(--text-primary)]">
-                  {hydrated ? formatCurrency(balance) : "—"}
+                  {hydrated ? <AnimatedCurrency value={balance} /> : "—"}
                 </div>
               </div>
               <div className="flex gap-2.5">

@@ -12,6 +12,7 @@ import {
   Clock,
 } from "lucide-react";
 import { useDemoStore } from "@/lib/store";
+import { AnimatedCurrency } from "@/components/ui/AnimatedCurrency";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export default function DashboardPage() {
@@ -54,14 +55,14 @@ export default function DashboardPage() {
           transition={{ duration: 0.5, delay: 0.05 }}
           className="gradient-border relative mb-4 overflow-hidden rounded-[var(--radius-lg)] bg-[var(--bg-card)] p-5"
         >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_80%_at_90%_0%,rgba(255,215,0,0.1),transparent_70%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_80%_at_90%_0%,rgba(20,199,123,0.12),transparent_70%)]" />
           <div className="relative flex flex-wrap items-center justify-between gap-3">
             <div>
               <div className="text-[10px] uppercase tracking-widest text-[var(--text-muted)]">
                 Wallet balance
               </div>
               <div className="mt-1 text-3xl font-bold text-[var(--text-primary)]">
-                {hydrated ? formatCurrency(balance) : "—"}
+                {hydrated ? <AnimatedCurrency value={balance} /> : "—"}
               </div>
             </div>
             <div className="flex gap-2">

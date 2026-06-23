@@ -39,7 +39,7 @@ export function Footer() {
         <div className="grid gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div>
             <Link href="/" className="flex items-center gap-2.5 no-underline">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--amber)] shadow-[0_0_20px_rgba(255,215,0,0.25)]">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--gold-light)] shadow-[0_0_20px_rgba(20,199,123,0.3)]">
                 <TrendingUp size={20} className="text-[var(--bg-primary)]" />
               </div>
               <span className="text-lg font-bold tracking-tight text-[var(--text-primary)]">

@@ -28,7 +28,7 @@ export default function AdminLoginPage() {
         >
           {/* Showcase panel */}
           <div className="relative hidden flex-col justify-between gap-8 border-r border-[var(--border)] bg-gradient-to-br from-[var(--bg-card)] to-[var(--bg-tertiary)] p-8 md:flex">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_30%_0%,rgba(255,215,0,0.08),transparent_70%)]" />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_30%_0%,rgba(20,199,123,0.1),transparent_70%)]" />
             <div className="relative">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--gold)]/[0.12] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--gold)]">
                 <ShieldCheck className="h-3 w-3" />
@@ -72,7 +72,7 @@ export default function AdminLoginPage() {
           {/* Form panel */}
           <div className="p-8 sm:p-10">
             <div className="mb-6 flex items-center gap-2.5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius)] bg-gradient-to-br from-[var(--gold)] to-[var(--amber)]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius)] bg-gradient-to-br from-[var(--gold)] to-[var(--gold-light)]">
                 <ShieldCheck className="h-5 w-5 text-[#0a0a0f]" />
               </div>
               <div>
@@ -94,8 +94,13 @@ export default function AdminLoginPage() {
               <div>
                 <label className="field-label">Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-muted)]" />
-                  <input type="password" defaultValue="amzvest-demo" className="input-premium pl-9" />
+                  <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-muted)]" />
+                  <input
+                    type="password"
+                    defaultValue="amzvest-demo"
+                    style={{ paddingLeft: "2.3rem" }}
+                    className="input-premium"
+                  />
                 </div>
               </div>
               <Link

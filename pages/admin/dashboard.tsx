@@ -313,7 +313,7 @@ function PayoutsTable({
               return (
                 <motion.tr
                   key={key}
-                  animate={isPaid ? { backgroundColor: "rgba(255,215,0,0.04)" } : {}}
+                  animate={isPaid ? { backgroundColor: "rgba(20,199,123,0.05)" } : {}}
                   className={cn(i < PAYOUTS.length - 1 && "border-b border-[var(--border)]")}
                 >
                   <td className="px-5 py-3 font-medium">{p.investor}</td>
@@ -440,7 +440,7 @@ function InvestorModal({ investor, onClose }: { investor: Investor | null; onClo
             </button>
 
             <div className="flex items-center gap-3">
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--amber)] text-base font-bold text-[var(--bg-primary)]">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-light)] text-base font-bold text-[var(--bg-primary)]">
                 {investor.name.split(" ").map((p) => p[0]).join("")}
               </span>
               <div>

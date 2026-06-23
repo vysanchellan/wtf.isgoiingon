@@ -12,7 +12,7 @@ export function CTASection() {
         transition={{ duration: 0.6 }}
         className="gradient-border relative mx-auto max-w-3xl overflow-hidden rounded-[var(--radius-xl)] bg-[var(--bg-card)] px-6 py-14 text-center"
       >
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_50%_0%,rgba(255,215,0,0.08),transparent_70%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_80%_at_50%_0%,rgba(20,199,123,0.1),transparent_70%)]" />
         <div className="relative">
           <h2 className="gradient-text-animated text-3xl font-bold tracking-tight sm:text-4xl">
             Ready to try the demo?

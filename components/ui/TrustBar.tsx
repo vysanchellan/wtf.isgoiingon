@@ -51,7 +51,7 @@ function Stat({ item, active, index }: { item: Item; active: boolean; index: num
           ? {
               borderRight: "1px solid transparent",
               borderImage:
-                "linear-gradient(180deg, transparent, rgba(255,215,0,0.2), transparent) 1",
+                "linear-gradient(180deg, transparent, rgba(20,199,123,0.22), transparent) 1",
             }
           : undefined
       }

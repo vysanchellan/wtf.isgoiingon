@@ -13,7 +13,13 @@ export function PageHeader({ eyebrow, title, subtitle, children, icon }: Props) 
   return (
     <section className="relative overflow-hidden border-b border-[var(--border)] bg-[var(--bg-secondary)]">
       <div className="bg-grid pointer-events-none absolute inset-0" aria-hidden="true" />
-      <div className="pointer-events-none absolute -top-24 left-1/2 h-[320px] w-[520px] -translate-x-1/2 rounded-full bg-[var(--gold)]/[0.06] blur-[120px]" aria-hidden="true" />
+      <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2" aria-hidden="true">
+        <motion.div
+          animate={{ opacity: [0.45, 0.85, 0.45], scale: [1, 1.12, 1] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+          className="h-[320px] w-[520px] rounded-full bg-[var(--gold)]/[0.07] blur-[120px]"
+        />
+      </div>
 
       <div className="relative mx-auto max-w-6xl px-4 pb-12 pt-14 sm:px-6 sm:pt-16">
         <motion.div

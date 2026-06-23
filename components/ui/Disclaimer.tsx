@@ -5,13 +5,12 @@ type Variant = "banner" | "inline" | "card";
 type Props = {
   variant?: Variant;
   children?: React.ReactNode;
-  className?: string;
 };
 
 const DEFAULT_TEXT =
   "DEMO — Educational project. AmzVest ZA is fictional. No investments are accepted, no returns are paid, no data leaves your browser.";
 
-export function Disclaimer({ variant = "inline", children, className }: Props) {
+export function Disclaimer({ variant = "inline", children }: Props) {
   const content = children ?? DEFAULT_TEXT;
 
   if (variant === "banner") {

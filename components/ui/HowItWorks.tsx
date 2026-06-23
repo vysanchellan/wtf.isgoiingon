@@ -57,7 +57,7 @@ export function HowItWorks() {
                 transition={{ delay: i * 0.1, duration: 0.5 }}
                 className="relative grid grid-cols-[40px_1fr] gap-5 pb-9 last:pb-0"
               >
-                <div className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--amber)] text-[var(--bg-primary)] shadow-[0_0_20px_rgba(255,215,0,0.2)]">
+                <div className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--gold-light)] text-[var(--bg-primary)] shadow-[0_0_20px_rgba(20,199,123,0.25)]">
                   <Icon className="h-4 w-4" />
                 </div>
                 <div className="pt-1">
