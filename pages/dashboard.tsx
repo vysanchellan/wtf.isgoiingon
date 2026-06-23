@@ -9,74 +9,35 @@ export default function DashboardPage() {
         <title>Dashboard — AmzVest ZA (DEMO)</title>
       </Head>
 
-      <div
-        style={{
-          background: "rgba(245, 158, 11, 0.1)",
-          borderBottom: "1px solid rgba(245, 158, 11, 0.2)",
-          padding: "8px 16px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 8,
-          fontSize: 12,
-          fontWeight: 500,
-          color: "var(--amber)",
-          textAlign: "center",
-        }}
-      >
-        <AlertTriangle style={{ width: 14, height: 14, flexShrink: 0 }} />
+      <div className="bg-[var(--amber-deep)]/20 border-b border-[var(--amber-deep)]/20 px-4 py-2 flex items-center justify-center gap-2 text-xs font-medium text-[var(--amber)]">
+        <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
         DEMO — For Educational Purposes Only
       </div>
 
-      <div style={{ maxWidth: 640, margin: "0 auto", padding: "32px 16px" }}>
-        <div style={{ marginBottom: 24 }}>
-          <h2 style={{ fontSize: 20, fontWeight: 600, color: "var(--text-primary)", margin: 0 }}>
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        <div className="mb-6">
+          <h2 className="text-xl font-bold text-[var(--text-primary)]">
             Welcome back, Sipho
           </h2>
-          <p style={{ fontSize: 13, color: "var(--text-secondary)", margin: "4px 0 0" }}>
+          <p className="text-xs text-[var(--text-secondary)] mt-1">
             Your investment portfolio · Growth Package
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 24 }}>
+        <div className="grid grid-cols-3 gap-3 mb-6">
           <MetricCard label="Invested" value="R1,000" />
           <MetricCard label="Total return" value="R3,000" gold />
           <MetricCard label="Received" value="R1,000" gold />
         </div>
 
-        <div
-          style={{
-            background: "var(--bg-card)",
-            border: "1px solid var(--border)",
-            borderRadius: "var(--radius-lg)",
-            marginBottom: 16,
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "12px 20px",
-              borderBottom: "1px solid var(--border)",
-            }}
-          >
-            <h3 style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>Active investment</h3>
-            <span
-              style={{
-                padding: "2px 12px",
-                borderRadius: 999,
-                fontSize: 10,
-                fontWeight: 600,
-                background: "rgba(255, 215, 0, 0.12)",
-                color: "var(--gold)",
-              }}
-            >
+        <div className="card-premium mb-4">
+          <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border)]">
+            <h3 className="text-sm font-semibold">Active investment</h3>
+            <span className="rounded-full bg-[var(--gold)]/[0.12] text-[var(--gold)] px-3 py-0.5 text-[10px] font-bold">
               Active
             </span>
           </div>
-          <div style={{ padding: "0 20px" }}>
+          <div className="px-5">
             <InvestmentRow
               name="Growth Package — R1,000 invested"
               meta="Started 2 June 2025 · Completes 23 June 2025"
@@ -91,86 +52,39 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div
-          style={{
-            background: "var(--bg-card)",
-            border: "1px solid var(--border)",
-            borderRadius: "var(--radius-lg)",
-            marginBottom: 16,
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "12px 20px",
-              borderBottom: "1px solid var(--border)",
-            }}
-          >
-            <h3 style={{ fontSize: 14, fontWeight: 600, margin: 0 }}>Payout schedule</h3>
-            <span style={{ fontSize: 11, color: "var(--text-secondary)" }}>Growth Package</span>
+        <div className="rounded-[var(--radius-lg)] bg-[var(--bg-card)] border border-[var(--border)] mb-4 overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border)]">
+            <h3 className="text-sm font-semibold">Payout schedule</h3>
+            <span className="text-[11px] text-[var(--text-secondary)]">Growth Package</span>
           </div>
-          <div style={{ padding: "0 20px" }}>
+          <div className="px-5">
             <PayoutRow week="Week 1 payout" date="Paid 9 June 2025" amount="R1,000" status="Paid" paid />
             <PayoutRow week="Week 2 payout" date="Due 16 June 2025" amount="R1,000" status="Upcoming" />
             <PayoutRow week="Week 3 payout" date="Due 23 June 2025" amount="R1,000" status="Upcoming" border={false} />
           </div>
         </div>
 
-        <div
-          style={{
-            padding: "16px 20px",
-            borderRadius: "var(--radius-lg)",
-            background: "rgba(255, 215, 0, 0.06)",
-            border: "1px solid rgba(255, 215, 0, 0.15)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: 24,
-          }}
-        >
+        <div className="rounded-[var(--radius-lg)] bg-[var(--gold)]/[0.06] border border-[var(--gold)]/[0.15] px-5 py-4 flex items-center justify-between mb-6">
           <div>
-            <div style={{ fontSize: 14, fontWeight: 600, color: "var(--gold)" }}>
+            <div className="text-sm font-semibold text-[var(--gold)]">
               Reinvest your returns when your cycle ends
             </div>
-            <div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 4 }}>
+            <div className="text-[11px] text-[var(--text-secondary)] mt-1">
               Compound your R3,000 return into a Premium package
             </div>
           </div>
           <Link
             href="/register"
-            style={{
-              padding: "8px 18px",
-              fontSize: 12,
-              fontWeight: 600,
-              color: "#0a0a0f",
-              background: "linear-gradient(135deg, var(--gold), var(--amber))",
-              borderRadius: "var(--radius)",
-              textDecoration: "none",
-              whiteSpace: "nowrap",
-              transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = "0 8px 30px rgba(255, 215, 0, 0.25)";
-              e.currentTarget.style.transform = "translateY(-1px)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = "none";
-              e.currentTarget.style.transform = "none";
-            }}
+            className="btn-gold inline-flex px-4 py-2 text-xs no-underline"
           >
             Reinvest
           </Link>
         </div>
 
-        <div style={{ textAlign: "right" }}>
+        <div className="text-right">
           <Link
             href="/"
-            style={{ fontSize: 12, color: "var(--text-muted)", textDecoration: "none" }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "var(--text-primary)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-muted)"; }}
+            className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] no-underline"
           >
             Sign out
           </Link>
@@ -182,24 +96,11 @@ export default function DashboardPage() {
 
 function MetricCard({ label, value, gold }: { label: string; value: string; gold?: boolean }) {
   return (
-    <div
-      style={{
-        background: "var(--bg-card)",
-        border: "1px solid var(--border)",
-        borderRadius: "var(--radius)",
-        padding: 16,
-      }}
-    >
-      <div style={{ fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 }}>
+    <div className="rounded-[var(--radius)] bg-[var(--bg-card)] border border-[var(--border)] p-4">
+      <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-widest mb-1">
         {label}
       </div>
-      <div
-        style={{
-          fontSize: 22,
-          fontWeight: 600,
-          color: gold ? "var(--gold)" : "var(--text-primary)",
-        }}
-      >
+      <div className={`text-xl font-bold ${gold ? "text-[var(--gold)]" : "text-[var(--text-primary)]"}`}>
         {value}
       </div>
     </div>
@@ -220,29 +121,18 @@ function InvestmentRow({
   border?: boolean;
 }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "12px 0",
-        borderBottom: border ? "1px solid var(--border)" : "none",
-      }}
-    >
+    <div className={`flex items-center justify-between py-3 ${border ? "border-b border-[var(--border)]" : ""}`}>
       <div>
-        <div style={{ fontSize: 13, fontWeight: 500 }}>{name}</div>
-        <div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 2 }}>{meta}</div>
+        <div className="text-sm font-medium">{name}</div>
+        <div className="text-[11px] text-[var(--text-secondary)] mt-0.5">{meta}</div>
       </div>
       {badge && (
         <span
-          style={{
-            padding: "2px 12px",
-            borderRadius: 999,
-            fontSize: 10,
-            fontWeight: 600,
-            background: done ? "rgba(255, 215, 0, 0.12)" : "rgba(255, 215, 0, 0.08)",
-            color: done ? "var(--gold)" : "var(--amber)",
-          }}
+          className={`rounded-full px-3 py-0.5 text-[10px] font-bold ${
+            done
+              ? "bg-[var(--gold)]/[0.12] text-[var(--gold)]"
+              : "bg-[var(--gold)]/[0.08] text-[var(--amber)]"
+          }`}
         >
           {badge}
         </span>
@@ -267,30 +157,19 @@ function PayoutRow({
   border?: boolean;
 }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "12px 0",
-        borderBottom: border ? "1px solid var(--border)" : "none",
-      }}
-    >
+    <div className={`flex items-center justify-between py-3 ${border ? "border-b border-[var(--border)]" : ""}`}>
       <div>
-        <div style={{ fontSize: 13, fontWeight: 500 }}>{week}</div>
-        <div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 2 }}>{date}</div>
+        <div className="text-sm font-medium">{week}</div>
+        <div className="text-[11px] text-[var(--text-secondary)] mt-0.5">{date}</div>
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <span style={{ fontSize: 14, fontWeight: 600, color: "var(--gold)" }}>{amount}</span>
+      <div className="flex items-center gap-2.5">
+        <span className="text-sm font-bold text-[var(--gold)]">{amount}</span>
         <span
-          style={{
-            padding: "2px 10px",
-            borderRadius: 999,
-            fontSize: 10,
-            fontWeight: 600,
-            background: paid ? "rgba(255, 215, 0, 0.12)" : "rgba(245, 158, 11, 0.12)",
-            color: paid ? "var(--gold)" : "var(--amber)",
-          }}
+          className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+            paid
+              ? "bg-[var(--gold)]/[0.12] text-[var(--gold)]"
+              : "bg-[var(--amber-deep)]/[0.12] text-[var(--amber)]"
+          }`}
         >
           {status}
         </span>

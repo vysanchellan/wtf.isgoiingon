@@ -23,20 +23,13 @@ export function Testimonials() {
 
   return (
     <section
-      className="py-16 sm:py-20"
-      style={{
-        background: "var(--bg-secondary)",
-        borderBottom: "1px solid var(--border)",
-      }}
+      className="bg-[var(--bg-primary)] border-b border-[var(--border)] py-16 sm:py-20"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <div className="mb-10 text-center">
-          <span
-            className="text-xs font-semibold tracking-[0.2em] uppercase"
-            style={{ color: "var(--gold)" }}
-          >
+          <span className="text-[var(--gold)] text-xs font-semibold tracking-[0.2em] uppercase">
             Testimonials
           </span>
           <h2 className="gradient-text mt-2 text-2xl font-bold sm:text-3xl">
@@ -52,45 +45,26 @@ export function Testimonials() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="card-premium glow relative overflow-hidden p-8"
-              style={{ borderLeft: "3px solid var(--gold)" }}
+              className="card-premium glow relative overflow-hidden border-l-4 border-l-[var(--gold)] p-6 sm:p-8"
             >
-              <div
-                className="absolute bottom-4 right-4 select-none"
-                style={{ color: "var(--gold)", opacity: 0.06 }}
-              >
+              <div className="absolute bottom-4 right-4 select-none text-[var(--gold)]/20">
                 <Quote className="h-20 w-20" />
               </div>
-              <div style={{ color: "var(--gold)", opacity: 0.2 }}>
+              <div className="text-[var(--gold)]/10">
                 <Quote className="h-8 w-8" />
               </div>
-              <blockquote
-                className="mt-4 text-lg leading-relaxed italic"
-                style={{ color: "var(--text-primary)" }}
-              >
+              <blockquote className="mt-4 text-lg leading-relaxed italic text-[var(--text-primary)]">
                 &ldquo;{t.quote}&rdquo;
               </blockquote>
-              <div
-                className="mt-6 flex items-center justify-between pt-4"
-                style={{ borderTop: "1px solid var(--border)" }}
-              >
-                <span
-                  className="text-sm font-semibold"
-                  style={{ color: "var(--gold)" }}
-                >
+              <div className="mt-6 flex items-center justify-between border-t border-[var(--border)] pt-4">
+                <span className="text-sm font-semibold text-[var(--gold)]">
                   {t.name}
                 </span>
-                <span
-                  className="text-sm font-bold"
-                  style={{ color: "var(--gold)" }}
-                >
+                <span className="text-sm font-bold text-[var(--gold)]">
                   {t.amount}
                 </span>
               </div>
-              <p
-                className="mt-3 text-[11px] font-medium"
-                style={{ color: "var(--amber)" }}
-              >
+              <p className="mt-2 text-[10px] text-[var(--amber)]">
                 Name and quote are fictional. Not a real testimonial.
               </p>
             </motion.div>
@@ -125,12 +99,10 @@ export function Testimonials() {
                   onClick={() => setIndex(i)}
                   className={cn(
                     "h-2 rounded-full transition-all duration-300",
-                    i === index ? "w-6" : "w-2"
+                    i === index
+                      ? "w-5 bg-[var(--gold)]"
+                      : "w-2 bg-[var(--border)]"
                   )}
-                  style={{
-                    background:
-                      i === index ? "var(--gold)" : "var(--border)",
-                  }}
                 />
               ))}
             </div>

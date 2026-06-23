@@ -44,33 +44,18 @@ export function HeroSection() {
             repeat: Infinity,
             ease: "linear",
           }}
+          className="absolute bottom-0 rounded-full pointer-events-none z-0 shadow-[0_0_6px_rgba(255,215,0,0.4)]"
           style={{
-            position: "absolute",
             left: c.x,
-            bottom: "0%",
             width: c.size,
             height: c.size,
-            borderRadius: "50%",
             background: "radial-gradient(circle at 35% 35%, var(--gold-light), var(--gold-dark))",
-            boxShadow: "0 0 6px rgba(255, 215, 0, 0.4)",
-            pointerEvents: "none",
-            zIndex: 0,
           }}
         />
       ))}
 
-      <div style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none" }}>
-        <div
-          style={{
-            position: "absolute",
-            top: "15%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: 800,
-            height: 400,
-            background: "radial-gradient(ellipse, rgba(255,215,0,0.05) 0%, transparent 60%)",
-          }}
-        />
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse,rgba(255,215,0,0.05)_0%,transparent_60%)]" />
       </div>
 
       <motion.div
@@ -80,40 +65,34 @@ export function HeroSection() {
         className="relative z-10 mx-auto max-w-6xl px-4 py-24 text-center sm:px-6"
       >
         <motion.div variants={childVariants} className="mb-8 flex justify-center">
-          <span
-            className="gradient-border inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-medium tracking-wide"
-            style={{ color: "var(--gold)" }}
-          >
-            <ShieldCheck style={{ width: 14, height: 14 }} />
+          <span className="gradient-border inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-medium tracking-wide text-[var(--gold)]">
+            <ShieldCheck size={14} />
             Verified Amazon Reselling Operation
           </span>
         </motion.div>
 
         <motion.h1 variants={childVariants} className="mx-auto max-w-3xl">
-          <span style={{ display: "block", fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 500, lineHeight: 1.2, letterSpacing: "-0.02em" }}>
+          <span
+            className="block font-medium leading-[1.2] tracking-[-0.02em]"
+            style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
+          >
             Put your money to work.
           </span>
           <span
-            style={{
-              display: "block",
-              fontSize: "clamp(1.6rem, 4vw, 2.8rem)",
-              fontWeight: 500,
-              lineHeight: 1.3,
-              marginTop: "0.25rem",
-              color: "var(--text-primary)",
-            }}
+            className="block font-medium leading-[1.3] mt-1 text-[var(--text-primary)]"
+            style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)" }}
           >
-            <span className="gradient-text" style={{ fontWeight: 600 }}>Triple</span>{" "}
+            <span className="gradient-text font-semibold">Triple</span>{" "}
             your investment in 3 weeks.
           </span>
         </motion.h1>
 
         <motion.p
           variants={childVariants}
-          className="mx-auto mt-6 max-w-xl text-sm leading-relaxed sm:text-base"
-          style={{ color: "var(--text-secondary)" }}
+          className="mx-auto mt-6 max-w-xl text-sm leading-relaxed sm:text-base text-[var(--text-secondary)]"
         >
-          We buy and sell products on Amazon using investor capital. Every rand invested generates proven returns — paid back to you in three weekly instalments.
+          We buy and sell products on Amazon using investor capital. Every rand invested
+          generates proven returns — paid back to you in three weekly instalments.
         </motion.p>
 
         <motion.div
@@ -124,7 +103,7 @@ export function HeroSection() {
             href="/register"
             className="btn-gold inline-flex items-center gap-2 px-7 py-3 text-sm no-underline"
           >
-            <TrendingUp style={{ width: 16, height: 16 }} />
+            <TrendingUp size={16} />
             Start investing
           </Link>
           <a
@@ -136,25 +115,7 @@ export function HeroSection() {
         </motion.div>
       </motion.div>
 
-      <div
-        style={{
-          position: "absolute",
-          bottom: 24,
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 10,
-          maxWidth: 600,
-          width: "calc(100% - 32px)",
-          padding: "10px 18px",
-          borderRadius: "var(--radius)",
-          background: "rgba(255, 215, 0, 0.06)",
-          border: "1px solid rgba(255, 215, 0, 0.12)",
-          textAlign: "center",
-          fontSize: 12,
-          color: "var(--amber)",
-          fontWeight: 500,
-        }}
-      >
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 max-w-[600px] w-[calc(100%-32px)] px-4 py-2.5 rounded-[var(--radius)] bg-[var(--gold)]/5 border border-[var(--gold)]/10 text-center text-xs text-[var(--amber)] font-medium">
         ⚠️ This is a FAKE demo site. No real money is involved.
       </div>
     </section>

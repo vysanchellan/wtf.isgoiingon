@@ -22,13 +22,7 @@ const itemVariants = {
 
 export function TrustBar() {
   return (
-    <div
-      style={{
-        background: "var(--bg-secondary)",
-        borderTop: "1px solid var(--border-glow)",
-        borderBottom: "1px solid var(--border-glow)",
-      }}
-    >
+    <div className="bg-[var(--bg-secondary)] border-y border-[var(--border-glow)]">
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -40,33 +34,19 @@ export function TrustBar() {
           <motion.div
             key={item.label}
             variants={itemVariants}
-            style={{
-              position: "relative",
-              padding: "24px 16px",
-              textAlign: "center",
-              borderRight: i < ITEMS.length - 1
-                ? "1px solid transparent"
-                : "none",
-              borderImage: i < ITEMS.length - 1
-                ? "linear-gradient(180deg, transparent, rgba(255,215,0,0.2), transparent) 1"
-                : undefined,
-            }}
+            className="relative px-4 py-6 text-center"
+            style={
+              i < ITEMS.length - 1
+                ? {
+                    borderRight: "1px solid transparent",
+                    borderImage:
+                      "linear-gradient(180deg, transparent, rgba(255,215,0,0.2), transparent) 1",
+                  }
+                : undefined
+            }
           >
-            <div
-              className="gradient-text"
-              style={{ fontSize: "clamp(1.25rem, 3vw, 1.75rem)", fontWeight: 600 }}
-            >
-              {item.num}
-            </div>
-            <div
-              style={{
-                fontSize: 10,
-                color: "var(--text-muted)",
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-                marginTop: 4,
-              }}
-            >
+            <div className="gradient-text text-2xl font-bold">{item.num}</div>
+            <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-widest mt-1">
               {item.label}
             </div>
           </motion.div>
