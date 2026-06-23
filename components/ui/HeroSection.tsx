@@ -1,122 +1,271 @@
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ShieldCheck, TrendingUp } from "lucide-react";
+import { motion, type Variants } from "framer-motion";
+import { ShieldCheck, TrendingUp, ArrowRight } from "lucide-react";
+import { useEffect, useRef } from "react";
 
-const coins = [
-  { size: 6, x: "5%", delay: 0, duration: 7 },
-  { size: 10, x: "12%", delay: 1.5, duration: 9 },
-  { size: 8, x: "22%", delay: 0.8, duration: 6.5 },
-  { size: 14, x: "35%", delay: 2.2, duration: 10 },
-  { size: 7, x: "48%", delay: 0.3, duration: 8 },
-  { size: 12, x: "58%", delay: 1.8, duration: 7.5 },
-  { size: 5, x: "68%", delay: 2.8, duration: 6 },
-  { size: 9, x: "78%", delay: 0.6, duration: 8.5 },
-  { size: 11, x: "88%", delay: 1.2, duration: 9.5 },
-  { size: 7, x: "95%", delay: 2, duration: 7 },
-  { size: 13, x: "42%", delay: 3.5, duration: 11 },
-  { size: 6, x: "72%", delay: 4, duration: 6.5 },
-];
+type Point = { x: number; y: number };
 
-const containerVariants = {
-  hidden: { opacity: 0 },
+interface WaveConfig {
+  offset: number;
+  amplitude: number;
+  frequency: number;
+  color: string;
+  opacity: number;
+}
+
+const highlightPills = [
+  "3× illustrative return",
+  "3 weekly payouts",
+  "Fictional figures",
+] as const;
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.2 },
+    y: 0,
+    transition: { duration: 0.8, staggerChildren: 0.12 },
   },
 };
 
-const childVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" as const } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
 };
 
-export function HeroSection() {
-  return (
-    <section className="gradient-hero relative flex min-h-screen items-center overflow-hidden">
-      {coins.map((c, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, y: "120%" }}
-          animate={{ opacity: [0, 0.7, 0.4, 0.8, 0], y: "-120%" }}
-          transition={{
-            duration: c.duration,
-            delay: c.delay,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          className="absolute bottom-0 rounded-full pointer-events-none z-0 shadow-[0_0_6px_rgba(255,215,0,0.4)]"
-          style={{
-            left: c.x,
-            width: c.size,
-            height: c.size,
-            background: "radial-gradient(circle at 35% 35%, var(--gold-light), var(--gold-dark))",
-          }}
-        />
-      ))}
+// Gold/amber palette tuned to the site's CSS variables (globals.css).
+const WAVE_PALETTE: WaveConfig[] = [
+  { offset: 0, amplitude: 70, frequency: 0.003, color: "rgba(255, 215, 0, 0.8)", opacity: 0.4 },
+  { offset: Math.PI / 2, amplitude: 90, frequency: 0.0026, color: "rgba(245, 158, 11, 0.7)", opacity: 0.32 },
+  { offset: Math.PI, amplitude: 60, frequency: 0.0034, color: "rgba(255, 237, 74, 0.65)", opacity: 0.28 },
+  { offset: Math.PI * 1.5, amplitude: 80, frequency: 0.0022, color: "rgba(217, 119, 6, 0.5)", opacity: 0.24 },
+  { offset: Math.PI * 2, amplitude: 55, frequency: 0.004, color: "rgba(245, 240, 232, 0.25)", opacity: 0.18 },
+];
 
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse,rgba(255,215,0,0.05)_0%,transparent_60%)]" />
+const BG_TOP = "#0a0a0f";
+const BG_BOTTOM = "#10101a";
+
+export function HeroSection() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const mouseRef = useRef<Point>({ x: 0, y: 0 });
+  const targetMouseRef = useRef<Point>({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return undefined;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return undefined;
+
+    let animationId: number;
+    let time = 0;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    const mouseInfluence = prefersReducedMotion ? 10 : 70;
+    const influenceRadius = prefersReducedMotion ? 160 : 320;
+    const smoothing = prefersReducedMotion ? 0.04 : 0.1;
+
+    const resizeCanvas = () => {
+      const parent = canvas.parentElement;
+      canvas.width = parent ? parent.clientWidth : window.innerWidth;
+      canvas.height = parent ? parent.clientHeight : window.innerHeight;
+    };
+
+    const recenterMouse = () => {
+      const centerPoint = { x: canvas.width / 2, y: canvas.height / 2 };
+      mouseRef.current = centerPoint;
+      targetMouseRef.current = centerPoint;
+    };
+
+    const handleResize = () => {
+      resizeCanvas();
+      recenterMouse();
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      targetMouseRef.current = {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+      };
+    };
+
+    const handleMouseLeave = () => recenterMouse();
+
+    resizeCanvas();
+    recenterMouse();
+
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseleave", handleMouseLeave);
+
+    const drawWave = (wave: WaveConfig) => {
+      ctx.save();
+      ctx.beginPath();
+
+      for (let x = 0; x <= canvas.width; x += 4) {
+        const dx = x - mouseRef.current.x;
+        const dy = canvas.height / 2 - mouseRef.current.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const influence = Math.max(0, 1 - distance / influenceRadius);
+        const mouseEffect =
+          influence *
+          mouseInfluence *
+          Math.sin(time * 0.001 + x * 0.01 + wave.offset);
+
+        const y =
+          canvas.height / 2 +
+          Math.sin(x * wave.frequency + time * 0.002 + wave.offset) *
+            wave.amplitude +
+          Math.sin(x * wave.frequency * 0.4 + time * 0.003) *
+            (wave.amplitude * 0.45) +
+          mouseEffect;
+
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = wave.color;
+      ctx.globalAlpha = wave.opacity;
+      ctx.shadowBlur = 35;
+      ctx.shadowColor = wave.color;
+      ctx.stroke();
+      ctx.restore();
+    };
+
+    const animate = () => {
+      time += 1;
+
+      mouseRef.current.x +=
+        (targetMouseRef.current.x - mouseRef.current.x) * smoothing;
+      mouseRef.current.y +=
+        (targetMouseRef.current.y - mouseRef.current.y) * smoothing;
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, BG_TOP);
+      gradient.addColorStop(1, BG_BOTTOM);
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
+
+      WAVE_PALETTE.forEach(drawWave);
+
+      animationId = window.requestAnimationFrame(animate);
+    };
+
+    animationId = window.requestAnimationFrame(animate);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseleave", handleMouseLeave);
+      cancelAnimationFrame(animationId);
+    };
+  }, []);
+
+  return (
+    <section
+      className="relative isolate flex min-h-screen w-full items-center justify-center overflow-hidden bg-[var(--bg-primary)]"
+      role="region"
+      aria-label="AmzVest ZA demo hero section"
+    >
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 h-full w-full"
+        aria-hidden="true"
+      />
+
+      <div className="absolute inset-0 -z-10 pointer-events-none">
+        <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[var(--gold)]/[0.05] blur-[140px]" />
+        <div className="absolute bottom-0 right-0 h-[360px] w-[360px] rounded-full bg-[var(--amber)]/[0.04] blur-[120px]" />
+        <div className="absolute top-1/2 left-1/4 h-[400px] w-[400px] rounded-full bg-[var(--gold-dark)]/[0.05] blur-[150px]" />
       </div>
 
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="relative z-10 mx-auto max-w-6xl px-4 py-24 text-center sm:px-6"
-      >
-        <motion.div variants={childVariants} className="mb-8 flex justify-center">
-          <span className="gradient-border inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-medium tracking-wide text-[var(--gold)]">
-            <ShieldCheck size={14} />
-            Verified Amazon Reselling Operation
-          </span>
-        </motion.div>
-
-        <motion.h1 variants={childVariants} className="mx-auto max-w-3xl">
-          <span
-            className="block font-medium leading-[1.2] tracking-[-0.02em]"
-            style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
-          >
-            Put your money to work.
-          </span>
-          <span
-            className="block font-medium leading-[1.3] mt-1 text-[var(--text-primary)]"
-            style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)" }}
-          >
-            <span className="gradient-text font-semibold">Triple</span>{" "}
-            your investment in 3 weeks.
-          </span>
-        </motion.h1>
-
-        <motion.p
-          variants={childVariants}
-          className="mx-auto mt-6 max-w-xl text-sm leading-relaxed sm:text-base text-[var(--text-secondary)]"
-        >
-          We buy and sell products on Amazon using investor capital. Every rand invested
-          generates proven returns — paid back to you in three weekly instalments.
-        </motion.p>
-
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-6 py-24 text-center md:px-8 lg:px-12">
         <motion.div
-          variants={childVariants}
-          className="mt-10 flex flex-wrap items-center justify-center gap-4"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="w-full"
         >
-          <Link
-            href="/register"
-            className="btn-gold inline-flex items-center gap-2 px-7 py-3 text-sm no-underline"
+          <motion.div
+            variants={itemVariants}
+            className="gradient-border mb-6 inline-flex items-center gap-2 rounded-full bg-[var(--bg-glass)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-[var(--gold)] backdrop-blur"
           >
-            <TrendingUp size={16} />
-            Start investing
-          </Link>
-          <a
-            href="#how"
-            className="btn-outline inline-flex items-center gap-2 px-7 py-3 text-sm no-underline"
-          >
-            How it works
-          </a>
-        </motion.div>
-      </motion.div>
+            <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+            Verified Amazon Reselling Operation
+          </motion.div>
 
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 max-w-[600px] w-[calc(100%-32px)] px-4 py-2.5 rounded-[var(--radius)] bg-[var(--gold)]/5 border border-[var(--gold)]/10 text-center text-xs text-[var(--amber)] font-medium">
-        ⚠️ This is a FAKE demo site. No real money is involved.
+          <motion.h1
+            variants={itemVariants}
+            className="mb-6 text-4xl font-semibold tracking-tight text-[var(--text-primary)] md:text-6xl lg:text-7xl"
+          >
+            Put your money to work.{" "}
+            <span className="gradient-text">Triple your investment</span> in 3
+            weeks.
+          </motion.h1>
+
+          <motion.p
+            variants={itemVariants}
+            className="mx-auto mb-10 max-w-3xl text-lg text-[var(--text-secondary)] md:text-xl"
+          >
+            We buy and sell products on Amazon using investor capital. Every rand
+            invested generates proven returns — paid back to you in three weekly
+            instalments.
+          </motion.p>
+
+          <motion.div
+            variants={itemVariants}
+            className="mb-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
+          >
+            <Link
+              href="/register"
+              className="btn-gold group inline-flex items-center gap-2 rounded-full px-8 py-3 text-sm font-semibold uppercase tracking-[0.15em] no-underline"
+            >
+              <TrendingUp className="h-4 w-4" aria-hidden="true" />
+              Start investing
+              <ArrowRight
+                className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                aria-hidden="true"
+              />
+            </Link>
+            <a
+              href="#how"
+              className="btn-outline inline-flex items-center gap-2 rounded-full px-8 py-3 text-sm font-medium no-underline backdrop-blur"
+            >
+              How it works
+            </a>
+          </motion.div>
+
+          <motion.ul
+            variants={itemVariants}
+            className="flex flex-wrap items-center justify-center gap-3 text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)]"
+          >
+            {highlightPills.map((pill) => (
+              <li
+                key={pill}
+                className="gradient-border rounded-full bg-[var(--bg-glass)] px-4 py-2 backdrop-blur"
+              >
+                {pill}
+              </li>
+            ))}
+          </motion.ul>
+        </motion.div>
+      </div>
+
+      <div className="absolute bottom-6 left-1/2 z-10 w-[calc(100%-32px)] max-w-[640px] -translate-x-1/2 rounded-[var(--radius)] border border-[var(--gold)]/20 bg-[var(--gold)]/10 px-4 py-2.5 text-center text-xs font-semibold text-[var(--amber)] backdrop-blur">
+        ⚠️ This is a FAKE demo site. No real money is involved. All figures are fictional and for educational purposes only.
       </div>
     </section>
   );
