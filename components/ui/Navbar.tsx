@@ -2,17 +2,21 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
-import { TrendingUp, Menu, X, AlertTriangle } from "lucide-react";
+import { TrendingUp, Menu, X, AlertTriangle, Wallet } from "lucide-react";
+import { useDemoStore } from "@/lib/store";
+import { formatCurrency } from "@/lib/utils";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/packages", label: "Packages" },
   { href: "/how-it-works", label: "How It Works" },
+  { href: "/wallet", label: "Wallet" },
   { href: "/faq", label: "FAQ" },
 ];
 
 export function Navbar() {
   const router = useRouter();
+  const { balance, hydrated } = useDemoStore();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -80,6 +84,15 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-3">
+            {hydrated && balance > 0 && (
+              <Link
+                href="/wallet"
+                className="hidden items-center gap-1.5 rounded-full border border-[var(--gold)]/30 bg-[var(--gold)]/[0.08] px-3 py-1.5 text-xs font-semibold text-[var(--gold)] no-underline transition hover:bg-[var(--gold)]/[0.14] sm:inline-flex"
+              >
+                <Wallet className="h-3.5 w-3.5" />
+                {formatCurrency(balance)}
+              </Link>
+            )}
             {isDashboard && (
               <>
                 <span className="hidden text-sm text-[var(--text-secondary)] sm:inline">

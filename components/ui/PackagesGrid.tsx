@@ -235,7 +235,7 @@ export function PackagesGrid({ withHeader = true }: Props) {
 
                 <div className="mt-auto pt-8">
                   <Link
-                    href="/register"
+                    href="/checkout"
                     onClick={() => setSelectedPackage(pkg.id)}
                     className={`block w-full rounded-[var(--radius)] py-2.5 text-center text-sm font-semibold no-underline transition-all ${
                       pkg.highlight

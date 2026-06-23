@@ -87,10 +87,10 @@ export default function RegisterPage() {
               <input type="password" placeholder="Minimum 8 characters" className="input-premium" />
             </div>
             <Link
-              href="/dashboard"
+              href="/checkout"
               className="btn-gold mt-1 flex w-full items-center justify-center gap-2 py-3 text-sm font-semibold no-underline"
             >
-              Create account &amp; proceed
+              Create account &amp; proceed to payment
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
