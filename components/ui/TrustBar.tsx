@@ -11,8 +11,8 @@ type Item = {
 };
 
 const ITEMS: Item[] = [
-  { value: 3, suffix: "×", label: "Return on investment", icon: TrendingUp },
-  { value: 3, suffix: " weeks", label: "Payout period", icon: CalendarClock },
+  { value: 2, suffix: "×", label: "Return on investment", icon: TrendingUp },
+  { value: 3, suffix: " weeks", label: "Time to payout", icon: CalendarClock },
   { value: 143, label: "Active investors", icon: Users },
   { value: 100, suffix: "%", label: "Payouts completed", icon: CheckCircle2 },
 ];
@@ -45,16 +45,7 @@ function Stat({ item, active, index }: { item: Item; active: boolean; index: num
       initial={{ opacity: 0, y: 16 }}
       animate={active ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
-      className="relative flex flex-col items-center px-4 py-8 text-center"
-      style={
-        index < ITEMS.length - 1
-          ? {
-              borderRight: "1px solid transparent",
-              borderImage:
-                "linear-gradient(180deg, transparent, rgba(20,199,123,0.22), transparent) 1",
-            }
-          : undefined
-      }
+      className="relative flex flex-col items-center border-[var(--border)] px-4 py-8 text-center [&:nth-child(-n+2)]:border-b sm:[&:nth-child(-n+2)]:border-b-0 sm:border-r sm:[&:nth-child(4n)]:border-r-0"
     >
       <span className="mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-[var(--gold)]/[0.1] text-[var(--gold)]">
         <Icon className="h-4 w-4" />

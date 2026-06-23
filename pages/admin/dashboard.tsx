@@ -22,7 +22,7 @@ const TABS: { id: TabId; label: string }[] = [
   { id: "packages", label: "Package overview" },
 ];
 
-const payoutKey = (investor: string, week: number) => `${investor}-${week}`;
+const payoutKey = (investor: string) => investor;
 
 export default function AdminDashboardPage() {
   const [tab, setTab] = useState<TabId>("investors");
@@ -39,7 +39,7 @@ export default function AdminDashboardPage() {
     let due = 0;
     let done = 0;
     for (const p of PAYOUTS) {
-      if (paid.has(payoutKey(p.investor, p.week))) done += p.amount;
+      if (paid.has(payoutKey(p.investor))) done += p.amount;
       else due += p.amount;
     }
     return { dueRemaining: due, paidThisSession: done };
@@ -51,8 +51,8 @@ export default function AdminDashboardPage() {
     return () => window.clearTimeout(id);
   }, [toast]);
 
-  const processPayout = (investor: string, week: number, amount: number) => {
-    const key = payoutKey(investor, week);
+  const processPayout = (investor: string, amount: number) => {
+    const key = payoutKey(investor);
     if (paid.has(key) || processing) return;
     setProcessing(key);
     window.setTimeout(() => {
@@ -65,9 +65,9 @@ export default function AdminDashboardPage() {
 
   const processAll = () => {
     if (processing) return;
-    const remaining = PAYOUTS.filter((p) => !paid.has(payoutKey(p.investor, p.week)));
+    const remaining = PAYOUTS.filter((p) => !paid.has(payoutKey(p.investor)));
     if (remaining.length === 0) return;
-    setPaid(new Set(PAYOUTS.map((p) => payoutKey(p.investor, p.week))));
+    setPaid(new Set(PAYOUTS.map((p) => payoutKey(p.investor))));
     setBurst((b) => b + 1);
     const total = remaining.reduce((s, p) => s + p.amount, 0);
     setToast(`${remaining.length} payouts (${formatCurrency(total)}) processed (demo)`);
@@ -260,7 +260,7 @@ function PayoutsTable({
 }: {
   paid: Set<string>;
   processing: string | null;
-  onProcess: (investor: string, week: number, amount: number) => void;
+  onProcess: (investor: string, amount: number) => void;
   onProcessAll: () => void;
   dueRemaining: number;
   burst: number;
@@ -300,14 +300,14 @@ function PayoutsTable({
         <table className="w-full border-collapse text-xs">
           <thead>
             <tr>
-              {["Investor", "Package", "Amount", "Week", "Due date", "Action"].map((h) => (
+              {["Investor", "Package", "Return", "Matures", "Action"].map((h) => (
                 <Th key={h}>{h}</Th>
               ))}
             </tr>
           </thead>
           <tbody>
             {PAYOUTS.map((p, i) => {
-              const key = payoutKey(p.investor, p.week);
+              const key = payoutKey(p.investor);
               const isPaid = paid.has(key);
               const isProcessing = processing === key;
               return (
@@ -321,11 +321,10 @@ function PayoutsTable({
                     {p.package.charAt(0).toUpperCase() + p.package.slice(1)}
                   </td>
                   <td className="px-5 py-3 font-semibold text-[var(--gold)]">{formatCurrency(p.amount)}</td>
-                  <td className="px-5 py-3 text-[var(--text-secondary)]">Week {p.week}</td>
                   <td className="px-5 py-3 text-[var(--text-secondary)]">{p.dueDate}</td>
                   <td className="px-5 py-3">
                     <button
-                      onClick={() => onProcess(p.investor, p.week, p.amount)}
+                      onClick={() => onProcess(p.investor, p.amount)}
                       disabled={isPaid || !!processing}
                       className={cn(
                         "inline-flex min-w-[110px] items-center justify-center gap-1.5 rounded-[var(--radius)] px-3 py-1.5 text-[10px] font-semibold transition",
@@ -366,7 +365,7 @@ function PackagesTable() {
       <table className="w-full border-collapse text-xs">
         <thead>
           <tr>
-            {["Package", "Investor pays", "Investor receives", "Weekly payout", "Your profit", "Active"].map((h) => (
+            {["Package", "Investor pays", "Investor receives", "Term", "Active"].map((h) => (
               <Th key={h}>{h}</Th>
             ))}
           </tr>
@@ -376,7 +375,6 @@ function PackagesTable() {
             const activeCount = INVESTORS.filter(
               (inv) => inv.package === pkg.id && inv.status === "active"
             ).length;
-            const profit = pkg.invest * 7;
             return (
               <tr
                 key={pkg.id}
@@ -387,11 +385,8 @@ function PackagesTable() {
               >
                 <td className="px-5 py-3 font-medium">{pkg.name}</td>
                 <td className="px-5 py-3">{formatCurrency(pkg.invest)}</td>
-                <td className="px-5 py-3">{formatCurrency(pkg.returnAmount)}</td>
-                <td className="px-5 py-3 text-[var(--text-secondary)]">
-                  {formatCurrency(pkg.weeklyPayout)} × {pkg.weeks}
-                </td>
-                <td className="px-5 py-3 font-semibold text-[var(--gold)]">{formatCurrency(profit)}</td>
+                <td className="px-5 py-3 font-semibold text-[var(--gold)]">{formatCurrency(pkg.returnAmount)}</td>
+                <td className="px-5 py-3 text-[var(--text-secondary)]">{pkg.weeks} weeks (lump sum)</td>
                 <td className="px-5 py-3">{activeCount}</td>
               </tr>
             );
@@ -454,27 +449,22 @@ function InvestorModal({ investor, onClose }: { investor: Investor | null; onClo
             <div className="mt-5 grid grid-cols-2 gap-3">
               <Stat label="Invested" value={formatCurrency(investor.invested)} />
               <Stat label="Total return" value={formatCurrency(investor.returnAmount)} gold />
-              <Stat label="Weekly payout" value={pkg ? formatCurrency(pkg.weeklyPayout) : "—"} />
+              <Stat label="Term" value={pkg ? `${pkg.weeks} weeks` : "—"} />
               <Stat label="Status" value={<StatusBadge status={investor.status} />} />
             </div>
 
             {pkg && (
               <div className="mt-5">
                 <p className="mb-2 text-[10px] uppercase tracking-widest text-[var(--text-muted)]">
-                  Payout schedule
+                  Payout
                 </p>
-                <div className="space-y-1.5">
-                  {Array.from({ length: pkg.weeks }).map((_, w) => (
-                    <div
-                      key={w}
-                      className="flex items-center justify-between rounded-[var(--radius)] bg-[var(--bg-tertiary)] px-3 py-2 text-xs"
-                    >
-                      <span className="text-[var(--text-secondary)]">Week {w + 1} payout</span>
-                      <span className="font-semibold text-[var(--gold)]">
-                        {formatCurrency(pkg.weeklyPayout)}
-                      </span>
-                    </div>
-                  ))}
+                <div className="flex items-center justify-between rounded-[var(--radius)] bg-[var(--bg-tertiary)] px-3 py-2.5 text-xs">
+                  <span className="text-[var(--text-secondary)]">
+                    Single lump sum after {pkg.weeks} weeks
+                  </span>
+                  <span className="font-semibold text-[var(--gold)]">
+                    {formatCurrency(pkg.returnAmount)}
+                  </span>
                 </div>
               </div>
             )}

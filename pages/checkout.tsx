@@ -67,7 +67,8 @@ export default function CheckoutPage() {
               <select
                 value={selectedPackage}
                 onChange={(e) => setSelectedPackage(e.target.value as PackageId)}
-                className="input-premium w-auto cursor-pointer py-1.5 text-xs"
+                style={{ width: "auto", padding: "0.4rem 0.6rem" }}
+                className="input-premium cursor-pointer text-xs"
               >
                 {PACKAGES.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -87,8 +88,9 @@ export default function CheckoutPage() {
               </div>
               <ul className="mt-4 space-y-2 text-sm text-[var(--text-secondary)]">
                 <Line label="You receive" value={formatCurrency(pkg.returnAmount)} highlight />
-                <Line label="Weekly payout" value={`${formatCurrency(pkg.weeklyPayout)} × ${pkg.weeks}`} />
-                <Line label="Net gain" value="200% (illustrative)" />
+                <Line label="Payout" value="Single lump sum" />
+                <Line label="Matures" value={`After ${pkg.weeks} weeks`} />
+                <Line label="Net gain" value="100% (2×)" />
               </ul>
             </div>
 

@@ -17,14 +17,14 @@ const STEPS = [
   {
     num: 3,
     icon: Wallet,
-    title: "Receive your weekly payouts",
-    desc: "Starting one week after your investment activates, you receive equal weekly payments for 3 consecutive weeks — directly to your South African bank account.",
+    title: "Receive your return after 3 weeks",
+    desc: "Three weeks after your investment activates, the package matures and your full return is paid out in a single lump sum — directly to your South African bank account.",
   },
   {
     num: 4,
     icon: RefreshCw,
     title: "Reinvest or withdraw",
-    desc: "Once your cycle completes, you can reinvest your returns into a new package and compound your earnings, or simply withdraw.",
+    desc: "Once your package matures, you can reinvest the full return into a new package and compound your earnings, or simply withdraw.",
   },
 ];
 

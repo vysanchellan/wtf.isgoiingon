@@ -5,8 +5,7 @@ export type InvestmentPackage = {
   name: string;
   invest: number;
   returnAmount: number;
-  weeklyPayout: number;
-  weeks: number;
+  weeks: number; // term — full return paid as one lump sum at the end
   tagline: string;
   description: string;
   highlight?: boolean;
@@ -18,21 +17,19 @@ export const PACKAGES: InvestmentPackage[] = [
     id: "starter",
     name: "Starter",
     invest: 500,
-    returnAmount: 1500,
-    weeklyPayout: 500,
+    returnAmount: 1000,
     weeks: 3,
-    tagline: "Invest R500, receive R1,500",
-    description: "A R500 investment that returns R1,500 over 3 equal weekly payouts.",
+    tagline: "Invest R500, receive R1,000",
+    description: "A R500 investment that returns R1,000 as a single payout after 3 weeks.",
   },
   {
     id: "growth",
     name: "Growth",
     invest: 1000,
-    returnAmount: 3000,
-    weeklyPayout: 1000,
+    returnAmount: 2000,
     weeks: 3,
-    tagline: "Invest R1,000, receive R3,000",
-    description: "A R1,000 investment that returns R3,000 over 3 equal weekly payouts.",
+    tagline: "Invest R1,000, receive R2,000",
+    description: "A R1,000 investment that returns R2,000 as a single payout after 3 weeks.",
     highlight: true,
     badge: "Popular",
   },
@@ -40,11 +37,10 @@ export const PACKAGES: InvestmentPackage[] = [
     id: "premium",
     name: "Premium",
     invest: 2500,
-    returnAmount: 7500,
-    weeklyPayout: 2500,
+    returnAmount: 5000,
     weeks: 3,
-    tagline: "Invest R2,500, receive R7,500",
-    description: "A R2,500 investment that returns R7,500 over 3 equal weekly payouts.",
+    tagline: "Invest R2,500, receive R5,000",
+    description: "A R2,500 investment that returns R5,000 as a single payout after 3 weeks.",
   },
 ];
 
@@ -63,23 +59,23 @@ export type Testimonial = {
 export const TESTIMONIALS: Testimonial[] = [
   {
     name: "Thabo M.",
-    quote: "I was skeptical at first, but the weekly payouts are exactly what they promised. Received my full R3,000 on time.",
-    amount: "R3,000 earned",
+    quote: "I was skeptical at first, but the full payout landed exactly three weeks later, just as promised. R2,000 back on my R1,000.",
+    amount: "R2,000 returned",
   },
   {
     name: "Nomsa D.",
-    quote: "Started with the Starter package to test the waters. After seeing the first payout hit my account, I upgraded to Premium.",
-    amount: "R7,500 earned",
+    quote: "Started with the Starter package to test the waters. After my first payout cleared, I went straight to Premium.",
+    amount: "R5,000 returned",
   },
   {
     name: "Ayanda K.",
-    quote: "The reinvest feature is brilliant. I rolled my returns into a bigger package and doubled my earnings in the next cycle.",
-    amount: "R9,000 earned",
+    quote: "The reinvest flow is brilliant. I rolled my return into a bigger package the next cycle and kept it compounding.",
+    amount: "R5,000 returned",
   },
   {
     name: "Lerato S.",
-    quote: "Three weeks, three payouts, no issues. The Amazon reselling model makes total sense once you see the numbers.",
-    amount: "R1,500 earned",
+    quote: "Three weeks, one clean payout, no issues. The Amazon reselling model makes total sense once you see the numbers.",
+    amount: "R1,000 returned",
   },
 ];
 
@@ -95,8 +91,8 @@ export const FAQS: FaqItem[] = [
     a: "Absolutely not. No deposit functionality exists. This is a demonstration only. Any 'investment' or 'payment' flows shown are UI simulations that do not process real transactions.",
   },
   {
-    q: "Are the returns real?",
-    a: "No. All return figures are completely fabricated. The 3× return, weekly payout amounts, and any financial projections shown on this site are fictional and for illustrative purposes only.",
+    q: "How do the returns work?",
+    a: "In this fictional model, a package matures after 3 weeks and the full return is paid in a single lump sum — not in weekly instalments. All return figures, including the 2× return shown here, are completely fabricated and for illustrative purposes only.",
   },
   {
     q: "Is my data safe?",
@@ -104,7 +100,7 @@ export const FAQS: FaqItem[] = [
   },
   {
     q: "Can I reinvest my returns?",
-    a: "In this demo simulation, the 'Reinvest' button navigates to the registration page. No actual reinvestment occurs — it is a UI flow designed to demonstrate the concept.",
+    a: "In this demo simulation, the 'Reinvest' button simply takes you back to the packages. No actual reinvestment occurs — it is a UI flow designed to demonstrate the concept.",
   },
 ];
 
@@ -118,30 +114,29 @@ export type Investor = {
 };
 
 export const INVESTORS: Investor[] = [
-  { id: "I-1001", name: "Sipho Nkosi", package: "growth", invested: 1000, returnAmount: 3000, status: "active" },
-  { id: "I-1002", name: "Nomsa Dlamini", package: "premium", invested: 2500, returnAmount: 7500, status: "active" },
-  { id: "I-1003", name: "Thabo Mokoena", package: "starter", invested: 500, returnAmount: 1500, status: "complete" },
-  { id: "I-1004", name: "Ayanda Khumalo", package: "growth", invested: 1000, returnAmount: 3000, status: "active" },
-  { id: "I-1005", name: "Priya Naidoo", package: "premium", invested: 2500, returnAmount: 7500, status: "pending" },
-  { id: "I-1006", name: "Lerato Sithole", package: "starter", invested: 500, returnAmount: 1500, status: "active" },
-  { id: "I-1007", name: "David Chen", package: "growth", invested: 1000, returnAmount: 3000, status: "complete" },
-  { id: "I-1008", name: "Sofia Almeida", package: "premium", invested: 2500, returnAmount: 7500, status: "active" },
+  { id: "I-1001", name: "Sipho Nkosi", package: "growth", invested: 1000, returnAmount: 2000, status: "active" },
+  { id: "I-1002", name: "Nomsa Dlamini", package: "premium", invested: 2500, returnAmount: 5000, status: "active" },
+  { id: "I-1003", name: "Thabo Mokoena", package: "starter", invested: 500, returnAmount: 1000, status: "complete" },
+  { id: "I-1004", name: "Ayanda Khumalo", package: "growth", invested: 1000, returnAmount: 2000, status: "active" },
+  { id: "I-1005", name: "Priya Naidoo", package: "premium", invested: 2500, returnAmount: 5000, status: "pending" },
+  { id: "I-1006", name: "Lerato Sithole", package: "starter", invested: 500, returnAmount: 1000, status: "active" },
+  { id: "I-1007", name: "David Chen", package: "growth", invested: 1000, returnAmount: 2000, status: "complete" },
+  { id: "I-1008", name: "Sofia Almeida", package: "premium", invested: 2500, returnAmount: 5000, status: "active" },
 ];
 
 export type Payout = {
   investor: string;
   package: PackageId;
-  amount: number;
-  week: number;
+  amount: number; // full maturity return
   dueDate: string;
   paid: boolean;
 };
 
 export const PAYOUTS: Payout[] = [
-  { investor: "Sipho Nkosi", package: "growth", amount: 1000, week: 2, dueDate: "16 Jun", paid: false },
-  { investor: "Nomsa Dlamini", package: "premium", amount: 2500, week: 2, dueDate: "16 Jun", paid: false },
-  { investor: "Ayanda Khumalo", package: "growth", amount: 1000, week: 1, dueDate: "18 Jun", paid: false },
-  { investor: "Lerato Sithole", package: "starter", amount: 500, week: 3, dueDate: "20 Jun", paid: false },
+  { investor: "Sipho Nkosi", package: "growth", amount: 2000, dueDate: "23 Jun", paid: false },
+  { investor: "Nomsa Dlamini", package: "premium", amount: 5000, dueDate: "23 Jun", paid: false },
+  { investor: "Ayanda Khumalo", package: "growth", amount: 2000, dueDate: "25 Jun", paid: false },
+  { investor: "Lerato Sithole", package: "starter", amount: 1000, dueDate: "27 Jun", paid: false },
 ];
 
 export const ALL_PACKAGE_IDS: PackageId[] = PACKAGES.map((p) => p.id);

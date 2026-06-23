@@ -156,27 +156,27 @@ export function PackagesGrid({ withHeader = true }: Props) {
               Choose your investment tier
             </h2>
             <p className="mt-3 text-base text-[var(--text-secondary)]">
-              All packages illustrate a 3× return over 3 equal weekly payouts.
-              These figures are fictional and shown for demonstration only.
+              Each package illustrates a 2× return, paid as a single lump sum after
+              3 weeks. These figures are fictional and shown for demonstration only.
             </p>
           </div>
         )}
 
-        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 items-stretch gap-6 pt-4 lg:grid-cols-3">
           {PACKAGES.map((pkg, index) => (
             <motion.div
               key={pkg.id}
-              initial={{ y: 50, opacity: 0 }}
-              whileInView={{ y: pkg.highlight ? -16 : 0, opacity: 1 }}
+              initial={{ y: 40, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{
                 duration: 0.6,
                 type: "spring",
                 stiffness: 100,
                 damping: 20,
-                delay: index * 0.15,
+                delay: index * 0.12,
               }}
-              className={`relative flex flex-col rounded-2xl p-8 backdrop-blur-sm transition-colors ${
+              className={`relative flex h-full flex-col rounded-2xl p-8 backdrop-blur-sm transition-colors ${
                 pkg.highlight
                   ? "border-2 border-[var(--gold)] bg-[var(--bg-card)]/80 shadow-[var(--shadow-glow)]"
                   : "border border-[var(--border)] bg-[var(--bg-card)]/70 hover:border-[var(--gold)]/30"
@@ -207,10 +207,11 @@ export function PackagesGrid({ withHeader = true }: Props) {
                   </span>
                 </div>
                 <p className="mt-2 text-xs text-[var(--text-muted)]">
-                  One-time (demo) · You receive{" "}
+                  One-time (demo) · Returns{" "}
                   <span className="font-semibold text-[var(--gold)]">
                     {formatCurrency(pkg.returnAmount)}
-                  </span>
+                  </span>{" "}
+                  after {pkg.weeks} weeks
                 </p>
 
                 <ul
@@ -218,9 +219,9 @@ export function PackagesGrid({ withHeader = true }: Props) {
                   className="mt-8 space-y-3 text-left text-sm leading-6 text-[var(--text-secondary)]"
                 >
                   {[
-                    `${formatCurrency(pkg.weeklyPayout)} per week × ${pkg.weeks} payouts`,
-                    `Pays out over ${pkg.weeks} weeks`,
-                    "200% illustrative net gain",
+                    `${formatCurrency(pkg.returnAmount)} paid as one lump sum`,
+                    `Matures ${pkg.weeks} weeks after purchase`,
+                    "100% illustrative net gain (2×)",
                     "Reinvest or withdraw (demo flow)",
                   ].map((feature) => (
                     <li key={feature} className="flex gap-x-3">

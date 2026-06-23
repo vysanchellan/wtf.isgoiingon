@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { useDemoStore } from "@/lib/store";
 import { AnimatedCurrency } from "@/components/ui/AnimatedCurrency";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatCurrency, formatDate, maturityDate } from "@/lib/utils";
 
 export default function DashboardPage() {
   const { balance, holdings, transactions, hydrated } = useDemoStore();
@@ -142,26 +142,19 @@ export default function DashboardPage() {
                     </div>
                   </div>
 
-                  <div className="mt-3 space-y-1.5">
-                    {Array.from({ length: h.weeks }).map((_, w) => (
-                      <div
-                        key={w}
-                        className="flex items-center justify-between rounded-[var(--radius)] bg-[var(--bg-tertiary)] px-3 py-2"
-                      >
-                        <span className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
-                          <Clock className="h-3.5 w-3.5 text-[var(--text-muted)]" />
-                          Week {w + 1} payout
-                        </span>
-                        <span className="flex items-center gap-2">
-                          <span className="text-xs font-bold text-[var(--gold)]">
-                            {formatCurrency(h.weeklyPayout)}
-                          </span>
-                          <span className="rounded-full bg-[var(--amber-deep)]/[0.12] px-2 py-0.5 text-[10px] font-bold text-[var(--amber)]">
-                            Scheduled
-                          </span>
-                        </span>
-                      </div>
-                    ))}
+                  <div className="mt-3 flex items-center justify-between rounded-[var(--radius)] bg-[var(--bg-tertiary)] px-3 py-2.5">
+                    <span className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
+                      <Clock className="h-3.5 w-3.5 text-[var(--text-muted)]" />
+                      Full payout · matures {maturityDate(h.startDate, h.weeks)}
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-[var(--gold)]">
+                        {formatCurrency(h.returnAmount)}
+                      </span>
+                      <span className="rounded-full bg-[var(--amber-deep)]/[0.12] px-2 py-0.5 text-[10px] font-bold text-[var(--amber)]">
+                        Scheduled
+                      </span>
+                    </span>
                   </div>
                 </div>
               ))}

@@ -40,3 +40,10 @@ export function formatDate(iso: string): string {
     day: "numeric",
   });
 }
+
+/** Maturity date = start + weeks, formatted (full return paid here). */
+export function maturityDate(iso: string, weeks: number): string {
+  const d = new Date(iso);
+  d.setDate(d.getDate() + weeks * 7);
+  return formatDate(d.toISOString());
+}

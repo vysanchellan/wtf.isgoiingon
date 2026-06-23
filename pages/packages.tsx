@@ -14,7 +14,7 @@ export default function PackagesPage() {
         eyebrow="Investment packages"
         icon={<Layers className="h-3.5 w-3.5" />}
         title="Pick the tier that matches your goals"
-        subtitle="Three illustrative tiers, each showing a 3× return over 3 weekly payouts."
+        subtitle="Three illustrative tiers, each showing a 2× return paid as a single lump sum after 3 weeks."
       >
         <Disclaimer variant="card">
           Investment amounts, returns, and projections below are fabricated for UI

@@ -14,8 +14,8 @@ interface WaveConfig {
 }
 
 const highlightPills = [
-  "3× illustrative return",
-  "3 weekly payouts",
+  "2× illustrative return",
+  "Single payout at week 3",
   "Fictional figures",
 ] as const;
 
@@ -176,7 +176,7 @@ export function HeroSection() {
 
   return (
     <section
-      className="relative isolate flex min-h-screen w-full items-center justify-center overflow-hidden bg-[var(--bg-primary)]"
+      className="relative isolate flex min-h-screen w-full flex-col overflow-hidden bg-[var(--bg-primary)]"
       role="region"
       aria-label="AmzVest ZA demo hero section"
     >
@@ -187,12 +187,12 @@ export function HeroSection() {
       />
 
       <div className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[var(--gold)]/[0.05] blur-[140px]" />
-        <div className="absolute bottom-0 right-0 h-[360px] w-[360px] rounded-full bg-[var(--amber)]/[0.04] blur-[120px]" />
+        <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[var(--gold)]/[0.06] blur-[140px]" />
+        <div className="absolute bottom-0 right-0 h-[360px] w-[360px] rounded-full bg-[var(--gold-light)]/[0.05] blur-[120px]" />
         <div className="absolute top-1/2 left-1/4 h-[400px] w-[400px] rounded-full bg-[var(--gold-dark)]/[0.05] blur-[150px]" />
       </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-6 py-24 text-center md:px-8 lg:px-12">
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center px-6 py-20 text-center md:px-8 lg:px-12">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -212,7 +212,7 @@ export function HeroSection() {
             className="mb-6 text-4xl font-semibold tracking-tight text-[var(--text-primary)] md:text-6xl lg:text-7xl"
           >
             Put your money to work.{" "}
-            <span className="gradient-text">Triple your investment</span> in 3
+            <span className="gradient-text">Double your investment</span> in 3
             weeks.
           </motion.h1>
 
@@ -220,9 +220,9 @@ export function HeroSection() {
             variants={itemVariants}
             className="mx-auto mb-10 max-w-3xl text-lg text-[var(--text-secondary)] md:text-xl"
           >
-            We buy and sell products on Amazon using investor capital. Every rand
-            invested generates proven returns — paid back to you in three weekly
-            instalments.
+            We buy and sell products on Amazon using investor capital. Your money
+            is put to work for three weeks, then your full return is paid out in a
+            single lump sum at the end.
           </motion.p>
 
           <motion.div
@@ -264,7 +264,7 @@ export function HeroSection() {
         </motion.div>
       </div>
 
-      <div className="absolute bottom-6 left-1/2 z-10 w-[calc(100%-32px)] max-w-[640px] -translate-x-1/2 rounded-[var(--radius)] border border-[var(--gold)]/20 bg-[var(--gold)]/10 px-4 py-2.5 text-center text-xs font-semibold text-[var(--amber)] backdrop-blur">
+      <div className="relative z-10 mx-auto mb-6 w-[calc(100%-32px)] max-w-[640px] rounded-[var(--radius)] border border-[var(--amber)]/25 bg-[var(--amber-deep)]/15 px-4 py-2.5 text-center text-xs font-semibold text-[var(--amber)] backdrop-blur">
         ⚠️ This is a FAKE demo site. No real money is involved. All figures are fictional and for educational purposes only.
       </div>
     </section>

@@ -6,7 +6,7 @@ import { Lock, ShieldCheck, ArrowRight, BarChart3, Users, Banknote } from "lucid
 const STATS = [
   { icon: Banknote, label: "Capital deployed", value: "R 11 500" },
   { icon: Users, label: "Active investors", value: "5" },
-  { icon: BarChart3, label: "Total paid out", value: "R 34 500" },
+  { icon: BarChart3, label: "Total returns owed", value: "R 23 000" },
 ];
 
 export default function AdminLoginPage() {

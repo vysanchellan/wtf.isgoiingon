@@ -14,7 +14,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Disclaimer } from "@/components/ui/Disclaimer";
 import { AnimatedCurrency } from "@/components/ui/AnimatedCurrency";
 import { useDemoStore } from "@/lib/store";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatCurrency, formatDate, maturityDate } from "@/lib/utils";
 
 export default function WalletPage() {
   const { balance, transactions, holdings, hydrated, reset } = useDemoStore();
@@ -102,8 +102,8 @@ export default function WalletPage() {
                         {h.name} package
                       </div>
                       <div className="mt-0.5 text-[11px] text-[var(--text-secondary)]">
-                        {formatCurrency(h.invested)} invested · {formatCurrency(h.weeklyPayout)}/week
-                        × {h.weeks} · started {formatDate(h.startDate)}
+                        {formatCurrency(h.invested)} invested · matures{" "}
+                        {maturityDate(h.startDate, h.weeks)}
                       </div>
                     </div>
                     <div className="text-right">

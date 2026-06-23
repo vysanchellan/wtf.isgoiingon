@@ -47,8 +47,8 @@ export default function RegisterPage() {
               {pkg.name} package selected
             </div>
             <div className="mt-0.5 text-[11px] text-[var(--text-secondary)]">
-              Invest {formatCurrency(pkg.invest)} · Receive {formatCurrency(pkg.returnAmount)} over{" "}
-              {pkg.weeks} weeks ({formatCurrency(pkg.weeklyPayout)}/week)
+              Invest {formatCurrency(pkg.invest)} · Receive {formatCurrency(pkg.returnAmount)} as a
+              single payout after {pkg.weeks} weeks
             </div>
           </div>
 

@@ -24,8 +24,7 @@ export type Holding = {
   name: string;
   invested: number;
   returnAmount: number;
-  weeklyPayout: number;
-  weeks: number;
+  weeks: number; // term — full return paid as one lump sum at maturity
   startDate: string; // ISO
 };
 
@@ -130,7 +129,6 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
           name: pkg.name,
           invested: pkg.invest,
           returnAmount: pkg.returnAmount,
-          weeklyPayout: pkg.weeklyPayout,
           weeks: pkg.weeks,
           startDate: now,
         },
