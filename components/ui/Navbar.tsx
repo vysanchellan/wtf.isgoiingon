@@ -82,30 +82,36 @@ export function Navbar() {
           <div className="flex items-center gap-3">
             {isDashboard && (
               <>
-                <span className="text-sm text-[var(--text-secondary)]">
+                <span className="hidden text-sm text-[var(--text-secondary)] sm:inline">
                   Sipho Nkosi
                 </span>
-                <Link href="/" className="btn-outline">
+                <Link href="/" className="btn-outline inline-flex items-center px-4 py-2 text-sm no-underline">
                   Exit
                 </Link>
               </>
             )}
             {isAdmin && (
               <>
-                <span className="bg-[var(--gold)] text-[var(--bg-primary)] rounded-full px-3 py-0.5 text-xs font-bold">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[var(--gold)]/[0.12] px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--gold)]">
                   Admin
                 </span>
-                <Link href="/" className="btn-outline">
+                <Link href="/" className="btn-outline inline-flex items-center px-4 py-2 text-sm no-underline">
                   Exit
                 </Link>
               </>
             )}
             {!isDashboard && !isAdmin && (
               <>
-                <Link href="/login" className="btn-outline">
+                <Link
+                  href="/login"
+                  className="btn-outline hidden items-center px-4 py-2 text-sm no-underline sm:inline-flex"
+                >
                   Sign in
                 </Link>
-                <Link href="/register" className="btn-gold hidden sm:inline-flex">
+                <Link
+                  href="/register"
+                  className="btn-gold hidden items-center px-5 py-2 text-sm font-semibold no-underline sm:inline-flex"
+                >
                   Invest now
                 </Link>
               </>
@@ -182,14 +188,14 @@ export function Navbar() {
                   <Link
                     href="/login"
                     onClick={() => setOpen(false)}
-                    className="btn-outline text-center"
+                    className="btn-outline w-44 px-5 py-2.5 text-center text-sm no-underline"
                   >
                     Sign in
                   </Link>
                   <Link
                     href="/register"
                     onClick={() => setOpen(false)}
-                    className="btn-gold text-center"
+                    className="btn-gold w-44 px-5 py-2.5 text-center text-sm font-semibold no-underline"
                   >
                     Invest now
                   </Link>

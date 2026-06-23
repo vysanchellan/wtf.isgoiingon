@@ -103,10 +103,6 @@ export const FAQS: FaqItem[] = [
     a: "No data is collected, stored, or transmitted. This is a static demo site. Any information entered into forms remains in your browser and is never sent to any server.",
   },
   {
-    q: "Who created this?",
-    a: "This is an educational project built for demonstration purposes. The creators do not offer investment services and this site should not be construed as financial advice.",
-  },
-  {
     q: "Can I reinvest my returns?",
     a: "In this demo simulation, the 'Reinvest' button navigates to the registration page. No actual reinvestment occurs — it is a UI flow designed to demonstrate the concept.",
   },
