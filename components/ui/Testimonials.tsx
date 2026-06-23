@@ -29,10 +29,8 @@ export function Testimonials() {
     >
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <div className="mb-10 text-center">
-          <span className="text-[var(--gold)] text-xs font-semibold tracking-[0.2em] uppercase">
-            Testimonials
-          </span>
-          <h2 className="gradient-text mt-2 text-2xl font-bold sm:text-3xl">
+          <span className="eyebrow">Testimonials</span>
+          <h2 className="gradient-text mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
             What our investors say
           </h2>
         </div>
@@ -57,8 +55,13 @@ export function Testimonials() {
                 &ldquo;{t.quote}&rdquo;
               </blockquote>
               <div className="mt-6 flex items-center justify-between border-t border-[var(--border)] pt-4">
-                <span className="text-sm font-semibold text-[var(--gold)]">
-                  {t.name}
+                <span className="flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gold)] to-[var(--amber)] text-xs font-bold text-[var(--bg-primary)]">
+                    {t.name.split(" ").map((p) => p[0]).join("")}
+                  </span>
+                  <span className="text-sm font-semibold text-[var(--text-primary)]">
+                    {t.name}
+                  </span>
                 </span>
                 <span className="text-sm font-bold text-[var(--gold)]">
                   {t.amount}

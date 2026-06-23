@@ -1,5 +1,7 @@
 import Head from "next/head";
 import { useState } from "react";
+import { motion } from "framer-motion";
+import { Banknote, Users, CalendarClock, TrendingUp } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { INVESTORS, PAYOUTS, PACKAGES } from "@/lib/data";
 import { formatCurrency, cn } from "@/lib/utils";
@@ -31,36 +33,40 @@ export default function AdminDashboardPage() {
         <title>Admin · Dashboard — AmzVest ZA (DEMO)</title>
       </Head>
       <AdminLayout title="Admin panel" description="AmzVest ZA · Operations dashboard">
-        <div className="grid grid-cols-4 gap-2.5 mb-6">
-          <KpiCard label="Capital deployed" value={formatCurrency(totalDeployed)} gold />
-          <KpiCard label="Active investors" value={String(activeCount)} />
-          <KpiCard label="Payouts this week" value={formatCurrency(totalPayoutsThisWeek)} amber />
-          <KpiCard label="Total paid out" value={formatCurrency(totalPaidOut)} gold />
+        <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <KpiCard label="Capital deployed" value={formatCurrency(totalDeployed)} icon={Banknote} index={0} />
+          <KpiCard label="Active investors" value={String(activeCount)} icon={Users} index={1} />
+          <KpiCard label="Payouts this week" value={formatCurrency(totalPayoutsThisWeek)} icon={CalendarClock} amber index={2} />
+          <KpiCard label="Total paid out" value={formatCurrency(totalPaidOut)} icon={TrendingUp} index={3} />
         </div>
 
-        <div className="rounded-[var(--radius-lg)] overflow-hidden bg-[var(--bg-card)] border border-[var(--border)]">
-          <div className="flex px-5 pt-4 border-b border-[var(--border)]">
+        <div className="card-glass overflow-hidden">
+          <div className="flex border-b border-[var(--border)] px-5 pt-4">
             {TABS.map((t) => (
               <button
                 key={t.id}
                 type="button"
                 onClick={() => setTab(t.id)}
                 className={cn(
-                  "px-4 py-2 text-xs",
+                  "relative px-4 pb-3 text-xs transition-colors",
                   tab === t.id
-                    ? "font-semibold text-[var(--gold)] border-b-2 border-[var(--gold)]"
+                    ? "font-semibold text-[var(--gold)]"
                     : "font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 )}
               >
                 {t.label}
+                {tab === t.id && (
+                  <motion.div
+                    layoutId="admin-tab-underline"
+                    className="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-[var(--gold)]"
+                  />
+                )}
               </button>
             ))}
           </div>
 
           {tab === "investors" && <InvestorsTable />}
-          {tab === "payouts" && (
-            <PayoutsTable paidPayouts={paidPayouts} markPaid={markPaid} />
-          )}
+          {tab === "payouts" && <PayoutsTable paidPayouts={paidPayouts} markPaid={markPaid} />}
           {tab === "packages" && <PackagesTable />}
         </div>
       </AdminLayout>
@@ -68,44 +74,69 @@ export default function AdminDashboardPage() {
   );
 }
 
-function KpiCard({ label, value, gold, amber }: { label: string; value: string; gold?: boolean; amber?: boolean }) {
+function KpiCard({
+  label,
+  value,
+  icon: Icon,
+  amber,
+  index,
+}: {
+  label: string;
+  value: string;
+  icon: typeof Banknote;
+  amber?: boolean;
+  index: number;
+}) {
   return (
-    <div className="rounded-[var(--radius)] bg-[var(--bg-card)] border border-[var(--border)] p-3">
-      <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-widest mb-1">
-        {label}
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.07 }}
+      className="card-glass p-4"
+    >
+      <div className="mb-2 flex items-center justify-between">
+        <span className="text-[10px] uppercase tracking-widest text-[var(--text-muted)]">
+          {label}
+        </span>
+        <Icon className={cn("h-3.5 w-3.5", amber ? "text-[var(--amber)]" : "text-[var(--gold)]")} />
       </div>
       <div className={cn("text-lg font-bold", amber ? "text-[var(--amber)]" : "text-[var(--gold)]")}>
         {value}
       </div>
-    </div>
+    </motion.div>
+  );
+}
+
+function Th({ children }: { children: React.ReactNode }) {
+  return (
+    <th className="bg-[var(--bg-tertiary)] px-5 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+      {children}
+    </th>
+  );
+}
+
+function Row({ children, last }: { children: React.ReactNode; last: boolean }) {
+  return (
+    <tr className={cn("transition hover:bg-[var(--gold)]/[0.03]", !last && "border-b border-[var(--border)]")}>
+      {children}
+    </tr>
   );
 }
 
 function InvestorsTable() {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-xs border-collapse">
+      <table className="w-full border-collapse text-xs">
         <thead>
-          <tr className="bg-[var(--bg-tertiary)]">
+          <tr>
             {["Name", "Package", "Invested", "Return", "Status", ""].map((h) => (
-              <th
-                key={h}
-                className="text-left px-5 py-3 font-semibold text-[var(--text-muted)] uppercase tracking-wider bg-[var(--bg-tertiary)]"
-              >
-                {h}
-              </th>
+              <Th key={h}>{h}</Th>
             ))}
           </tr>
         </thead>
         <tbody>
           {INVESTORS.map((inv, i) => (
-            <tr
-              key={inv.id}
-              className={cn(
-                "hover:bg-[var(--gold)]/[0.02] transition",
-                i < INVESTORS.length - 1 && "border-b border-[var(--border)]"
-              )}
-            >
+            <Row key={inv.id} last={i === INVESTORS.length - 1}>
               <td className="px-5 py-3 font-medium">{inv.name}</td>
               <td className="px-5 py-3 text-[var(--text-secondary)]">
                 {inv.package.charAt(0).toUpperCase() + inv.package.slice(1)}
@@ -116,11 +147,11 @@ function InvestorsTable() {
                 <StatusBadge status={inv.status} />
               </td>
               <td className="px-5 py-3">
-                <button className="rounded-[var(--radius)] border border-[var(--border)] px-3 py-1 text-[10px] hover:bg-[var(--bg-tertiary)] transition">
+                <button className="rounded-[var(--radius)] border border-[var(--border)] px-3 py-1 text-[10px] transition hover:border-[var(--gold)]/40 hover:bg-[var(--bg-tertiary)]">
                   View
                 </button>
               </td>
-            </tr>
+            </Row>
           ))}
         </tbody>
       </table>
@@ -140,11 +171,7 @@ function StatusBadge({ status }: { status: string }) {
     complete: "Complete",
     pending: "Pending payment",
   };
-  return (
-    <span className={cn(base, colorMap[status] || "text-[var(--text-muted)]")}>
-      {labels[status]}
-    </span>
-  );
+  return <span className={cn(base, colorMap[status] || "text-[var(--text-muted)]")}>{labels[status]}</span>;
 }
 
 function PayoutsTable({
@@ -156,16 +183,11 @@ function PayoutsTable({
 }) {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-xs border-collapse">
+      <table className="w-full border-collapse text-xs">
         <thead>
-          <tr className="bg-[var(--bg-tertiary)]">
+          <tr>
             {["Investor", "Package", "Amount", "Week", "Due date", "Action"].map((h) => (
-              <th
-                key={h}
-                className="text-left px-5 py-3 font-semibold text-[var(--text-muted)] uppercase tracking-wider bg-[var(--bg-tertiary)]"
-              >
-                {h}
-              </th>
+              <Th key={h}>{h}</Th>
             ))}
           </tr>
         </thead>
@@ -174,26 +196,14 @@ function PayoutsTable({
             const key = `${p.investor}-${p.week}`;
             const isPaid = paidPayouts.has(key);
             return (
-              <tr
-                key={key}
-                className={cn(
-                  "hover:bg-[var(--gold)]/[0.02] transition",
-                  i < PAYOUTS.length - 1 && "border-b border-[var(--border)]"
-                )}
-              >
+              <Row key={key} last={i === PAYOUTS.length - 1}>
                 <td className="px-5 py-3 font-medium">{p.investor}</td>
                 <td className="px-5 py-3 text-[var(--text-secondary)]">
                   {p.package.charAt(0).toUpperCase() + p.package.slice(1)}
                 </td>
-                <td className="px-5 py-3 font-semibold text-[var(--gold)]">
-                  {formatCurrency(p.amount)}
-                </td>
-                <td className="px-5 py-3 text-[var(--text-secondary)]">
-                  Week {p.week}
-                </td>
-                <td className="px-5 py-3 text-[var(--text-secondary)]">
-                  {p.dueDate}
-                </td>
+                <td className="px-5 py-3 font-semibold text-[var(--gold)]">{formatCurrency(p.amount)}</td>
+                <td className="px-5 py-3 text-[var(--text-secondary)]">Week {p.week}</td>
+                <td className="px-5 py-3 text-[var(--text-secondary)]">{p.dueDate}</td>
                 <td className="px-5 py-3">
                   <button
                     onClick={() => markPaid(key)}
@@ -201,14 +211,14 @@ function PayoutsTable({
                     className={cn(
                       "rounded-[var(--radius)] px-3 py-1 text-[10px] font-semibold transition",
                       isPaid
-                        ? "bg-[var(--gold)]/[0.12] text-[var(--gold)] cursor-default"
+                        ? "cursor-default bg-[var(--gold)]/[0.12] text-[var(--gold)]"
                         : "border border-[var(--gold)] text-[var(--gold)] hover:bg-[var(--gold)]/[0.08]"
                     )}
                   >
                     {isPaid ? "✓ Paid" : "Mark paid"}
                   </button>
                 </td>
-              </tr>
+              </Row>
             );
           })}
         </tbody>
@@ -220,16 +230,11 @@ function PayoutsTable({
 function PackagesTable() {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-xs border-collapse">
+      <table className="w-full border-collapse text-xs">
         <thead>
-          <tr className="bg-[var(--bg-tertiary)]">
+          <tr>
             {["Package", "Investor pays", "Investor receives", "Weekly payout", "Your profit", "Active"].map((h) => (
-              <th
-                key={h}
-                className="text-left px-5 py-3 font-semibold text-[var(--text-muted)] uppercase tracking-wider bg-[var(--bg-tertiary)]"
-              >
-                {h}
-              </th>
+              <Th key={h}>{h}</Th>
             ))}
           </tr>
         </thead>
@@ -240,24 +245,16 @@ function PackagesTable() {
             ).length;
             const profit = pkg.invest * 7;
             return (
-              <tr
-                key={pkg.id}
-                className={cn(
-                  "hover:bg-[var(--gold)]/[0.02] transition",
-                  i < PACKAGES.length - 1 && "border-b border-[var(--border)]"
-                )}
-              >
+              <Row key={pkg.id} last={i === PACKAGES.length - 1}>
                 <td className="px-5 py-3 font-medium">{pkg.name}</td>
                 <td className="px-5 py-3">{formatCurrency(pkg.invest)}</td>
                 <td className="px-5 py-3">{formatCurrency(pkg.returnAmount)}</td>
                 <td className="px-5 py-3 text-[var(--text-secondary)]">
                   {formatCurrency(pkg.weeklyPayout)} × {pkg.weeks}
                 </td>
-                <td className="px-5 py-3 font-semibold text-[var(--gold)]">
-                  {formatCurrency(profit)}
-                </td>
+                <td className="px-5 py-3 font-semibold text-[var(--gold)]">{formatCurrency(profit)}</td>
                 <td className="px-5 py-3">{activeCount}</td>
-              </tr>
+              </Row>
             );
           })}
         </tbody>

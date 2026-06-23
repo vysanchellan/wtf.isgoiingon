@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
-import { TrendingUp, Menu, X } from "lucide-react";
+import { TrendingUp, Menu, X, AlertTriangle } from "lucide-react";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -14,12 +14,20 @@ const NAV_LINKS = [
 export function Navbar() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const close = () => setOpen(false);
     router.events.on("routeChangeStart", close);
     return () => router.events.off("routeChangeStart", close);
   }, [router.events]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const isActive = (href: string) =>
     href === "/" ? router.pathname === "/" : router.pathname.startsWith(href);
@@ -29,14 +37,21 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50">
-      <div className="bg-[var(--amber-deep)]/20 text-[var(--amber)] border-b border-[var(--amber-deep)]/20 text-[10px] flex items-center justify-center gap-1.5 px-4 py-1 font-medium">
-        ⚠️ DEMO — Fictional content. Not real investment advice.
+      <div className="bg-[var(--amber-deep)]/20 text-[var(--amber)] border-b border-[var(--amber-deep)]/20 text-[10px] flex items-center justify-center gap-1.5 px-4 py-1 font-medium tracking-wide">
+        <AlertTriangle className="h-3 w-3 shrink-0" />
+        DEMO — Fictional content. Not real investment advice.
       </div>
 
-      <nav className="bg-[var(--bg-secondary)]/85 backdrop-blur-lg border-b border-[var(--border-glow)] shadow-lg">
+      <nav
+        className={`border-b transition-all duration-300 ${
+          scrolled
+            ? "bg-[var(--bg-secondary)]/90 backdrop-blur-xl border-[var(--border-glow)] shadow-[0_8px_30px_rgba(0,0,0,0.35)]"
+            : "bg-[var(--bg-secondary)]/60 backdrop-blur-lg border-transparent"
+        }`}
+      >
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5 no-underline">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--amber)] flex items-center justify-center shrink-0">
+          <Link href="/" className="group flex items-center gap-2.5 no-underline">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--gold)] to-[var(--amber)] flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(255,215,0,0.25)] transition-transform duration-300 group-hover:scale-105">
               <TrendingUp size={20} className="text-[var(--bg-primary)]" />
             </div>
             <span className="text-xl font-bold text-[var(--text-primary)] tracking-tight">

@@ -1,7 +1,8 @@
 import Head from "next/head";
 import { useState, type FormEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Mail, MapPin, Send } from "lucide-react";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { Disclaimer } from "@/components/ui/Disclaimer";
 
 export default function ContactPage() {
@@ -17,107 +18,87 @@ export default function ContactPage() {
       <Head>
         <title>Contact — AmzVest ZA (DEMO)</title>
       </Head>
-      <section
-        style={{
-          borderBottom: "1px solid var(--border)",
-          background: "var(--bg-secondary)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 1152,
-            margin: "0 auto",
-            padding: "48px 16px 40px",
-          }}
-        >
-          <div
-            style={{
-              fontSize: 11,
-              fontWeight: 600,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--gold)",
-            }}
-          >
-            Contact
-          </div>
-          <h1
-            style={{
-              fontSize: 28,
-              fontWeight: 600,
-              color: "var(--text-primary)",
-              margin: "8px 0 0",
-            }}
-          >
-            Get in touch
-          </h1>
-          <div style={{ marginTop: 20, maxWidth: 600 }}>
-            <Disclaimer variant="card">
-              This form does not submit anywhere — it&apos;s a UI flow for a demo project. No data is sent or stored.
-            </Disclaimer>
-          </div>
-        </div>
-      </section>
 
-      <section style={{ padding: "64px 0", background: "var(--bg-primary)" }}>
-        <div style={{ maxWidth: 560, margin: "0 auto", padding: "0 16px" }}>
-          <form
-            onSubmit={handleSubmit}
-            style={{
-              background: "var(--bg-card)",
-              border: "1px solid var(--border)",
-              borderRadius: "var(--radius-xl)",
-              padding: 24,
-            }}
+      <PageHeader
+        eyebrow="Contact"
+        icon={<Mail className="h-3.5 w-3.5" />}
+        title="Get in touch"
+        subtitle="Have a question about the demo? Drop a note below."
+      >
+        <Disclaimer variant="card">
+          This form does not submit anywhere — it&apos;s a UI flow for a demo
+          project. No data is sent or stored.
+        </Disclaimer>
+      </PageHeader>
+
+      <section className="bg-[var(--bg-primary)] py-16">
+        <div className="mx-auto grid max-w-4xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_1.4fr]">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="space-y-4"
           >
-            <h2 style={{ fontSize: 16, fontWeight: 600, margin: 0, color: "var(--text-primary)" }}>
+            <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+              Reach the (fictional) team
+            </h2>
+            <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
+              AmzVest ZA is an educational demonstration. These details are part
+              of the simulation and don&apos;t reach a real inbox.
+            </p>
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
+                <span className="flex h-9 w-9 items-center justify-center rounded-[var(--radius)] bg-[var(--gold)]/[0.1] text-[var(--gold)]">
+                  <Mail className="h-4 w-4" />
+                </span>
+                hello@amzvest.example
+              </div>
+              <div className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
+                <span className="flex h-9 w-9 items-center justify-center rounded-[var(--radius)] bg-[var(--gold)]/[0.1] text-[var(--gold)]">
+                  <MapPin className="h-4 w-4" />
+                </span>
+                Durban, South Africa
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.form
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            onSubmit={handleSubmit}
+            className="card-glass p-6 sm:p-8"
+          >
+            <h2 className="text-base font-semibold text-[var(--text-primary)]">
               Send a message (demo)
             </h2>
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "4px 0 20px" }}>
+            <p className="mt-1 mb-6 text-xs text-[var(--text-secondary)]">
               Fields validate locally. Submission shows a confirmation only.
             </p>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <Field label="Name" id="name" type="text" />
-              <Field label="Email" id="email" type="email" />
-              <Field label="Subject" id="subject" type="text" />
+            <div className="space-y-4">
+              <Field label="Name" id="name" type="text" placeholder="Sipho Nkosi" />
+              <Field label="Email" id="email" type="email" placeholder="you@email.com" />
+              <Field label="Subject" id="subject" type="text" placeholder="How can we help?" />
               <div>
-                <label htmlFor="message" style={labelStyle}>Message</label>
+                <label htmlFor="message" className="field-label">Message</label>
                 <textarea
                   id="message"
                   required
                   rows={4}
-                  style={inputStyle}
-                  onFocus={focusGold}
-                  onBlur={blurBorder}
+                  placeholder="Your message…"
+                  className="input-premium resize-none"
                 />
               </div>
             </div>
 
             <button
               type="submit"
-              style={{
-                width: "100%",
-                marginTop: 20,
-                padding: "11px 16px",
-                fontSize: 13,
-                fontWeight: 600,
-                color: "#0a0a0f",
-                background: "linear-gradient(135deg, var(--gold), var(--amber))",
-                border: "none",
-                borderRadius: "var(--radius)",
-                cursor: "pointer",
-                transition: "all 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = "0 8px 30px rgba(255, 215, 0, 0.25)";
-                e.currentTarget.style.transform = "translateY(-1px)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = "none";
-                e.currentTarget.style.transform = "none";
-              }}
+              className="btn-gold mt-6 inline-flex w-full items-center justify-center gap-2 py-3 text-sm font-semibold"
             >
+              <Send className="h-4 w-4" />
               Send demo message
             </button>
 
@@ -127,79 +108,42 @@ export default function ContactPage() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
-                  style={{
-                    marginTop: 20,
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 10,
-                    padding: "12px 16px",
-                    borderRadius: "var(--radius)",
-                    background: "rgba(255, 215, 0, 0.08)",
-                    border: "1px solid rgba(255, 215, 0, 0.2)",
-                    fontSize: 12,
-                    color: "var(--gold)",
-                  }}
+                  className="mt-5 flex items-start gap-2.5 rounded-[var(--radius)] border border-[var(--gold)]/20 bg-[var(--gold)]/[0.08] px-4 py-3 text-xs text-[var(--gold)]"
                 >
-                  <CheckCircle2 style={{ width: 16, height: 16, flexShrink: 0, marginTop: 1 }} />
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0" />
                   <div>
-                    <p style={{ fontWeight: 600, margin: 0 }}>Demo: message accepted.</p>
-                    <p style={{ color: "var(--text-secondary)", margin: "2px 0 0" }}>
+                    <p className="font-semibold">Demo: message accepted.</p>
+                    <p className="mt-0.5 text-[var(--text-secondary)]">
                       No email is actually sent. This is a demo.
                     </p>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
-          </form>
+          </motion.form>
         </div>
       </section>
     </>
   );
 }
 
-const labelStyle: React.CSSProperties = {
-  fontSize: 12,
-  fontWeight: 600,
-  color: "var(--text-secondary)",
-  display: "block",
-  marginBottom: 6,
-};
-
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "10px 12px",
-  fontSize: 13,
-  background: "var(--bg-tertiary)",
-  border: "1px solid var(--border)",
-  borderRadius: "var(--radius)",
-  color: "var(--text-primary)",
-  outline: "none",
-  boxSizing: "border-box",
-  fontFamily: "inherit",
-};
-
-function Field({ label, id, type }: { label: string; id: string; type: string }) {
+function Field({
+  label,
+  id,
+  type,
+  placeholder,
+}: {
+  label: string;
+  id: string;
+  type: string;
+  placeholder?: string;
+}) {
   return (
     <div>
-      <label htmlFor={id} style={labelStyle}>{label}</label>
-      <input
-        id={id}
-        type={type}
-        required
-        style={inputStyle}
-        onFocus={focusGold}
-        onBlur={blurBorder}
-      />
+      <label htmlFor={id} className="field-label">
+        {label}
+      </label>
+      <input id={id} type={type} required placeholder={placeholder} className="input-premium" />
     </div>
   );
-}
-
-function focusGold(e: React.FocusEvent<HTMLElement>) {
-  e.currentTarget.style.borderColor = "var(--gold)";
-  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(255, 215, 0, 0.15)";
-}
-
-function blurBorder(e: React.FocusEvent<HTMLElement>) {
-  e.currentTarget.style.borderColor = "var(--border)";
-  e.currentTarget.style.boxShadow = "none";
 }

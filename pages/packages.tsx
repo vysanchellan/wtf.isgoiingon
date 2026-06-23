@@ -1,5 +1,7 @@
 import Head from "next/head";
+import { Layers } from "lucide-react";
 import { PackagesGrid } from "@/components/ui/PackagesGrid";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { Disclaimer } from "@/components/ui/Disclaimer";
 
 export default function PackagesPage() {
@@ -8,47 +10,17 @@ export default function PackagesPage() {
       <Head>
         <title>Packages — AmzVest ZA (DEMO)</title>
       </Head>
-      <section
-        style={{
-          borderBottom: "1px solid var(--border)",
-          background: "var(--bg-secondary)",
-        }}
+      <PageHeader
+        eyebrow="Investment packages"
+        icon={<Layers className="h-3.5 w-3.5" />}
+        title="Pick the tier that matches your goals"
+        subtitle="Three illustrative tiers, each showing a 3× return over 3 weekly payouts."
       >
-        <div
-          style={{
-            maxWidth: 1152,
-            margin: "0 auto",
-            padding: "48px 16px 40px",
-          }}
-        >
-          <div
-            style={{
-              fontSize: 11,
-              fontWeight: 600,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--gold)",
-            }}
-          >
-            Investment packages
-          </div>
-          <h1
-            style={{
-              fontSize: 28,
-              fontWeight: 600,
-              color: "var(--text-primary)",
-              margin: "8px 0 0",
-            }}
-          >
-            Pick the tier that matches your goals
-          </h1>
-          <div style={{ marginTop: 20, maxWidth: 600 }}>
-            <Disclaimer variant="card">
-              Investment amounts, returns, and projections below are fabricated for UI demonstration. No real product or fulfilment exists.
-            </Disclaimer>
-          </div>
-        </div>
-      </section>
+        <Disclaimer variant="card">
+          Investment amounts, returns, and projections below are fabricated for UI
+          demonstration. No real product or fulfilment exists.
+        </Disclaimer>
+      </PageHeader>
       <PackagesGrid withHeader={false} />
     </>
   );

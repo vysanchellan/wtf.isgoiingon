@@ -11,10 +11,8 @@ export function FAQ() {
     <section className="bg-[var(--bg-secondary)] border-b border-[var(--border)] py-16 sm:py-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <div className="mb-10 text-center">
-          <span className="text-[var(--gold)] text-xs font-semibold tracking-[0.2em] uppercase">
-            FAQ
-          </span>
-          <h2 className="gradient-text mt-2 text-2xl font-bold sm:text-3xl">
+          <span className="eyebrow">FAQ</span>
+          <h2 className="gradient-text mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
             Frequently asked questions
           </h2>
         </div>

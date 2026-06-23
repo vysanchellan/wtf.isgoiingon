@@ -1,8 +1,8 @@
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { TrendingUp } from "lucide-react";
-import { PACKAGES, getPackage, type PackageId } from "@/lib/data";
+import { motion } from "framer-motion";
+import { TrendingUp, ArrowRight } from "lucide-react";
+import { getPackage, type PackageId } from "@/lib/data";
 import { useDemoStore } from "@/lib/store";
 import { formatCurrency } from "@/lib/utils";
 
@@ -10,12 +10,7 @@ const PKG_IDS: PackageId[] = ["starter", "growth", "premium"];
 
 export default function RegisterPage() {
   const { selectedPackage, setSelectedPackage } = useDemoStore();
-  const [pkgId, setPkgId] = useState<PackageId>(selectedPackage);
-
-  useEffect(() => {
-    setPkgId(selectedPackage);
-  }, [selectedPackage]);
-
+  const pkgId = selectedPackage;
   const pkg = getPackage(pkgId);
 
   return (
@@ -23,72 +18,59 @@ export default function RegisterPage() {
       <Head>
         <title>Register — AmzVest ZA (DEMO)</title>
       </Head>
-      <div className="min-h-[calc(100vh-116px)] flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-sm rounded-[var(--radius-xl)] bg-[var(--bg-card)] border border-[var(--border-glow)] p-8 shadow-[var(--shadow-glow)]">
-          <div className="flex items-center gap-2.5 mb-6">
-            <div className="w-9 h-9 rounded-[var(--radius)] bg-gradient-to-br from-[var(--gold)] to-[var(--amber)] flex items-center justify-center">
-              <TrendingUp className="h-[18px] w-[18px] text-[#0a0a0f]" />
+      <div className="relative flex min-h-[calc(100vh-116px)] items-center justify-center overflow-hidden px-4 py-12">
+        <div className="bg-grid pointer-events-none absolute inset-0" aria-hidden="true" />
+        <div className="pointer-events-none absolute left-1/2 top-1/4 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-[var(--gold)]/[0.06] blur-[130px]" aria-hidden="true" />
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="card-glass relative w-full max-w-sm p-8 shadow-[var(--shadow-glow)]"
+        >
+          <div className="mb-6 flex items-center gap-2.5">
+            <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius)] bg-gradient-to-br from-[var(--gold)] to-[var(--amber)]">
+              <TrendingUp className="h-5 w-5 text-[#0a0a0f]" />
             </div>
-            <span className="text-sm font-semibold text-[var(--gold)]">
-              AmzVest ZA
+            <span className="text-base font-bold tracking-tight text-[var(--text-primary)]">
+              AmzVest <span className="text-[var(--gold)]">ZA</span>
             </span>
           </div>
 
-          <h2 className="text-xl font-bold text-[var(--text-primary)]">
-            Create your account
-          </h2>
-          <p className="text-xs text-[var(--text-secondary)] mt-1 mb-5">
-            Join 143 investors already earning returns
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Create your account</h1>
+          <p className="mb-5 mt-1.5 text-sm text-[var(--text-secondary)]">
+            Join 143 (fictional) investors in the demo
           </p>
 
-          <div className="rounded-[var(--radius)] bg-[var(--gold)]/[0.06] border border-[var(--gold)]/[0.15] px-4 py-3 mb-5">
+          <div className="mb-5 rounded-[var(--radius)] border border-[var(--gold)]/[0.15] bg-[var(--gold)]/[0.06] px-4 py-3">
             <div className="text-xs font-semibold text-[var(--gold)]">
-              {pkg.name} Package selected
+              {pkg.name} package selected
             </div>
-            <div className="text-[11px] text-[var(--text-secondary)] mt-0.5">
-              Invest {formatCurrency(pkg.invest)} · Receive {formatCurrency(pkg.returnAmount)} over {pkg.weeks} weeks ({formatCurrency(pkg.weeklyPayout)}/week)
+            <div className="mt-0.5 text-[11px] text-[var(--text-secondary)]">
+              Invest {formatCurrency(pkg.invest)} · Receive {formatCurrency(pkg.returnAmount)} over{" "}
+              {pkg.weeks} weeks ({formatCurrency(pkg.weeklyPayout)}/week)
             </div>
           </div>
 
           <div className="space-y-4">
             <div>
-              <label className="text-xs font-semibold text-[var(--text-secondary)] block mb-1.5">
-                Full name
-              </label>
-              <input
-                type="text"
-                placeholder="Sipho Nkosi"
-                className="w-full px-3 py-2.5 text-sm bg-[var(--bg-tertiary)] border border-[var(--border)] rounded-[var(--radius)] text-[var(--text-primary)] outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/20 transition"
-              />
+              <label className="field-label">Full name</label>
+              <input type="text" placeholder="Sipho Nkosi" className="input-premium" />
             </div>
             <div>
-              <label className="text-xs font-semibold text-[var(--text-secondary)] block mb-1.5">
-                Email address
-              </label>
-              <input
-                type="email"
-                placeholder="sipho@email.com"
-                className="w-full px-3 py-2.5 text-sm bg-[var(--bg-tertiary)] border border-[var(--border)] rounded-[var(--radius)] text-[var(--text-primary)] outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/20 transition"
-              />
+              <label className="field-label">Email address</label>
+              <input type="email" placeholder="sipho@email.com" className="input-premium" />
             </div>
             <div>
-              <label className="text-xs font-semibold text-[var(--text-secondary)] block mb-1.5">
-                Phone number
-              </label>
-              <input
-                type="tel"
-                placeholder="+27 82 000 0000"
-                className="w-full px-3 py-2.5 text-sm bg-[var(--bg-tertiary)] border border-[var(--border)] rounded-[var(--radius)] text-[var(--text-primary)] outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/20 transition"
-              />
+              <label className="field-label">Phone number</label>
+              <input type="tel" placeholder="+27 82 000 0000" className="input-premium" />
             </div>
             <div>
-              <label className="text-xs font-semibold text-[var(--text-secondary)] block mb-1.5">
-                Investment package
-              </label>
+              <label className="field-label">Investment package</label>
               <select
                 value={pkgId}
-                onChange={(e) => setPkgId(e.target.value as PackageId)}
-                className="w-full px-3 py-2.5 text-sm bg-[var(--bg-tertiary)] border border-[var(--border)] rounded-[var(--radius)] text-[var(--text-primary)] outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/20 transition cursor-pointer"
+                onChange={(e) => setSelectedPackage(e.target.value as PackageId)}
+                className="input-premium cursor-pointer"
               >
                 {PKG_IDS.map((id) => {
                   const p = getPackage(id);
@@ -101,34 +83,29 @@ export default function RegisterPage() {
               </select>
             </div>
             <div>
-              <label className="text-xs font-semibold text-[var(--text-secondary)] block mb-1.5">
-                Create password
-              </label>
-              <input
-                type="password"
-                placeholder="Minimum 8 characters"
-                className="w-full px-3 py-2.5 text-sm bg-[var(--bg-tertiary)] border border-[var(--border)] rounded-[var(--radius)] text-[var(--text-primary)] outline-none focus:border-[var(--gold)] focus:ring-2 focus:ring-[var(--gold)]/20 transition"
-              />
+              <label className="field-label">Create password</label>
+              <input type="password" placeholder="Minimum 8 characters" className="input-premium" />
             </div>
             <Link
               href="/dashboard"
-              className="btn-gold block w-full text-center py-2.5 text-sm font-semibold no-underline mt-0.5"
+              className="btn-gold mt-1 flex w-full items-center justify-center gap-2 py-3 text-sm font-semibold no-underline"
             >
-              Create account &amp; proceed to payment
+              Create account &amp; proceed
+              <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
-          <div className="text-center text-xs text-[var(--text-secondary)] mt-5">
+          <div className="mt-6 text-center text-xs text-[var(--text-secondary)]">
             Already have an account?{" "}
-            <Link href="/login" className="text-[var(--gold)] no-underline">
+            <Link href="/login" className="font-semibold text-[var(--gold)] no-underline hover:underline">
               Sign in
             </Link>
           </div>
 
-          <div className="mt-4 rounded-[var(--radius)] bg-[var(--amber-deep)]/10 border border-[var(--amber-deep)]/20 px-3 py-2.5 text-[11px] text-[var(--amber)] text-center font-medium">
-            This is a DEMO. No real account is created.
+          <div className="demo-pill mt-5 justify-center px-3 py-2.5 text-center">
+            This is a DEMO. No real account is created. No payment is processed.
           </div>
-        </div>
+        </motion.div>
       </div>
     </>
   );

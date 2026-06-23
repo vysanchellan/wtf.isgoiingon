@@ -13,23 +13,26 @@ type Props = {
 
 type MousePosition = { x: number | null; y: number | null };
 
+type StarCfg = {
+  id: number;
+  top: string;
+  left: string;
+  size: number;
+  duration: number;
+  delay: number;
+};
+
 // --- Interactive magnetic starfield (gold theme) ---
 
 function Star({
+  cfg,
   mousePosition,
   containerRef,
 }: {
+  cfg: StarCfg;
   mousePosition: MousePosition;
   containerRef: RefObject<HTMLDivElement | null>;
 }) {
-  const [initialPos] = useState({
-    top: `${Math.random() * 100}%`,
-    left: `${Math.random() * 100}%`,
-    size: 1 + Math.random() * 2,
-    duration: 2 + Math.random() * 3,
-    delay: Math.random() * 5,
-  });
-
   const springConfig = { stiffness: 100, damping: 15, mass: 0.1 };
   const springX = useSpring(0, springConfig);
   const springY = useSpring(0, springConfig);
@@ -46,8 +49,8 @@ function Star({
     }
 
     const rect = containerRef.current.getBoundingClientRect();
-    const starX = rect.left + (parseFloat(initialPos.left) / 100) * rect.width;
-    const starY = rect.top + (parseFloat(initialPos.top) / 100) * rect.height;
+    const starX = rect.left + (parseFloat(cfg.left) / 100) * rect.width;
+    const starY = rect.top + (parseFloat(cfg.top) / 100) * rect.height;
 
     const deltaX = mousePosition.x - starX;
     const deltaY = mousePosition.y - starY;
@@ -62,26 +65,22 @@ function Star({
       springX.set(0);
       springY.set(0);
     }
-  }, [mousePosition, initialPos, containerRef, springX, springY]);
+  }, [mousePosition, cfg, containerRef, springX, springY]);
 
   return (
     <motion.div
       className="absolute rounded-full bg-[var(--gold)]"
       style={{
-        top: initialPos.top,
-        left: initialPos.left,
-        width: `${initialPos.size}px`,
-        height: `${initialPos.size}px`,
+        top: cfg.top,
+        left: cfg.left,
+        width: `${cfg.size}px`,
+        height: `${cfg.size}px`,
         x: springX,
         y: springY,
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: [0, 1, 0] }}
-      transition={{
-        duration: initialPos.duration,
-        repeat: Infinity,
-        delay: initialPos.delay,
-      }}
+      transition={{ duration: cfg.duration, repeat: Infinity, delay: cfg.delay }}
     />
   );
 }
@@ -93,11 +92,31 @@ function InteractiveStarfield({
   mousePosition: MousePosition;
   containerRef: RefObject<HTMLDivElement | null>;
 }) {
+  // Generated after mount so randomness stays out of render (and SSR) — keeps
+  // the markup deterministic and avoids hydration mismatches.
+  const [stars, setStars] = useState<StarCfg[]>([]);
+
+  useEffect(() => {
+    // One-time, client-only seed of decorative stars — intentional.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setStars(
+      Array.from({ length: 120 }, (_, id) => ({
+        id,
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        size: 1 + Math.random() * 2,
+        duration: 2 + Math.random() * 3,
+        delay: Math.random() * 5,
+      }))
+    );
+  }, []);
+
   return (
     <div className="pointer-events-none absolute inset-0 h-full w-full overflow-hidden">
-      {Array.from({ length: 120 }).map((_, i) => (
+      {stars.map((cfg) => (
         <Star
-          key={`star-${i}`}
+          key={cfg.id}
+          cfg={cfg}
           mousePosition={mousePosition}
           containerRef={containerRef}
         />
